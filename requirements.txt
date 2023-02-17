@@ -8,3 +8,4 @@ whitenoise==6.2.0
 bs4
 djangorestframework
 reportlab
+requests
