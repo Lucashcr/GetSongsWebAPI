@@ -5,7 +5,9 @@ psycopg2==2.8.6
 sqlparse==0.4.2
 whitenoise==6.2.0
 
-bs4
+django-allauth
 djangorestframework
+
+bs4
 reportlab
 requests
