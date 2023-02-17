@@ -1,0 +1,115 @@
+:root {
+    --header-footer-spacing: 20px;
+    --header-img-width: 50px;
+}
+
+* {
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+
+    background-color: lightgray;
+}
+
+header {
+    display: flex;
+    align-items: center;
+
+    padding: var(--header-footer-spacing) 50px;
+}
+
+header > * {
+    flex: 1;
+}
+
+#logo-field {
+    display: flex;
+    align-items: center;
+    gap: var(--header-footer-spacing);
+}
+
+#logo-field:hover {
+    text-decoration: none;
+}
+
+header h4 {
+    margin: 0;
+    font-family: 'Ubuntu', 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: bold;
+    font-size: xx-large;
+    font-style: italic;
+}
+
+header img {
+    width: var(--header-img-width); 
+    border-radius: calc( var(--header-img-width) / 2 );
+}
+
+header > nav {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: var(--header-footer-spacing);
+}
+
+header nav a {
+    min-width: 100px;
+}
+
+header nav a:hover {
+    background-color: gray;
+}
+
+main {
+    flex: 1;
+    width: 1200px;
+    margin: 0 auto;
+    padding: 50px;
+}
+
+main .buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+main .editing {
+    border: 5px solid #348839;
+    padding: 0;
+}
+
+main .editing table {
+    margin: 0;
+}
+
+.song_item:hover {
+    cursor: grab;
+}
+
+.pop-up {
+    margin: 20px;
+}
+
+.pop-up select {
+    width: 100%;
+}
+
+footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: var(--header-footer-spacing);
+}
+
+footer > * {
+    flex: 1;
+}
+
+footer h4 {
+    margin: 0;
+}

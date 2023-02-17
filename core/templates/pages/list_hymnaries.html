@@ -1,0 +1,46 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block head_title %} - Hinários{% endblock %}
+
+{% block content %}
+<h1>Olá, {{user.first_name}} {{user.last_name}}! Seja bem-vindo(a)!</h1>
+
+<h2>Aqui estão seus hinários:</h2>
+<table class="table table-striped">
+    <thead class="bg-dark text-light">
+        <td>Nome</td>
+        <td>Data da criação</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </thead>
+    {% for hymnary in hymnaries %}
+        <tr>
+            <td>{{hymnary.title}}</td>
+            <td>{{hymnary.created_at}}</td>
+            <td><a href="/hymnary/{{hymnary.id}}" class="btn btn-light">Abrir</a></td>
+            <td><a href="/hymnary/{{hymnary.id}}/edit" class="btn btn-info">Editar</a></td>
+            <td><a href="/hymnary/{{hymnary.id}}/export" class="btn btn-secondary">Visualizar</a></td>
+            <td><a href="/hymnary/{{hymnary.id}}/export?as_attachment=1" class="btn btn-success">Exportar</a></td>
+            <td><a href="/hymnary/{{hymnary.id}}/delete" class="btn btn-danger">Excluir</a></td>
+        </tr>
+    {% endfor %}
+</table>
+<div class="buttons">
+    {% comment %} <a href="/hymnary/new" class="btn btn-dark">Novo</a> {% endcomment %}
+    <button class="btn btn-dark" onclick="setHymnaryName()">Novo</button>
+</div>
+
+<script>
+    function setHymnaryName() {
+        let name = prompt("Nome do novo hinário:", "");
+        if (name != null && name != "") {
+            window.location.replace("http://localhost:8000/hymnary/new/" + name);
+        }
+    }
+</script>
+{% endblock content %}

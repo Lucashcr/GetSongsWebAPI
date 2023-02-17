@@ -1,0 +1,23 @@
+{% extends 'api/base.html' %}
+
+{% block head_title %}API - Músicas{% endblock head_title %}
+
+{% block content %}
+<h1>Listando {{datatype}} disponíveis:</h1>
+<table class="table table-striped">
+    <thead class="bg-dark text-light">
+        <td>Nome</td> 
+        <td>Slug</td>
+        <td>Artista</td>
+        <td>Categoria</td>
+    </thead>
+    {% for data in collection %}
+    <tr>
+        <td>{{data.name}}</td>
+        <td>{{data.slug}}</td>
+        <td>{{data.artist.name}}</td>
+        <td>{{data.category.name}}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock content %}

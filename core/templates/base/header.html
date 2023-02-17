@@ -1,0 +1,22 @@
+{% load static %}
+
+<header class="bg-dark centered">
+    <a id="logo-field" href="/">
+        <img src="{% static '/favicon/favicon-32x32.png' %}" class="img-fluid ${3|rounded-top,rounded-right,rounded-bottom,rounded-left,rounded-circle,|} bg-light" alt="">
+        <h4 class="text-light">GetSongs</h4>
+    </a>
+    <nav>
+        {% if request.user.is_authenticated %}
+        <a href="/accounts/logout" class="btn btn-outline-light">Sair</a>
+        {% else %}
+        <a href="/accounts/login" class="btn btn-outline-light">Entrar</a>
+        {% endif %}
+        {% if request.user.is_authenticated %}
+        <a href="/accounts/profile" class="btn btn-outline-light">Perfil</a>
+        <a href="/hymnary" class="btn btn-outline-light">Hinários</a>
+        {% comment %} {% else %}
+        <a href="/accounts/login" class="btn btn-outline-light">Meus hinários</a> {% endcomment %}
+        {% endif %}
+        <a href="/about" class="btn btn-outline-light">Quem somos?</a>
+    </nav>
+</header>

@@ -1,0 +1,31 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<h4>Você tem certeza que deseja excluir este hinário?</h4>
+
+<p>Nome: {{ hymnary.title }}</p>
+<p>Criado em: {{ hymnary.created_at }}</p>
+
+<table class="table table-striped">
+    <thead class="bg-dark text-light">
+        <td>Categoria</td>
+        <td>Nome</td>
+        <td>Artista</td>
+    </thead>
+    {% for song in hymnary.songs.all %}
+    <tr>
+        <td>{{song.category}}</td>
+        <td>{{song.name}}</td>
+        <td>{{song.artist}}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<form method="post" style="text-align: center;">
+    {% csrf_token %}
+    {% if redirect_field_value %}
+    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+    {% endif %}
+    <button type="submit" class="btn btn-danger">Excluir</button>
+</form>
+{% endblock content %}

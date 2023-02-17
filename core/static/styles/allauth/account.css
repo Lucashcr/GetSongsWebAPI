@@ -1,0 +1,92 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+nav {
+    background-color: lightgray;
+    margin: 0;
+}
+
+nav ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+
+    list-style-type: none;
+
+    margin: 0;
+    padding: 0;
+
+    border-bottom: 3px solid slategray;
+}
+
+nav ul li {
+    margin: 10px 5px;
+    padding: 10px 0;
+}
+
+nav ul li a {
+    padding: 10px 20px;
+    border-radius: 200px;
+    
+    border: 3px solid slategray;
+
+    text-decoration: none;
+    color: black;
+}
+
+nav ul li a:hover {
+    background-color: slategray;
+    text-decoration: underline;
+    font-weight: bold;
+    color: lightgray;
+}
+
+div.centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100vw;
+    height: 100vh;
+}
+
+main {
+    color: black;
+    border: 3px solid slategray;
+    background-color: lightgray;
+    
+    margin: auto;
+    padding: 30px;
+    border-radius: 15px;
+    min-width: 500px;
+
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+}
+
+main h1 {
+    margin: 0;
+    padding: 0;
+}
+
+/* main input {
+    display: block;
+    width: 100%;
+} */
+
+main form {
+    display: flex;
+    flex-direction: column;
+}
+
+main form input {
+    display: block;
+    width: 100%;
+}
+
+main form button {
+    display: inline;
+    width: 30%;
+    margin: auto;
+}
