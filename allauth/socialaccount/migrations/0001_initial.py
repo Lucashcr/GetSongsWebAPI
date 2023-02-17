@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('sites', '0002_alter_domain_unique'),
+        # ('sites', '0002_alter_domain_unique'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
