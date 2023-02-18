@@ -75,7 +75,7 @@ class DeleteHymnary(TemplateHymnaryView):
 def new_hymnary(request, hymnary_name):
     new_hymnary = Hymnary(
         title=hymnary_name,
-        owner=request.usersave_hymnary
+        owner=request.user
     )
     new_hymnary.save()
     return redirect(f'/hymnary/{new_hymnary.id}/edit')
