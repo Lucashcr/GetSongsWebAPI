@@ -1,6 +1,6 @@
 function getRequestFromAPI(model, id="") {
     const xhr = new XMLHttpRequest();
-    xhr.open("GET", `http://localhost:8000/api/${model}/${id}`, false);
+    xhr.open("GET", `http://getsongs.up.railway.app/api/${model}/${id}`, false);
     xhr.send();
     return JSON.parse(xhr.response);
 }
