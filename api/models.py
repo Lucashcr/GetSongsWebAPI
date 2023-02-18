@@ -25,7 +25,7 @@ class Song(models.Model):
     artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     lyrics_url = models.CharField(max_length=256)
-    video_url = models.CharField(max_length=256)
+    preview_url = models.CharField(max_length=256)
 
     def __str__(self) -> str:
         return f'{self.name} - {self.artist.name}'

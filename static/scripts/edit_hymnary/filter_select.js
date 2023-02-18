@@ -1,7 +1,6 @@
 function getRequestFromAPI(model, id="") {
     const xhr = new XMLHttpRequest();
     xhr.open("GET", `https://${window.location.hostname}/api/${model}/${id}`, false);
-    console.log(window.location.host);
     xhr.send();
     return JSON.parse(xhr.response);
 }
@@ -34,6 +33,6 @@ category_select.addEventListener("change", (e) => {
 
 song_select.addEventListener("change", (e) => {
     let song = getRequestFromAPI('song', e.target.value);
-    song_preview.setAttribute('src', song.video_url);
+    song_preview.setAttribute('src', song.preview_url);
     song_preview.hidden = false;
 })

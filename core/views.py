@@ -87,10 +87,10 @@ def export_hymnary(request, hymnary_id):
     body = []
     for item in hymnary.hymnary_songs.all():
         song = item.song
-        video_url = song.video_url.replace('embed/', 'watch?v=')
+        preview_url = song.preview_url.replace('embed/', 'watch?v=')
         body.extend([
             Paragraph(song.category.name, styles.paragraphs['heading1']),
-            Paragraph(f'<a href="{video_url}">{song.name} - {song.artist}</a>', styles.paragraphs['heading2']),
+            Paragraph(f'<a href="{preview_url}">{song.name} - {song.artist}</a>', styles.paragraphs['heading2']),
             *[Paragraph(p, styles.paragraphs['left-aligned']) for p in song.get_lyrics()]
         ])
     
