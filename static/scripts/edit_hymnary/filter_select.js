@@ -1,6 +1,6 @@
 function getRequestFromAPI(model, id="") {
     const xhr = new XMLHttpRequest();
-    xhr.open("GET", `https://${window.location.hostname}/${model}/${id}`, false);
+    xhr.open("GET", `https://${window.location.hostname}/api/${model}/${id}`, false);
     console.log(window.location.host);
     xhr.send();
     return JSON.parse(xhr.response);
