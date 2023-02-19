@@ -17,5 +17,5 @@ class CategorySerializer(serializers.ModelSerializer):
 class SongSerializer(serializers.ModelSerializer):
     class Meta:
         model = Song
-        fields = ['id', 'name', 'slug', 'artist', 'category', 'lyrics_url', 'video_url']
+        fields = ['id', 'name', 'slug', 'artist', 'category', 'lyrics_url', 'preview_url']
 
