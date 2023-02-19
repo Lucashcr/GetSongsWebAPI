@@ -10,7 +10,7 @@ import json, os
 from api.models import *
 from core.models import Hymnary
 
-from build_doc.templates import SimpleDocTemplate, TwoColumnsTemplate
+from build_doc.templates import SingleColumnTemplate, TwoColumnsTemplate
 from build_doc import styles
 
 
@@ -87,7 +87,7 @@ def export_hymnary(request, hymnary_id):
     file_name = f'{hymnary.title}_{datetime.now().strftime("%d_%m_%Y-%H_%M")}.pdf'
     file_path = os.path.join(MEDIA_ROOT, file_name)
 
-    doc = SimpleDocTemplate(file_path, title=hymnary.title)
+    doc = SingleColumnTemplate(file_path, title=hymnary.title)
     doc.insert_heading(hymnary.title, 'heading2-centered')
     for item in hymnary.hymnary_songs.all():
         song = item.song
