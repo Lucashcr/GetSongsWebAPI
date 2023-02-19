@@ -79,7 +79,8 @@ main .buttons {
 
 main .editing {
     border: 5px solid #348839;
-    padding: 0;
+    border-radius: 10px;
+    padding: 10px 10px;
 }
 
 main .editing table {
