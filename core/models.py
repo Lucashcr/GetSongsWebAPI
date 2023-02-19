@@ -8,6 +8,7 @@ class Hymnary(models.Model):
     title = models.CharField(max_length=64)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+    print_category = models.BooleanField(default=True)
     songs = models.ManyToManyField(Song, related_name='hymns', through='HymnarySong')
 
 class HymnarySong(models.Model):

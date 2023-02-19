@@ -66,7 +66,10 @@ function saveHymnary() {
             'Content-Type': 'application/json',
             'X-CSRFToken': csrftoken,
         },
-        body: JSON.stringify({ 'songs_id': songs_id })
+        body: JSON.stringify({ 
+            'songs_id': songs_id,
+            'print_category': document.getElementById('print-category').checked
+        })
     });
     alert('Hinário salvo com sucesso!');
 }

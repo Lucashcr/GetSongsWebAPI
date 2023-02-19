@@ -89,7 +89,8 @@ def export_hymnary(request, hymnary_id):
         song = item.song
         preview_url = song.preview_url.replace('embed/', 'watch?v=')
         body.extend([
-            Paragraph(song.category.name, styles.paragraphs['heading1']),
+            Paragraph(song.category.name, styles.paragraphs['heading1']) 
+            if ... else None,
             Paragraph(f'<a href="{preview_url}">{song.name} - {song.artist}</a>', styles.paragraphs['heading2']),
             *[Paragraph(p, styles.paragraphs['left-aligned']) for p in song.get_lyrics()]
         ])
@@ -113,10 +114,15 @@ def save_hymnary(request: HttpRequest, hymnary_id):
     if request.method == 'PUT' and hymnary.owner == request.user:
         hymnary.songs.clear()
 
-        for i, song_id in enumerate(json.loads(request.body)['songs_id']):
+        request_body = json.loads(request.body)
+        hymnary.print_category = request_body['print_category']
+
+        for i, song_id in enumerate(request_body['songs_id']):
             hymnary.songs.add(
                 Song.objects.get(id=song_id), 
                 through_defaults={'order': i + 1}
             )
+
+        hymnary.save()
 
     return HttpResponse()
