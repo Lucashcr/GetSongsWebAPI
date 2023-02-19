@@ -88,7 +88,7 @@ def export_hymnary(request, hymnary_id):
     file_path = os.path.join(MEDIA_ROOT, file_name)
 
     doc = SingleColumnTemplate(file_path, title=hymnary.title)
-    doc.insert_heading(hymnary.title, 'heading2-centered')
+    doc.insert_heading(hymnary.title, 'heading1-centered')
     for item in hymnary.hymnary_songs.all():
         song = item.song
         preview_url = song.preview_url.replace('embed/', '')

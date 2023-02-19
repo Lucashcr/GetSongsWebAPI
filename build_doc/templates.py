@@ -32,7 +32,7 @@ class SingleColumnTemplate(CustomBaseTemplate):
         
         page = Frame(
             self.leftMargin, self.bottomMargin, 
-            self.width - self.leftMargin*2, self.height, id='page'
+            self.width, self.height, id='page'
         )
         self.addPageTemplates(PageTemplate('single_column', [page]))
 
