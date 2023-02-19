@@ -95,7 +95,7 @@ def export_hymnary(request, hymnary_id):
         doc.insert_heading(song.category.name) if hymnary.print_category else None
         doc.insert_heading_link(f'{song.name} - {song.artist}', preview_url, 'heading2')
         for p in song.get_lyrics():
-            doc.insert_paragraph(p, styles.paragraphs['left-aligned'])
+            doc.insert_paragraph(p)
     doc.build()
     as_attachment = bool(request.GET.get('as_attachment'))
     response = FileResponse(open(file_path, 'rb'), as_attachment=as_attachment, filename=file_name)
