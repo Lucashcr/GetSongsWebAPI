@@ -10,7 +10,7 @@ import json, os
 from api.models import *
 from core.models import Hymnary
 
-from build_doc.templates import SimpleDocTemplate, TwoColumnsTemplate, Paragraph
+from build_doc.templates import SimpleDocTemplate, TwoColumnsTemplate
 from build_doc import styles
 
 
@@ -84,21 +84,19 @@ def new_hymnary(request, hymnary_name):
 def export_hymnary(request, hymnary_id):
     hymnary = Hymnary.objects.get(id=hymnary_id)
 
-    body = []
-    for item in hymnary.hymnary_songs.all():
-        song = item.song
-        preview_url = song.preview_url.replace('embed/', 'watch?v=')
-        body.extend([
-            Paragraph(song.category.name, styles.paragraphs['heading1']) 
-            if ... else None,
-            Paragraph(f'<a href="{preview_url}">{song.name} - {song.artist}</a>', styles.paragraphs['heading2']),
-            *[Paragraph(p, styles.paragraphs['left-aligned']) for p in song.get_lyrics()]
-        ])
-    
     file_name = f'{hymnary.title}_{datetime.now().strftime("%d_%m_%Y-%H_%M")}.pdf'
     file_path = os.path.join(MEDIA_ROOT, file_name)
 
-    SimpleDocTemplate(file_path, title=hymnary.title).build(body)
+    doc = SimpleDocTemplate(file_path, title=hymnary.title)
+    doc.insert_heading(hymnary.title, 'heading2-centered')
+    for item in hymnary.hymnary_songs.all():
+        song = item.song
+        preview_url = song.preview_url.replace('embed/', '')
+        doc.insert_heading(song.category.name) if hymnary.print_category else None
+        doc.insert_heading_link(f'{song.name} - {song.artist}', preview_url, 'heading2')
+        for p in song.get_lyrics():
+            doc.insert_paragraph(p, styles.paragraphs['heading'])
+    doc.build()
     as_attachment = bool(request.GET.get('as_attachment'))
     response = FileResponse(open(file_path, 'rb'), as_attachment=as_attachment, filename=file_name)
     
