@@ -5,6 +5,11 @@
 
 * {
     margin: 0;
+    font-family: 'Raleway', 'Arial Narrow', Arial, sans-serif;
+}
+
+h1 {
+    font-weight: bolder;
 }
 
 body {
@@ -22,7 +27,7 @@ header {
     padding: var(--header-footer-spacing) 50px;
 }
 
-header > * {
+header>* {
     flex: 1;
 }
 
@@ -45,11 +50,11 @@ header h4 {
 }
 
 header img {
-    width: var(--header-img-width); 
-    border-radius: calc( var(--header-img-width) / 2 );
+    width: var(--header-img-width);
+    border-radius: calc(var(--header-img-width) / 2);
 }
 
-header > nav {
+header>nav {
     display: flex;
     flex-direction: row-reverse;
     gap: var(--header-footer-spacing);
@@ -107,7 +112,7 @@ footer {
     padding: var(--header-footer-spacing);
 }
 
-footer > * {
+footer>* {
     flex: 1;
 }
 
