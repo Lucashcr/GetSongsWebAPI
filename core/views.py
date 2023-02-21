@@ -5,8 +5,10 @@ from django.http import HttpRequest, HttpResponse
 from django.http.response import FileResponse
 from django.shortcuts import redirect
 from django.views.generic import TemplateView
+from django.core.mail import send_mail
 
-import json, os
+import json
+import os
 from api.models import *
 from core.models import Hymnary
 
@@ -25,7 +27,17 @@ class AboutView(TemplateView):
 
 class ContactView(TemplateView):
     template_name = "pages/contact.html"
-    
+
+    # def post(self, request):
+    #     name = request.POST.get('name')
+    #     email = request.POST.get('email')
+    #     message = request.POST.get('message')
+
+    #     send_mail(
+    #         f'{name} - Contato via GetSongs',
+    #         message, None, [email]
+    #     )
+
 
 class ListHymnaries(TemplateView):
     template_name = "pages/list_hymnaries.html"
@@ -39,13 +51,13 @@ class ListHymnaries(TemplateView):
 class TemplateHymnaryView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
+
         try:
             context["hymnary"] = Hymnary.objects.get(id=kwargs['hymnary_id'])
             context["categories"] = Category.objects.all()
         except:
             ...
-        
+
         return context
 
     def get(self, request, *args, **kwargs):
@@ -96,21 +108,24 @@ def export_hymnary(request, hymnary_id):
     for item in hymnary.hymnary_songs.all():
         song = item.song
         preview_url = song.preview_url.replace('embed/', '')
-        doc.insert_heading(song.category.name) if hymnary.print_category else None
-        doc.insert_heading_link(f'{song.name} - {song.artist}', preview_url, 'heading2')
+        doc.insert_heading(
+            song.category.name) if hymnary.print_category else None
+        doc.insert_heading_link(
+            f'{song.name} - {song.artist}', preview_url, 'heading2')
         for p in song.get_lyrics():
             doc.insert_paragraph(p)
     doc.build()
     as_attachment = bool(request.GET.get('as_attachment'))
-    response = FileResponse(open(file_path, 'rb'), as_attachment=as_attachment, filename=file_name)
-    
+    response = FileResponse(open(file_path, 'rb'),
+                            as_attachment=as_attachment, filename=file_name)
+
     os.remove(file_path)
-    
+
     return response
 
 
 # CRIAR VIEW PARA /hymnary/<id>/save
-def save_hymnary(request: HttpRequest, hymnary_id):    
+def save_hymnary(request: HttpRequest, hymnary_id):
     hymnary = Hymnary.objects.get(id=hymnary_id)
 
     if request.method == 'PUT' and hymnary.owner == request.user:
@@ -121,7 +136,7 @@ def save_hymnary(request: HttpRequest, hymnary_id):
 
         for i, song_id in enumerate(request_body['songs_id']):
             hymnary.songs.add(
-                Song.objects.get(id=song_id), 
+                Song.objects.get(id=song_id),
                 through_defaults={'order': i + 1}
             )
 

@@ -3,14 +3,30 @@
 {% block head_title %} - Contato{% endblock head_title %}
 
 {% block content %}
-<h1>Contato</h1>
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur non officia voluptas quas vero. Porro cum perspiciatis, modi nobis aspernatur quasi assumenda adipisci, omnis, excepturi nisi velit voluptatibus accusamus corporis.</p>
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur non officia voluptas quas vero. Porro cum perspiciatis, modi nobis aspernatur quasi assumenda adipisci, omnis, excepturi nisi velit voluptatibus accusamus corporis.</p>
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur non officia voluptas quas vero. Porro cum perspiciatis, modi nobis aspernatur quasi assumenda adipisci, omnis, excepturi nisi velit voluptatibus accusamus corporis.</p>
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur non officia voluptas quas vero. Porro cum perspiciatis, modi nobis aspernatur quasi assumenda adipisci, omnis, excepturi nisi velit voluptatibus accusamus corporis.</p>
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur non officia voluptas quas vero. Porro cum perspiciatis, modi nobis aspernatur quasi assumenda adipisci, omnis, excepturi nisi velit voluptatibus accusamus corporis.</p>
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur non officia voluptas quas vero. Porro cum perspiciatis, modi nobis aspernatur quasi assumenda adipisci, omnis, excepturi nisi velit voluptatibus accusamus corporis.</p>
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur non officia voluptas quas vero. Porro cum perspiciatis, modi nobis aspernatur quasi assumenda adipisci, omnis, excepturi nisi velit voluptatibus accusamus corporis.</p>
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur non officia voluptas quas vero. Porro cum perspiciatis, modi nobis aspernatur quasi assumenda adipisci, omnis, excepturi nisi velit voluptatibus accusamus corporis.</p>
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur non officia voluptas quas vero. Porro cum perspiciatis, modi nobis aspernatur quasi assumenda adipisci, omnis, excepturi nisi velit voluptatibus accusamus corporis.</p>
+
+<h1>Entre em contato conosco</h1>
+
+<p>
+    Se você tem alguma dúvida ou sugestão, por favor, entre em contato conosco preenchendo o formulário abaixo:
+</p>
+
+<form method="POST" class="form"> {% csrf_token %}
+    <div class="form-group">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" class="form-control" name="nome" required 
+        {% if request.user.is_authenticated %}value="{{request.user.name}}"{% endif %}>
+    </div>
+    <div class="form-group">
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" class="form-control" name="email" required
+        {% if request.user.is_authenticated %}value="{{request.user.email}}"{% endif %}>
+    </div>
+    <div class="form-group">
+        <label for="mensagem">Mensagem:</label><br>
+        <textarea id="mensagem" class="form-control" name="mensagem" required></textarea>
+    </div>
+    <input type="submit" value="Enviar">
+</form>
+
+
 {% endblock content %}
