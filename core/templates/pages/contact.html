@@ -14,7 +14,7 @@
     <div class="form-group">
         <label for="nome">Nome:</label>
         <input type="text" id="nome" class="form-control" name="nome" required 
-        {% if request.user.is_authenticated %}value="{{request.user.name}}"{% endif %}>
+        {% if request.user.is_authenticated %}value="{{request.user.first_name}} {{request.user.last_name}}"{% endif %}>
     </div>
     <div class="form-group">
         <label for="email">E-mail:</label>
