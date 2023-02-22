@@ -1,18 +1,18 @@
 import os
 import json
+from datetime import datetime
+
 from django.core.mail import send_mail
 from django.views.generic import TemplateView
 from django.shortcuts import redirect
 from django.http.response import FileResponse
 from django.http import HttpRequest, HttpResponse
-from datetime import datetime
 
-from build_doc import styles
 from build_doc.templates import SingleColumnTemplate, TwoColumnsTemplate
 
 from api.models import *
 from core.models import Hymnary
-from mysite.settings import BASE_DIR
+from mysite.settings import BASE_DIR, TIME_ZONE
 
 
 # Create your views here.
@@ -36,9 +36,10 @@ class ContactView(TemplateView):
         email = request.POST.get('email')
         message = request.POST.get('message').split('\n')
 
-        with open(BASE_DIR / 'core' / 'templates' / 'email' / 'contact.html', 'r') as f:
+        with open(BASE_DIR/'core'/'templates'/'email'/'contact.html', 'r') as f:
             html_message = f.read() % (
-                name, email, datetime.now().strftime('%d/%m/%Y %H:%M:%S'),
+                name, email,
+                datetime.now(TIME_ZONE).strftime('%d/%m/%Y %H:%M:%S'),
                 ''.join(f'<p>{p}</p>' for p in message)
             )
 
