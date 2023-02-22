@@ -33,7 +33,7 @@ class ContactView(TemplateView):
 
         template_file_path = (
             self.get_template_names()[0]
-            .replace('page', 'email')
+            .replace('pages', 'email')
         )
 
         with open(template_file_path, 'r') as f:
