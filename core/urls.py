@@ -9,7 +9,7 @@ urlpatterns = [
     path('', HomeView.as_view()),
     path('about', AboutView.as_view()),
     path('contact', ContactView.as_view()),
-    path('thanks_contact', ThanksContactView.as_view()),
+    path('thanks-contact', ThanksContactView.as_view()),
     path('hymnary', login_required(ListHymnaries.as_view())),
     path("hymnary/new/<hymnary_name>", login_required(new_hymnary)),
     path('hymnary/<int:hymnary_id>', login_required(ShowHymnary.as_view())),

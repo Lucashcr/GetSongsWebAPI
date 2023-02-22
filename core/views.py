@@ -48,7 +48,7 @@ class ContactView(TemplateView):
             html_message=html_message
         )
 
-        return redirect('/thanks')
+        return redirect('/thanks-contact')
 
 
 class ListHymnaries(TemplateView):
