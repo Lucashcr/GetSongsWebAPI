@@ -3,7 +3,7 @@ from datetime import datetime
 from django.conf.global_settings import MEDIA_ROOT
 from django.http import HttpRequest, HttpResponse
 from django.http.response import FileResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.views.generic import TemplateView
 from django.core.mail import send_mail
 
@@ -28,15 +28,22 @@ class AboutView(TemplateView):
 class ContactView(TemplateView):
     template_name = "pages/contact.html"
 
-    # def post(self, request):
-    #     name = request.POST.get('name')
-    #     email = request.POST.get('email')
-    #     message = request.POST.get('message')
+    def post(self, request):
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message').split('\n')
 
-    #     send_mail(
-    #         f'{name} - Contato via GetSongs',
-    #         message, None, [email]
-    #     )
+        with open('./templates/email/contact.html', 'r') as f:
+            html_message = f.read() % (
+                name, email, datetime.now(), 
+                f'<p>{p}</p>' for p in message
+            )
+
+        send_mail(
+            f'{name} - Contato via GetSongs', '', None,
+            [email, 'lucash.rocha@hotmail.com'],
+            html_message=html_message
+        )
 
 
 class ListHymnaries(TemplateView):
