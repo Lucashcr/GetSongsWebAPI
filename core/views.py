@@ -1,19 +1,17 @@
+import os
+import json
+from django.conf.global_settings import MEDIA_ROOT
+from django.core.mail import send_mail
+from django.views.generic import TemplateView
+from django.shortcuts import redirect
+from django.http.response import FileResponse
+from django.http import HttpRequest, HttpResponse
 from datetime import datetime
 
-from django.conf.global_settings import MEDIA_ROOT
-from django.http import HttpRequest, HttpResponse
-from django.http.response import FileResponse
-from django.shortcuts import redirect, render
-from django.views.generic import TemplateView
-from django.core.mail import send_mail
-
-import json
-import os
-from api.models import *
-from core.models import Hymnary
-
-from build_doc.templates import SingleColumnTemplate, TwoColumnsTemplate
 from build_doc import styles
+from build_doc.templates import SingleColumnTemplate, TwoColumnsTemplate
+from core.models import Hymnary
+from api.models import *
 
 
 # Create your views here.
@@ -33,7 +31,12 @@ class ContactView(TemplateView):
         email = request.POST.get('email')
         message = request.POST.get('message').split('\n')
 
-        with open('./templates/email/contact.html', 'r') as f:
+        template_file_path = (
+            self.get_template_names()[0]
+            .replace('page', 'email')
+        )
+
+        with open(template_file_path, 'r') as f:
             html_message = f.read() % (
                 name, email, datetime.now(),
                 ''.join(f'<p>{p}</p>' for p in message)
