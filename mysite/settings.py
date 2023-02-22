@@ -151,4 +151,3 @@ EMAIL_PORT = '587'
 EMAIL_HOST_USER = 'getsongsweb@gmail.com'
 EMAIL_HOST_PASSWORD = 'gugogmwwvffuyiqo'
 EMAIL_USE_TLS = True
-EMAIL_USE_SSL = True
