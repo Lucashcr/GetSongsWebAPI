@@ -24,6 +24,10 @@ class AboutView(TemplateView):
     template_name = "pages/about.html"
 
 
+class ThanksContactView(TemplateView):
+    template_name = "pages/thanks_contact.html"
+
+
 class ContactView(TemplateView):
     template_name = "pages/contact.html"
 
@@ -31,11 +35,6 @@ class ContactView(TemplateView):
         name = request.POST.get('name')
         email = request.POST.get('email')
         message = request.POST.get('message').split('\n')
-
-        template_file_path = (
-            self.get_template_names()[0]
-            .replace('pages', 'email')
-        )
 
         with open(BASE_DIR / 'core' / 'templates' / 'email' / 'contact.html', 'r') as f:
             html_message = f.read() % (
@@ -48,6 +47,8 @@ class ContactView(TemplateView):
             [email, 'lucash.rocha@hotmail.com'],
             html_message=html_message
         )
+
+        return redirect('/thanks')
 
 
 class ListHymnaries(TemplateView):
