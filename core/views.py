@@ -38,7 +38,7 @@ class ContactView(TemplateView):
 
         with open(BASE_DIR / 'core' / 'templates' / 'email' / 'contact.html', 'r') as f:
             html_message = f.read() % (
-                name, email, datetime.now(),
+                name, email, datetime.now().strftime('%d/%m/%Y %H:%M:%S'),
                 ''.join(f'<p>{p}</p>' for p in message)
             )
 
