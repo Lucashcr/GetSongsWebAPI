@@ -1,6 +1,5 @@
 import os
 import json
-from django.conf.global_settings import MEDIA_ROOT
 from django.core.mail import send_mail
 from django.views.generic import TemplateView
 from django.shortcuts import redirect
@@ -10,8 +9,10 @@ from datetime import datetime
 
 from build_doc import styles
 from build_doc.templates import SingleColumnTemplate, TwoColumnsTemplate
-from core.models import Hymnary
+
 from api.models import *
+from core.models import Hymnary
+from mysite.settings import BASE_DIR
 
 
 # Create your views here.
@@ -36,7 +37,7 @@ class ContactView(TemplateView):
             .replace('pages', 'email')
         )
 
-        with open(template_file_path, 'r') as f:
+        with open(BASE_DIR / 'core' / 'templates' / 'email' / 'contact.html', 'r') as f:
             html_message = f.read() % (
                 name, email, datetime.now(),
                 ''.join(f'<p>{p}</p>' for p in message)
@@ -111,7 +112,7 @@ def export_hymnary(request, hymnary_id):
     hymnary = Hymnary.objects.get(id=hymnary_id)
 
     file_name = f'{hymnary.title}_{datetime.now().strftime("%d_%m_%Y-%H_%M")}.pdf'
-    file_path = os.path.join(MEDIA_ROOT, file_name)
+    file_path = os.path.join(file_name)
 
     doc = SingleColumnTemplate(file_path, title=hymnary.title)
     doc.insert_heading(hymnary.title, 'heading1-centered')
