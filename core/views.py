@@ -35,8 +35,8 @@ class ContactView(TemplateView):
 
         with open('./templates/email/contact.html', 'r') as f:
             html_message = f.read() % (
-                name, email, datetime.now(), 
-                f'<p>{p}</p>' for p in message
+                name, email, datetime.now(),
+                ''.join(f'<p>{p}</p>' for p in message)
             )
 
         send_mail(
