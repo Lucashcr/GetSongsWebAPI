@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-from env import email
+
 import os
 from pathlib import Path
 
@@ -146,9 +146,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Email settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = email.EMAIL_HOST
-EMAIL_HOST_USER = email.EMAIL_HOST_USER
-EMAIL_HOST_PASSWORD = email.EMAIL_HOST_PASSWORD
-EMAIL_PORT = email.EMAIL_PORT
-EMAIL_USE_TLS = email.EMAIL_USE_TLS
-EMAIL_USE_SSL = email.EMAIL_USE_SSL
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = '587'
+EMAIL_HOST_USER = 'getsongsweb@gmail.com'
+EMAIL_HOST_PASSWORD = 'gugogmwwvffuyiqo'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = True
