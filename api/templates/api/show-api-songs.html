@@ -4,6 +4,7 @@
 
 {% block content %}
 <h1>Listando {{datatype}} disponíveis:</h1>
+{% if collection %}
 <table class="table table-striped">
     <thead class="bg-dark text-light">
         <td>Nome</td> 
@@ -20,4 +21,7 @@
     </tr>
     {% endfor %}
 </table>
+{% else %}
+<h1>Ops, não encontramos as músicas solicitadas.</h1>
+{% endif %}
 {% endblock content %}

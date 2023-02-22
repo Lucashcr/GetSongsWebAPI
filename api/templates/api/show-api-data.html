@@ -4,16 +4,19 @@
 
 {% block content %}
 <h1>Listando {{datatype}} disponíveis:</h1>
+<h2>Clique para listar as músicas filtradas por {{datatype}}.</h2>
 <table class="table table-striped">
     <thead class="bg-dark text-light"> 
         <td>Nome</td> 
         <td>Slug</td>
     </thead>
     {% for data in collection %}
-    <tr>
-        <td>{{data.name}}</td>
-        <td>{{data.slug}}</td>
-    </tr>
+    <a href="/api/show-songs/{{data.slug}}">
+        <tr>
+            <td>{{data.name}}</td>
+            <td>{{data.slug}}</td>
+        </tr>
+    </a>
     {% endfor %}
 </table>
 {% endblock content %}
