@@ -14,6 +14,7 @@ urlpatterns = [
     path('', HomeView.as_view()),
     path('show-categories/', ShowCategoriesView.as_view()),
     path('show-artists/', ShowArtistsView.as_view()),
+    path('show-songs/', ShowSongsView.as_view()),
     path('show-songs/<slug>', ShowSongsView.as_view()),
     path('', include(router.urls))
     # path('category/', CategoryViewSet.as_view({'get': 'retrieve'})),

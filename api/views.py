@@ -54,8 +54,8 @@ class ShowSongsView(TemplateView):
         context_data = super().get_context_data(**kwargs)
         context_data['collection'] = Song.objects.all()
 
-        slug = kwargs.pop('slug', '')
-        if slug != '':
+        slug = kwargs.pop('slug', None)
+        if slug is not None:
             artists = Song.objects.filter(artist__slug=slug)
             categories = Song.objects.filter(category__slug=slug)
 
