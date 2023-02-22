@@ -4,11 +4,13 @@
 
 {% block content %}
 <h1>Listando {{datatype}} disponíveis:</h1>
+{% if filtered %}
+<h2>Filtrado por: {{filtered}}</h2>
+{% endif %}
 {% if collection %}
 <table class="table table-striped">
     <thead class="bg-dark text-light">
         <td>Nome</td> 
-        <td>Slug</td>
         <td>Artista</td>
         <td>Categoria</td>
     </thead>
