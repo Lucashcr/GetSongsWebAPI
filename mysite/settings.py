@@ -9,8 +9,7 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-# Email settings
-from env.email import *
+from env import email
 import os
 from pathlib import Path
 
@@ -144,3 +143,12 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = email.EMAIL_HOST
+EMAIL_HOST_USER = email.EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = email.EMAIL_HOST_PASSWORD
+EMAIL_PORT = email.EMAIL_PORT
+EMAIL_USE_TLS = email.EMAIL_USE_TLS
+EMAIL_USE_SSL = email.EMAIL_USE_SSL
