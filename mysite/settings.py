@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 # import dj_database_url
 from configparser import ConfigParser
+import os
 from pathlib import Path
 
 
@@ -30,7 +31,7 @@ cfg.read(BASE_DIR / 'config.ini')
 SECRET_KEY = 'django-insecure-rc^*w^w&6g9_(uvx#6s*bnt!w)l0rdi%!l7mv#y%uc&x%wo5pk'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False if os.environ.get('DEPLOY') else True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -94,28 +95,30 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 
-DATABASE_URL = cfg["DATABASE"]['URL']
+DATABASE_URL = cfg["DATABASE"]["URL"]
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': cfg["DATABASE"]["PGDATABASE"],
-        'USER': cfg["DATABASE"]["PGUSER"],
-        'PASSWORD': cfg["DATABASE"]["PGPASSWORD"],
-        'HOST': cfg["DATABASE"]["PGHOST"],
-        'PORT': cfg["DATABASE"]["PGPORT"],
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': cfg["DATABASE"]["PGDATABASE"],
+            'USER': cfg["DATABASE"]["PGUSER"],
+            'PASSWORD': cfg["DATABASE"]["PGPASSWORD"],
+            'HOST': cfg["DATABASE"]["PGHOST"],
+            'PORT': cfg["DATABASE"]["PGPORT"],
+        }
     }
-}
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': os.environ["PGDATABASE"],
-#         'USER': os.environ["PGUSER"],
-#         'PASSWORD': os.environ["PGPASSWORD"],
-#         'HOST': os.environ["PGHOST"],
-#         'PORT': os.environ["PGPORT"],
-#     }
-# }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ["PGDATABASE"],
+            'USER': os.environ["PGUSER"],
+            'PASSWORD': os.environ["PGPASSWORD"],
+            'HOST': os.environ["PGHOST"],
+            'PORT': os.environ["PGPORT"],
+        }
+    }
 
 
 # Password validation
@@ -163,8 +166,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Email settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = cfg["EMAIL"]["HOST"]
-EMAIL_PORT = cfg["EMAIL"]["PORT"]
-EMAIL_HOST_USER = cfg["EMAIL"]["HOST_USER"]
-EMAIL_HOST_PASSWORD = cfg["EMAIL"]["HOST_PASSWORD"]
+
+if DEBUG:
+    EMAIL_HOST = cfg["EMAIL"]["HOST"]
+    EMAIL_PORT = cfg["EMAIL"]["PORT"]
+    EMAIL_HOST_USER = cfg["EMAIL"]["HOST_USER"]
+    EMAIL_HOST_PASSWORD = cfg["EMAIL"]["HOST_PASSWORD"]
+else:
+    EMAIL_HOST = os.environ["EMAIL_HOST"]
+    EMAIL_PORT = os.environ["EMAIL_PORT"]
+    EMAIL_HOST_USER = os.environ["EMAIL_HOST_USER"]
+    EMAIL_HOST_PASSWORD = os.environ["EMAIL_HOST_PASSWORD"]
+
 EMAIL_USE_TLS = True
