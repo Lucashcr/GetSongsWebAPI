@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 # Email settings
-# from env.email import *
+from env.email import *
 import os
 from pathlib import Path
 
