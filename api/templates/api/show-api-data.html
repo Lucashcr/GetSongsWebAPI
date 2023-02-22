@@ -11,12 +11,9 @@
         <td>Slug</td>
     </thead>
     {% for data in collection %}
-    <a href="/api/show-songs/{{data.slug}}">
-        <tr>
-            <td>{{data.name}}</td>
-            <td>{{data.slug}}</td>
-        </tr>
-    </a>
+    <tr>
+        <td><a href="/api/show-songs/{{data.slug}}">{{data.name}}</a></td>
+    </tr>
     {% endfor %}
 </table>
 {% endblock content %}
