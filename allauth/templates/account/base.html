@@ -42,11 +42,10 @@
       </ul>
     </nav> {% endcomment %}
     {% include 'base/header.html' %}
-    <div class="centered">
-      <main class="bg-light">
-        {% block content %}{% endblock %}
-      </main>
-    </div>
+    <main class="bg-light">
+    {% block content %}
+    {% endblock %}
+    </main>
     {% endblock %}
     {% block extra_body %}{% endblock %}
     {% include 'base/footer.html' %}

@@ -27,7 +27,7 @@ header {
     padding: var(--header-footer-spacing) 50px;
 }
 
-header>* {
+header>nav {
     flex: 1;
 }
 
