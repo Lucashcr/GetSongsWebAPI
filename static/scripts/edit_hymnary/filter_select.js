@@ -38,10 +38,10 @@ category_select.addEventListener("change", (e) => {
         data
             .filter(song => song.category == e.target.value)
             .forEach(element => {
-                let artist_name = artists.then(data => {
-                    data.find(artist => artist.id == element.artist).name;
+                artists.then(data => {
+                    let artist_name = data.find(artist => artist.id == element.artist).name;
+                    song_select.appendChild(new Option(`${element.name} - ${artist_name}`, element.id));
                 })
-                song_select.appendChild(new Option(`${element.name} - ${artist_name}`, element.id));
             });
     })
 })
