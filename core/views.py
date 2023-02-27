@@ -168,7 +168,7 @@ def save_hymnary(request: HttpRequest, hymnary_id):
 
             hymnary.save()
     except Exception:
-        result = f'Ops, tivemos algum problema! Tente novamente mais tarde ou entre em contato.'
+        result = 'Ops, tivemos algum problema! Tente novamente mais tarde ou entre em contato.'
     else:
         result = 'Hinário salvo com sucesso'
 
