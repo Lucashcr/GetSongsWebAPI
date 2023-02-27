@@ -1,27 +1,11 @@
-// function getRequestFromAPI(model, id = "") {
-//     const xhr = new XMLHttpRequest();
-//     xhr.open("GET", `https://${window.location.hostname}/api/${model}/${id}`, false);
-//     xhr.send();
-//     return JSON.parse(xhr.response);
-// }
-
-// async function getRequestFromAPI(model, id = "") {
-//     const response = await fetch(`/api/${model}/${id}`);
-//     var jsonData = await response.json();
-//     return jsonData;
-// };
-
-// let categories = getRequestFromAPI("category");
-// let artists = getRequestFromAPI("artist");
-// let songs = getRequestFromAPI("song");
-
-// let categories = fetch(`https://${window.location.hostname}/api/category`).then(response => { return response.json() });
 let categories;
 fetch(`https://${window.location.hostname}/api/category`)
     .then(response => { categories = response.json() });
+
 let artists;
 fetch(`https://${window.location.hostname}/api/artist`)
     .then(response => { artists = response.json() });
+
 let songs;
 fetch(`https://${window.location.hostname}/api/song`)
     .then(response => { songs = response.json() });
@@ -47,7 +31,9 @@ category_select.addEventListener("change", (e) => {
 })
 
 song_select.addEventListener("change", (e) => {
-    let song = getRequestFromAPI('song', e.target.value);
-    song_preview.setAttribute('src', song.preview_url);
-    song_preview.hidden = false;
+    songs.then(data => {
+        let song = data.find(song => song.id == e.target.value);
+        song_preview.setAttribute('src', song.preview_url);
+        song_preview.hidden = false;
+    })
 })
