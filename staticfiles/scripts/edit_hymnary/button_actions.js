@@ -55,7 +55,6 @@ function getCookie(name) {
 function saveHymnary() {
     let songs_id = Array.from(songs_list.querySelectorAll('.song_id'))
         .map(song_id => parseInt(song_id.value));
-    console.log(songs_id);
 
     const csrftoken = getCookie('csrftoken');
 
@@ -71,9 +70,7 @@ function saveHymnary() {
             'print_category': document.getElementById('print-category').checked,
             'template': document.getElementById('template').value
         })
-    }).then(response => response.json()
-    ).then(data => {
-        console.log(data);
-        alert(data.result);
-    });
+    }).then(response => { return response.json() }).then(
+        data => alert(data.result)
+    );
 }
