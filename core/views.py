@@ -6,7 +6,7 @@ from django.core.mail import send_mail
 from django.views.generic import TemplateView
 from django.shortcuts import redirect
 from django.http.response import FileResponse
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, JsonResponse
 
 from build_doc.templates import SingleColumnTemplate, TwoColumnsTemplate
 
@@ -150,20 +150,24 @@ def export_hymnary(request, hymnary_id):
 
 
 def save_hymnary(request: HttpRequest, hymnary_id):
-    hymnary = Hymnary.objects.get(id=hymnary_id)
+    try:
+        hymnary = Hymnary.objects.get(id=hymnary_id)
 
-    if request.method == 'PUT' and hymnary.owner == request.user:
-        request_body = json.loads(request.body)
-        hymnary.print_category = request_body['print_category']
-        hymnary.template = request_body['template']
+        if request.method == 'PUT' and hymnary.owner == request.user:
+            request_body = json.loads(request.body)
+            hymnary.print_category = request_body['print_category']
+            hymnary.template = request_body['template']
 
-        hymnary.songs.clear()
-        for i, song_id in enumerate(request_body['songs_id']):
-            hymnary.songs.add(
-                Song.objects.get(id=song_id),
-                through_defaults={'order': i + 1}
-            )
+            hymnary.songs.clear()
+            for i, song_id in enumerate(request_body['songs_id']):
+                hymnary.songs.add(
+                    Song.objects.get(id=song_id),
+                    through_defaults={'order': i + 1}
+                )
 
-        hymnary.save()
+            hymnary.save()
+            result = 'ok'
+    except Exception as err:
+        result = f'error: {err}'
 
-    return HttpResponse()
+    return JsonResponse({'result', result})
