@@ -167,8 +167,9 @@ def save_hymnary(request: HttpRequest, hymnary_id):
                 )
 
             hymnary.save()
-            result = 'Hinário salvo com sucesso'
-    except Exception as err:
-        result = f'Erro: {gettext(err)}'
+    except Exception:
+        result = f'Ops, tivemos algum problema! Tente novamente mais tarde ou entre em contato.'
+    else:
+        result = 'Hinário salvo com sucesso'
 
     return JsonResponse({'result', result})
