@@ -3,29 +3,30 @@ function togglePopUp() {
 }
 
 function appendSong() {
-    let song = songs.find(song => song.id == song_select.value);
+    songs.then(data => {
+        let song = data.find(song => song.id == song_select.value);
 
-    let newSongElement = document.createElement("tr");
-    newSongElement.classList.add("song_item");
-    newSongElement.draggable = true;
+        let newSongElement = document.createElement("tr");
+        newSongElement.classList.add("song_item");
+        newSongElement.draggable = true;
 
-    let category = document.createElement("td");
-    category.innerText = categories.find(cat => song.category == cat.id).name;
-    newSongElement.appendChild(category);
-    let songname = document.createElement("td");
-    songname.innerText = song.name;
-    newSongElement.appendChild(songname);
-    let artist = document.createElement("td");
-    artist.innerText = artists.find(art => song.artist == art.id).name;
-    newSongElement.appendChild(artist);
-    let song_id_input = document.createElement("input");
-    song_id_input.type = "hidden";
-    song_id_input.classList.add("song_id");
-    song_id_input.value = song.id;
-    newSongElement.appendChild(song_id_input)
+        let category = document.createElement("td");
+        category.innerText = categories.find(cat => song.category == cat.id).name;
+        newSongElement.appendChild(category);
+        let songname = document.createElement("td");
+        songname.innerText = song.name;
+        newSongElement.appendChild(songname);
+        let artist = document.createElement("td");
+        artist.innerText = artists.find(art => song.artist == art.id).name;
+        newSongElement.appendChild(artist);
+        let song_id_input = document.createElement("input");
+        song_id_input.type = "hidden";
+        song_id_input.classList.add("song_id");
+        song_id_input.value = song.id;
+        newSongElement.appendChild(song_id_input)
 
-    songs_list.insertAdjacentElement("beforeend", newSongElement);
-    togglePopUp();
+        songs_list.insertAdjacentElement("beforeend", newSongElement);
+    })
 }
 
 function removeSong() {

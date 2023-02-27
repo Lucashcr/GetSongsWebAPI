@@ -7,7 +7,6 @@ from django.views.generic import TemplateView
 from django.shortcuts import redirect
 from django.http.response import FileResponse
 from django.http import HttpRequest, JsonResponse
-from django.utils.translation import gettext
 
 from build_doc.templates import SingleColumnTemplate, TwoColumnsTemplate
 
