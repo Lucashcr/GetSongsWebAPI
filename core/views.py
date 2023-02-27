@@ -165,11 +165,10 @@ def save_hymnary(request: HttpRequest, hymnary_id):
                     Song.objects.get(id=song_id),
                     through_defaults={'order': i + 1}
                 )
-
-            hymnary.save()
     except Exception:
-        result = 'Ops, tivemos algum problema! Tente novamente mais tarde ou entre em contato.'
+        alert = 'Ops, tivemos um problema em salvar seu! Tente novamente mais tarde ou entre em contato.'
     else:
-        result = 'Hinário salvo com sucesso'
+        hymnary.save()
+        alert = 'Hinário salvo com sucesso'
 
-    return JsonResponse({'result', result})
+    return JsonResponse({'alert': alert})
