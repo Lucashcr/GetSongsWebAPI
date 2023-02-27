@@ -55,7 +55,6 @@ function getCookie(name) {
 function saveHymnary() {
     let songs_id = Array.from(songs_list.querySelectorAll('.song_id'))
         .map(song_id => parseInt(song_id.value));
-    console.log(songs_id);
 
     const csrftoken = getCookie('csrftoken');
 
