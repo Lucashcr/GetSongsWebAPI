@@ -121,11 +121,10 @@ def export_hymnary(request, hymnary_id):
     file_name = f'{hymnary.title}_{datetime.now().strftime("%d_%m_%Y-%H_%M")}.pdf'
     file_path = os.path.join(file_name)
 
-    match hymnary.template:
-        case 'single-column' | 'each-song-by-page':
-            HymnaryTemplate = SingleColumnTemplate
-        case 'double-column':
-            HymnaryTemplate = TwoColumnsTemplate
+    if hymnary.template in ('single-column', 'each-song-by-page'):
+        HymnaryTemplate = SingleColumnTemplate
+    elif hymnary.template == 'double-column':
+        HymnaryTemplate = TwoColumnsTemplate
 
     doc = HymnaryTemplate(file_path, title=hymnary.title)
     doc.insert_heading(hymnary.title, 'heading1-centered')
