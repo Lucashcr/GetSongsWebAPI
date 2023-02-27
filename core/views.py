@@ -123,7 +123,7 @@ def export_hymnary(request, hymnary_id):
 
     if hymnary.template in ('single-column', 'each-song-by-page'):
         HymnaryTemplate = SingleColumnTemplate
-    elif hymnary.template == 'double-column':
+    elif hymnary.template == 'two-columns':
         HymnaryTemplate = TwoColumnsTemplate
 
     doc = HymnaryTemplate(file_path, title=hymnary.title)
@@ -164,8 +164,9 @@ def save_hymnary(request: HttpRequest, hymnary_id):
                     Song.objects.get(id=song_id),
                     through_defaults={'order': i + 1}
                 )
-    except Exception:
-        alert = 'Ops, tivemos um problema em salvar seu! Tente novamente mais tarde ou entre em contato.'
+    except Exception as e:
+        print(e)
+        alert = 'Ops, tivemos um problema em salvar seu hinário! Tente novamente mais tarde ou entre em contato.'
     else:
         hymnary.save()
         alert = 'Hinário salvo com sucesso'

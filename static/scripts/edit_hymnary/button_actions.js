@@ -76,6 +76,6 @@ function saveHymnary() {
             'template': document.getElementById('template').value
         })
     }).then(response => response.json()).then(
-        data => alert(data.result)
+        data => alert(data.alert)
     );
 }
