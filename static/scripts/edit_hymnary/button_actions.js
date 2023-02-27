@@ -11,15 +11,15 @@ function appendSong() {
         newSongElement.draggable = true;
 
         let category = document.createElement("td");
-        category.innerText = categories.then(data => {
-            data.find(cat => song.category == cat.id).name;
+        categories.then(data => {
+            category.innerText = data.find(cat => song.category == cat.id).name;
             newSongElement.appendChild(category);
             let songname = document.createElement("td");
             songname.innerText = song.name;
             newSongElement.appendChild(songname);
             let artist = document.createElement("td");
-            artist.innerText = artists.then(data => {
-                data.find(art => song.artist == art.id).name;
+            artists.then(data => {
+                artist.innerText = data.find(art => song.artist == art.id).name;
                 newSongElement.appendChild(artist);
                 let song_id_input = document.createElement("input");
                 song_id_input.type = "hidden";
