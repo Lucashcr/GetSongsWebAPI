@@ -16,17 +16,9 @@ function getRequestFromAPI(model, id = "") {
 // let songs = getRequestFromAPI("song");
 
 // let categories = fetch(`https://${window.location.hostname}/api/category`).then(response => { return response.json() });
-let categories;
-fetch(`https://${window.location.hostname}/api/category`)
-    .then(response => { categories = response.json() });
-
-let artists;
-fetch(`https://${window.location.hostname}/api/artist`)
-    .then(response => { artists = response.json() });
-
-let songs;
-fetch(`https://${window.location.hostname}/api/song`)
-    .then(response => { songs = response.json() });
+let categories = fetch(`https://${window.location.hostname}/api/category`)
+let artists = fetch(`https://${window.location.hostname}/api/artist`)
+let songs = fetch(`https://${window.location.hostname}/api/song`)
 
 let category_select = document.getElementById('select-category');
 let song_select = document.getElementById('select-song');
@@ -36,12 +28,14 @@ let song_preview = document.getElementById('song-preview')
 category_select.addEventListener("change", (e) => {
     song_select.innerHTML = "";
     song_select.appendChild(new Option("---"));
-    songs
-        .filter(song => song.category == e.target.value)
-        .forEach(element => {
-            let artist_name = artists.find(artist => artist.id == element.artist).name;
-            song_select.appendChild(new Option(`${element.name} - ${artist_name}`, element.id));
-        });
+    songs.then(response => {
+        response.json()
+            .filter(song => song.category == e.target.value)
+            .forEach(element => {
+                let artist_name = artists.find(artist => artist.id == element.artist).name;
+                song_select.appendChild(new Option(`${element.name} - ${artist_name}`, element.id));
+            });
+    })
 })
 
 song_select.addEventListener("change", (e) => {
