@@ -71,6 +71,6 @@ function saveHymnary() {
             'print_category': document.getElementById('print-category').checked,
             'template': document.getElementById('template').value
         })
-    });
+    }).then(data => console.log(data));
     alert('Hinário salvo com sucesso!');
 }
