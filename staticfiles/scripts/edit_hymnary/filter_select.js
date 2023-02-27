@@ -1,11 +1,11 @@
-function getRequestFromAPI(model, id = "") {
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", `https://${window.location.hostname}/api/${model}/${id}`, false);
-    xhr.send();
-    return JSON.parse(xhr.response);
-}
+// function getRequestFromAPI(model, id = "") {
+//     const xhr = new XMLHttpRequest();
+//     xhr.open("GET", `https://${window.location.hostname}/api/${model}/${id}`, false);
+//     xhr.send();
+//     return JSON.parse(xhr.response);
+// }
 
-// async function getRequestFromAPI(model, id="") {
+// async function getRequestFromAPI(model, id = "") {
 //     const response = await fetch(`/api/${model}/${id}`);
 //     var jsonData = await response.json();
 //     return jsonData;
@@ -16,9 +16,15 @@ function getRequestFromAPI(model, id = "") {
 // let songs = getRequestFromAPI("song");
 
 // let categories = fetch(`https://${window.location.hostname}/api/category`).then(response => { return response.json() });
-let categories = fetch(`https://${window.location.hostname}/api/category`)
-let artists = fetch(`https://${window.location.hostname}/api/artist`)
-let songs = fetch(`https://${window.location.hostname}/api/song`)
+let categories;
+fetch(`https://${window.location.hostname}/api/category`)
+    .then(response => { categories = response.json() });
+let artists;
+fetch(`https://${window.location.hostname}/api/artist`)
+    .then(response => { artists = response.json() });
+let songs;
+fetch(`https://${window.location.hostname}/api/song`)
+    .then(response => { songs = response.json() });
 
 let category_select = document.getElementById('select-category');
 let song_select = document.getElementById('select-song');
@@ -28,8 +34,8 @@ let song_preview = document.getElementById('song-preview')
 category_select.addEventListener("change", (e) => {
     song_select.innerHTML = "";
     song_select.appendChild(new Option("---"));
-    songs.then(response => {
-        response.json()
+    songs.then(data => {
+        data
             .filter(song => song.category == e.target.value)
             .forEach(element => {
                 let artist_name = artists.find(artist => artist.id == element.artist).name;
