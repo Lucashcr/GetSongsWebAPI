@@ -23,7 +23,7 @@ function appendSong() {
     song_id_input.classList.add("song_id");
     song_id_input.value = song.id;
     newSongElement.appendChild(song_id_input)
-    
+
     songs_list.insertAdjacentElement("beforeend", newSongElement);
     togglePopUp();
 }
@@ -56,7 +56,7 @@ function saveHymnary() {
     let songs_id = Array.from(songs_list.querySelectorAll('.song_id'))
         .map(song_id => parseInt(song_id.value));
     console.log(songs_id);
-        
+
     const csrftoken = getCookie('csrftoken');
 
     fetch(window.location.pathname.replace('edit', 'save'), {
@@ -66,10 +66,10 @@ function saveHymnary() {
             'Content-Type': 'application/json',
             'X-CSRFToken': csrftoken,
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
             'songs_id': songs_id,
-            'print_category': document.getElementById('print-category').checked
+            'print_category': document.getElementById('print-category').checked,
+            'template': document.getElementById('template').value
         })
-    });
-    alert('Hinário salvo com sucesso!');
+    }).then(data => alert(data.result));
 }

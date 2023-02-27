@@ -7,6 +7,7 @@ from django.views.generic import TemplateView
 from django.shortcuts import redirect
 from django.http.response import FileResponse
 from django.http import HttpRequest, JsonResponse
+from django.utils.translation import gettext
 
 from build_doc.templates import SingleColumnTemplate, TwoColumnsTemplate
 
@@ -166,8 +167,8 @@ def save_hymnary(request: HttpRequest, hymnary_id):
                 )
 
             hymnary.save()
-            result = 'ok'
+            result = 'Hinário salvo com sucesso'
     except Exception as err:
-        result = f'error: {err}'
+        result = f'Erro: {gettext(err)}'
 
     return JsonResponse({'result', result})
