@@ -71,5 +71,10 @@ function saveHymnary() {
             'print_category': document.getElementById('print-category').checked,
             'template': document.getElementById('template').value
         })
-    }).then(response => response.json()).then(data => alert(data.result));
+    }).then(response => response.json()).then(
+        data => {
+            console.log(data);
+            alert(data.result);
+        }
+    );
 }
