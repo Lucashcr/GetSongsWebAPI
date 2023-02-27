@@ -155,7 +155,6 @@ def save_hymnary(request: HttpRequest, hymnary_id):
 
     if request.method == 'PUT' and hymnary.owner == request.user:
         request_body = json.loads(request.body)
-        print(request_body)
         hymnary.print_category = request_body['print_category']
         hymnary.template = request_body['template']
 
