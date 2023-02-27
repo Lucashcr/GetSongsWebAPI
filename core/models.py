@@ -19,6 +19,16 @@ class Hymnary(models.Model):
         related_name='hymns',
         through='HymnarySong'
     )
+    TEMPLATE_CHOICES = (
+        ('single-column', 'Uma coluna'),
+        ('two-columns', 'Duas colunas'),
+        ('each-song-by-page', 'Uma música por página')
+    )
+    template = models.CharField(
+        'Modelo', max_length=32,
+        choices=TEMPLATE_CHOICES,
+        default='single-column'
+    )
 
 
 class HymnarySong(models.Model):

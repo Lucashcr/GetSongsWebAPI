@@ -14,6 +14,16 @@
         {% if hymnary.print_category %}checked{% endif %}>
         <label for="print-category">Exibir categoria</label>
     </div>
+    <div>
+        <label for="template">Modelo: </label>
+        <select name="template" id="template" class="form-select form-select-sm">
+            {% for template, verbose in templates %}
+            <option value="{{template}}"
+            {% if hymnary.template == template %}selected{% endif %}
+            >{{verbose}}</option>
+            {% endfor %}
+        </select>
+    </div>
     <table class="table table-striped">
         <thead class="bg-dark text-light">
             <td>Categoria</td>

@@ -88,6 +88,11 @@ class ShowHymnary(TemplateHymnaryView):
 class EditHymnary(TemplateHymnaryView):
     template_name = 'pages/edit_hymnary.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["templates"] = Hymnary.TEMPLATE_CHOICES
+        return context
+
 
 class DeleteHymnary(TemplateHymnaryView):
     template_name = 'pages/delete_hymnary.html'
@@ -116,7 +121,13 @@ def export_hymnary(request, hymnary_id):
     file_name = f'{hymnary.title}_{datetime.now().strftime("%d_%m_%Y-%H_%M")}.pdf'
     file_path = os.path.join(file_name)
 
-    doc = SingleColumnTemplate(file_path, title=hymnary.title)
+    match hymnary.template:
+        case 'single-column' | 'each-song-by-page':
+            HymnaryTemplate = SingleColumnTemplate
+        case 'double-column':
+            HymnaryTemplate = TwoColumnsTemplate
+
+    doc = HymnaryTemplate(file_path, title=hymnary.title)
     doc.insert_heading(hymnary.title, 'heading1-centered')
     for item in hymnary.hymnary_songs.all():
         song = item.song
@@ -127,6 +138,8 @@ def export_hymnary(request, hymnary_id):
             f'{song.name} - {song.artist}', preview_url, 'heading2')
         for p in song.get_lyrics():
             doc.insert_paragraph(p)
+        if hymnary.template == 'each-song-by-page':
+            doc.add_new_page()
     doc.build()
     as_attachment = bool(request.GET.get('as_attachment'))
     response = FileResponse(open(file_path, 'rb'),
@@ -137,16 +150,16 @@ def export_hymnary(request, hymnary_id):
     return response
 
 
-# CRIAR VIEW PARA /hymnary/<id>/save
 def save_hymnary(request: HttpRequest, hymnary_id):
     hymnary = Hymnary.objects.get(id=hymnary_id)
 
     if request.method == 'PUT' and hymnary.owner == request.user:
-        hymnary.songs.clear()
-
         request_body = json.loads(request.body)
+        print(request_body)
         hymnary.print_category = request_body['print_category']
+        hymnary.template = request_body['template']
 
+        hymnary.songs.clear()
         for i, song_id in enumerate(request_body['songs_id']):
             hymnary.songs.add(
                 Song.objects.get(id=song_id),
