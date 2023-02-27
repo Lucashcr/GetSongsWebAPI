@@ -15,9 +15,10 @@ function getRequestFromAPI(model, id = "") {
 // let artists = getRequestFromAPI("artist");
 // let songs = getRequestFromAPI("song");
 
+// let categories = fetch(`https://${window.location.hostname}/api/category`).then(response => { return response.json() });
 let categories = fetch(`https://${window.location.hostname}/api/category`).then(response => { return response.json() });
 let artists = fetch(`https://${window.location.hostname}/api/artist`).then(response => { return response.json() });
-let songs = fetch(`https://${window.location.hostname}/api/songs`).then(response => { return response.json() });
+let songs = fetch(`https://${window.location.hostname}/api/song`).then(response => { return response.json() });
 
 let category_select = document.getElementById('select-category');
 let song_select = document.getElementById('select-song');
