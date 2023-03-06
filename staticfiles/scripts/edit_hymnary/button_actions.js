@@ -73,9 +73,16 @@ function saveHymnary() {
         body: JSON.stringify({
             'songs_id': songs_id,
             'print_category': document.getElementById('print-category').checked,
-            'template': document.getElementById('template').value
+            'template': document.getElementById('template').value,
+            'new_title': document.getElementById('new-title').value
         })
-    }).then(response => response.json()).then(
-        data => alert(data.alert)
-    );
+    }).then(response => response.json()).then(data => {
+        alert(data.alert);
+        console.log(data);
+        if (data.status == 200) {
+            window.location.replace(
+                window.location.pathname.replace('/edit', '')
+            );
+        }
+    });
 }
