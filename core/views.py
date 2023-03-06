@@ -157,6 +157,7 @@ def save_hymnary(request: HttpRequest, hymnary_id):
             request_body = json.loads(request.body)
             hymnary.print_category = request_body['print_category']
             hymnary.template = request_body['template']
+            hymnary.title = request_body['new_title']
 
             hymnary.songs.clear()
             for i, song_id in enumerate(request_body['songs_id']):
