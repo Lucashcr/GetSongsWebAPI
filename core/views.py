@@ -152,7 +152,7 @@ def export_hymnary(request, hymnary_id):
 def save_hymnary(request: HttpRequest, hymnary_id):
     try:
         hymnary = Hymnary.objects.get(id=hymnary_id)
-
+    
         if request.method == 'PUT' and hymnary.owner == request.user:
             request_body = json.loads(request.body)
             hymnary.print_category = request_body['print_category']
