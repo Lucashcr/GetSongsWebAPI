@@ -78,7 +78,6 @@ function saveHymnary() {
         })
     }).then(response => response.json()).then(data => {
         alert(data.alert);
-        console.log(data);
         if (data.status == 200) {
             window.location.replace(
                 window.location.pathname.replace('/edit', '')
