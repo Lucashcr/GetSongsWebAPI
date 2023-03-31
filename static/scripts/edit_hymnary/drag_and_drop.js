@@ -1,16 +1,18 @@
 const songs_list = document.getElementById("songs_list");
+const song_items = document.getElementsByClassName("song_item");
 
-document.addEventListener("dragstart", (e) => {
-    e.target.classList.add("dragging");
-});
-
-document.addEventListener("dragend", (e) => {
-    e.target.classList.remove("dragging");
-});
+for (const song_item of song_items) {
+    song_item.addEventListener("dragstart", (e) => {
+        e.target.classList.add("dragging");
+    });
+    song_item.addEventListener("dragend", (e) => {
+        e.target.classList.remove("dragging");
+    })
+};
 
 songs_list.addEventListener("dragover", (e) => {
     const dragging = document.querySelector(".dragging");
-    const applyAfter = getNewPosition(songs_list, e.clientY);
+    const applyAfter = getNewPosition(e.clientY);
 
     if (applyAfter) {
         applyAfter.insertAdjacentElement("afterend", dragging);
@@ -19,7 +21,7 @@ songs_list.addEventListener("dragover", (e) => {
     }
 });
 
-function getNewPosition(songs_list, posY) {
+function getNewPosition(posY) {
     const items = songs_list.querySelectorAll(".song_item:not(.dragging)");
     let result;
 

@@ -31,14 +31,18 @@
     <h2 class="bg-dark text-light text-center p-2 mb-0">
         Músicas:
     </h2>
-    <div class="songs_list border border-secondary">
+    <div id="songs_list" class="border border-secondary">
         {% for item in hymnary.hymnary_songs.all %}
-        <div class="song_item border border-secondary" draggable="True">
-            <div>
+        <div id="song_{{item.song.id}}" class="song_item border border-secondary" draggable="True">
+            <div class="left">
                 <h3 class="name">{{item.song.name}}</h3>
                 <h4 class="artist">{{item.song.artist}}</h4>
             </div>
-            <h4 class="category">{{item.song.category}}</h4>
+            <div class="right">
+                <button class="btn-close close" id="close_{{item.song.id}}">&times;</button>
+                <br>
+                <h4 class="category">{{item.song.category}}</h4>
+            </div>
             <input type="hidden" class="song_id" value="{{item.song.id}}">
         </div>
         {% endfor %}
