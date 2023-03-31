@@ -4,7 +4,6 @@ function togglePopUp() {
 
 async function appendSong() {
     const song = await songs.then(data => data.find(song => song.id == song_select.value));
-    console.log(song);
     if (document.getElementById(`song_${song.id}`)) {
         alert("Esta música já foi adicionada!");
         return;
@@ -26,7 +25,7 @@ async function appendSong() {
             <br>
             <h4 class="category">${category.name}</h4>
         </div>
-        <input type="hidden" class=${song.id} value="${song.id}">`;
+        <input type="hidden" class="song_id" value="${song.id}">`;
 
     newSongElement.addEventListener("dragstart", (e) => {
         e.target.classList.add("dragging");
@@ -35,11 +34,11 @@ async function appendSong() {
         e.target.classList.remove("dragging");
     })
 
-    const btn = document.getElementById(`close_${song.id}`)
-    btn.addEventListener("click", (e) => {
-        const id = e.target.id.replace('close_', '');
-        songs_list.removeChild(document.getElementById(`song_${id}`));
-    })
+    newSongElement.getElementsByTagName('button')
+        .addEventListener("click", (e) => {
+            const id = e.target.id.replace('close_', '');
+            songs_list.removeChild(document.getElementById(`song_${id}`));
+        })
 
     songs_list.insertAdjacentElement("beforeend", newSongElement);
 }
