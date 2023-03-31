@@ -3,8 +3,9 @@ function togglePopUp() {
 }
 
 async function appendSong() {
-    const song = await songs.then(data => data.find(song => song.id == song_select.value))
-    if (songs_list.getElementById(`song_${song.id}`)) {
+    const song = await songs.then(data => data.find(song => song.id == song_select.value));
+    console.log(song);
+    if (document.getElementById(`song_${song.id}`)) {
         alert("Esta música já foi adicionada!");
         return;
     };
