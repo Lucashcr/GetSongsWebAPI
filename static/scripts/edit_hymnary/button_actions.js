@@ -27,7 +27,7 @@ async function appendSong() {
         </div>
         <input type="hidden" class="song_id" value="${song.id}">`;
 
-    songs_list.insertAdjacentElement("beforeend", newSongElement);
+    newSongElement = songs_list.insertAdjacentElement("beforeend", newSongElement);
 
     newSongElement.addEventListener("dragstart", (e) => {
         e.target.classList.add("dragging");
