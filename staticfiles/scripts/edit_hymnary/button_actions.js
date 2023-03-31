@@ -27,20 +27,19 @@ async function appendSong() {
         </div>
         <input type="hidden" class="song_id" value="${song.id}">`;
 
+    songs_list.insertAdjacentElement("beforeend", newSongElement);
+
     newSongElement.addEventListener("dragstart", (e) => {
         e.target.classList.add("dragging");
     });
     newSongElement.addEventListener("dragend", (e) => {
         e.target.classList.remove("dragging");
     })
-
-    newSongElement.getElementsByTagName('button')
+    newSongElement.getElementById(`close_${song.id}`)
         .addEventListener("click", (e) => {
             const id = e.target.id.replace('close_', '');
             songs_list.removeChild(document.getElementById(`song_${id}`));
-        })
-
-    songs_list.insertAdjacentElement("beforeend", newSongElement);
+        });
 }
 
 for (const btn of songs_list.getElementsByClassName('btn-close')) {
