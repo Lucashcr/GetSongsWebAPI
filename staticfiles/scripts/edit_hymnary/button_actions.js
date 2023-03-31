@@ -4,6 +4,11 @@ function togglePopUp() {
 
 async function appendSong() {
     const song = await songs.find(song => song.id == song_select.value);
+    if (document.getElementById(`song_${song.id}`)) {
+        alert("Esta música já foi adicionada!");
+        return;
+    };
+
     const artist = await artists.find(artist => artist.id == song.artist);
     const category = await categories.find(category => category.id == song.category);
 
@@ -53,8 +58,20 @@ async function appendSong() {
     // })
 }
 
-function removeSong() {
-    songs_list.removeChild(songs_list.lastElementChild);
+// function removeSong() {
+//     songs_list.removeChild(songs_list.lastElementChild);
+// }
+
+
+function removeSong(id) {
+    console.log(id);
+    songs_list.removeChild(document.getElementById(`song_${id}`));
+}
+
+for (const btn of songs_list.getElementsByClassName('btn-close')) {
+    btn.addEventListener("click", (e) => {
+        removeSong(btn.id.replace('close_', ''))
+    });
 }
 
 function getCookie(name) {

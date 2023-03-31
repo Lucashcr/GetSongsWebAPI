@@ -92,14 +92,8 @@ main .editing table {
     margin: 0;
 }
 
-.songs_list {
+#songs_list {
     padding: 20px 50px;
-}
-
-.song_item * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
 }
 
 .song_item {
@@ -114,6 +108,19 @@ main .editing table {
 
     border-radius: 10px;
     box-shadow: 3px 3px 4px #0003;
+
+    transition: 0.5s;
+}
+
+.song_item:not(.dragging) {
+    transition-property: transform;
+    transition-duration: 0.5s;
+}
+
+.song_item * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 .song_item h3 {
