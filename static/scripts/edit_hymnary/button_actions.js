@@ -22,7 +22,10 @@ async function appendSong() {
             <h4 class="artist">${artist.name}</h4>
         </div>
         <h4 class="category">${category.name}</h4>
-        <input type="hidden" class=${song.id} value="{{item.song.id}}">`;
+        <input type="hidden" class=${song.id} value="${song.id}">`;
+
+    songs_list.insertAdjacentElement("beforeend", newSongElement);
+
     // songs.then(data => {
     //     let song = data.find(song => song.id == song_select.value);
 
