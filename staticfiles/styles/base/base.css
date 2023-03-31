@@ -92,8 +92,37 @@ main .editing table {
     margin: 0;
 }
 
-.song_item:hover {
+.songs_list {
+    padding: 20px 50px;
+}
+
+.song_item * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.song_item {
     cursor: grab;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 10px 20px;
+    margin-bottom: 10px;
+
+    border-radius: 10px;
+    box-shadow: 3px 3px 4px #0003;
+}
+
+.song_item h3 {
+    font-size: large;
+    font-weight: 600;
+}
+
+.song_item h4 {
+    font-size: medium;
 }
 
 .pop-up {
