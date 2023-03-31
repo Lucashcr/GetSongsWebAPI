@@ -17,55 +17,19 @@ async function appendSong() {
     newSongElement.className = "song_item border border-secondary";
     newSongElement.draggable = true;
 
-    newSongElement.innerHTML = `<div>
+    newSongElement.innerHTML = `<div class="left">
             <h3 class="name">${song.name}</h3>
             <h4 class="artist">${artist.name}</h4>
         </div>
-        <h4 class="category">${category.name}</h4>
+        <div class="right">
+            <button class="btn-close close" id="close_${song.id}">&times;</button>
+            <br>
+            <h4 class="category">${category.name}</h4>
+        </div>
         <input type="hidden" class=${song.id} value="${song.id}">`;
 
     songs_list.insertAdjacentElement("beforeend", newSongElement);
-
-    // songs.then(data => {
-    //     let song = data.find(song => song.id == song_select.value);
-
-    //     let newSongElement = document.createElement("div");
-    //     newSongElement.classList.add("song_item border border-secondary");
-    //     newSongElement.draggable = true;
-
-    //     newSongElement.innerHTML = `<div>
-    //             <h3 class="name">${song.name}</h3>
-    //             <h4 class="artist">${song.artist}</h4>
-    //         </div>
-    //         <h4 class="category">${song.category}</h4>
-    //         <input type="hidden" class=${song.id} value="{{item.song.id}}">`;
-    //     let category = document.createElement("td");
-    //     categories.then(data => {
-    //         category.innerText = data.find(cat => song.category == cat.id).name;
-    //         newSongElement.appendChild(category);
-    //         let songname = document.createElement("td");
-    //         songname.innerText = song.name;
-    //         newSongElement.appendChild(songname);
-    //         let artist = document.createElement("td");
-    //         artists.then(data => {
-    //             artist.innerText = data.find(art => song.artist == art.id).name;
-    //             newSongElement.appendChild(artist);
-    //             let song_id_input = document.createElement("input");
-    //             song_id_input.type = "hidden";
-    //             song_id_input.classList.add("song_id");
-    //             song_id_input.value = song.id;
-    //             newSongElement.appendChild(song_id_input)
-
-    //             songs_list.insertAdjacentElement("beforeend", newSongElement);
-    //         })
-    //     })
-    // })
 }
-
-// function removeSong() {
-//     songs_list.removeChild(songs_list.lastElementChild);
-// }
-
 
 function removeSong(id) {
     console.log(id);

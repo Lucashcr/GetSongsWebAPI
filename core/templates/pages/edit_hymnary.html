@@ -48,23 +48,6 @@
         {% endfor %}
     </div>
 </div>
-{% comment %} <table class="table table-striped">
-    <thead class="bg-dark text-light">
-        <td>Categoria</td>
-        <td>Nome</td>
-        <td>Artista</td>
-    </thead>
-    <tbody id="songs_list">
-        {% for item in hymnary.hymnary_songs.all %}
-        <tr class="song_item" draggable="True">
-            <td>{{ item.song.category }}</td>
-            <td>{{ item.song.name }}</td>
-            <td>{{ item.song.artist }}</td>
-            <input type="hidden" class="song_id" value="{{item.song.id}}">
-        </tr>
-        {% endfor %}
-    </tbody>
-</table> {% endcomment %}
 
 <div class="pop-up list-group" hidden>
     <h3>Adicionar música:</h3>
