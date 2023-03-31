@@ -13,9 +13,9 @@ async function appendSong() {
     const category = await categories.then(data => data.find(category => category.id == song.category));
 
     let newSongElement = document.createElement("div");
+    newSongElement.id = `song_${song.id}`;
     newSongElement.className = "song_item border border-secondary";
     newSongElement.draggable = true;
-
     newSongElement.innerHTML = `<div class="left">
             <h3 class="name">${song.name}</h3>
             <h4 class="artist">${artist.name}</h4>
@@ -28,18 +28,18 @@ async function appendSong() {
         <input type="hidden" class="song_id" value="${song.id}">`;
 
     newSongElement = songs_list.insertAdjacentElement("beforeend", newSongElement);
-
     newSongElement.addEventListener("dragstart", (e) => {
         e.target.classList.add("dragging");
     });
     newSongElement.addEventListener("dragend", (e) => {
         e.target.classList.remove("dragging");
     })
-    newSongElement.getElementById(`close_${song.id}`)
-        .addEventListener("click", (e) => {
-            const id = e.target.id.replace('close_', '');
-            songs_list.removeChild(document.getElementById(`song_${id}`));
-        });
+    const btn = newSongElement.children[1].children[0];
+    console.log(btn);
+    btn.addEventListener("click", (e) => {
+        const id = e.target.id.replace('close_', '');
+        songs_list.removeChild(document.getElementById(`song_${id}`));
+    });
 }
 
 for (const btn of songs_list.getElementsByClassName('btn-close')) {
