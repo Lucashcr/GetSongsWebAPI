@@ -8,44 +8,59 @@
 {% if hymnary is not None %}
 <h1>{{hymnary.title}}</h1>
 <p>Criado em {{hymnary.created_at}}</p>
-<div class="editing">
-    <div>
-        <label for="new-title">Mudar título:</label>
-        <input type="text" id="new-title" name="new-title" class="form-control" value="{{hymnary.title}}">
-    </div>
-    <div>
-        <input type="checkbox" name="print-category" id="print-category"
-        {% if hymnary.print_category %}checked{% endif %}>
-        <label for="print-category">Exibir categoria</label>
-    </div>
-    <div>
-        <label for="template">Modelo: </label>
-        <select name="template" id="template" class="form-select form-select-sm">
-            {% for template, verbose in templates %}
-            <option value="{{template}}"
-            {% if hymnary.template == template %}selected{% endif %}
-            >{{verbose}}</option>
-            {% endfor %}
-        </select>
-    </div>
-    <table class="table table-striped">
-        <thead class="bg-dark text-light">
-            <td>Categoria</td>
-            <td>Nome</td>
-            <td>Artista</td>
-        </thead>
-        <tbody id="songs_list">
-            {% for item in hymnary.hymnary_songs.all %}
-            <tr class="song_item" draggable="True">
-                <td>{{ item.song.category }}</td>
-                <td>{{ item.song.name }}</td>
-                <td>{{ item.song.artist }}</td>
-                <input type="hidden" class="song_id" value="{{item.song.id}}">
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div>
+    <label for="new-title">Mudar título:</label>
+    <input type="text" id="new-title" name="new-title" class="form-control" value="{{hymnary.title}}">
 </div>
+<div>
+    <input type="checkbox" name="print-category" id="print-category"
+    {% if hymnary.print_category %}checked{% endif %}>
+    <label for="print-category">Exibir categoria</label>
+</div>
+<div>
+    <label for="template">Modelo: </label>
+    <select name="template" id="template" class="form-select form-select-sm">
+        {% for template, verbose in templates %}
+        <option value="{{template}}"
+        {% if hymnary.template == template %}selected{% endif %}
+        >{{verbose}}</option>
+        {% endfor %}
+    </select>
+</div>
+<div class="hymnary">
+    <h2 class="bg-dark text-light text-center p-2 mb-0">
+        Músicas:
+    </h2>
+    <div class="songs_list border border-secondary">
+        {% for item in hymnary.hymnary_songs.all %}
+        <div class="song_item border border-secondary" draggable="True">
+            <div>
+                <h3 class="name">{{item.song.name}}</h3>
+                <h4 class="artist">{{item.song.artist}}</h4>
+            </div>
+            <h4 class="category">{{item.song.category}}</h4>
+            <input type="hidden" class="song_id" value="{{item.song.id}}">
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% comment %} <table class="table table-striped">
+    <thead class="bg-dark text-light">
+        <td>Categoria</td>
+        <td>Nome</td>
+        <td>Artista</td>
+    </thead>
+    <tbody id="songs_list">
+        {% for item in hymnary.hymnary_songs.all %}
+        <tr class="song_item" draggable="True">
+            <td>{{ item.song.category }}</td>
+            <td>{{ item.song.name }}</td>
+            <td>{{ item.song.artist }}</td>
+            <input type="hidden" class="song_id" value="{{item.song.id}}">
+        </tr>
+        {% endfor %}
+    </tbody>
+</table> {% endcomment %}
 
 <div class="pop-up list-group" hidden>
     <h3>Adicionar música:</h3>
