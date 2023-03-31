@@ -3,14 +3,14 @@ function togglePopUp() {
 }
 
 async function appendSong() {
-    const song = await songs.find(song => song.id == song_select.value);
-    if (document.getElementById(`song_${song.id}`)) {
+    const song = await songs.then(data => data.find(song => song.id == song_select.value))
+    if (songs_list.getElementById(`song_${song.id}`)) {
         alert("Esta música já foi adicionada!");
         return;
     };
 
-    const artist = await artists.find(artist => artist.id == song.artist);
-    const category = await categories.find(category => category.id == song.category);
+    const artist = await artists.then(data => data.find(artist => artist.id == song.artist));
+    const category = await categories.then(data => data.find(category => category.id == song.category));
 
     let newSongElement = document.createElement("div");
     newSongElement.classList.add("song_item border border-secondary");
@@ -18,9 +18,9 @@ async function appendSong() {
 
     newSongElement.innerHTML = `<div>
             <h3 class="name">${song.name}</h3>
-            <h4 class="artist">${song.artist}</h4>
+            <h4 class="artist">${artist.name}</h4>
         </div>
-        <h4 class="category">${song.category}</h4>
+        <h4 class="category">${category.name}</h4>
         <input type="hidden" class=${song.id} value="{{item.song.id}}">`;
     // songs.then(data => {
     //     let song = data.find(song => song.id == song_select.value);

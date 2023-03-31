@@ -109,12 +109,10 @@ main .editing table {
     border-radius: 10px;
     box-shadow: 3px 3px 4px #0003;
 
-    transition: 0.5s;
 }
 
-.song_item:not(.dragging) {
-    transition-property: transform;
-    transition-duration: 0.5s;
+.dragging {
+    transition: 0.5s;
 }
 
 .song_item * {
@@ -130,6 +128,10 @@ main .editing table {
 
 .song_item h4 {
     font-size: medium;
+}
+
+.btn-close:focus {
+    border: none;
 }
 
 .pop-up {
