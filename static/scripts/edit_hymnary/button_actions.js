@@ -14,7 +14,7 @@ async function appendSong() {
     const category = await categories.then(data => data.find(category => category.id == song.category));
 
     let newSongElement = document.createElement("div");
-    newSongElement.className.add("song_item border border-secondary");
+    newSongElement.className = "song_item border border-secondary";
     newSongElement.draggable = true;
 
     newSongElement.innerHTML = `<div>
