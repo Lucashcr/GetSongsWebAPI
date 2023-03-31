@@ -130,10 +130,6 @@ main .editing table {
     font-size: medium;
 }
 
-.btn-close {
-    width: 20px;
-}
-
 .btn-close:focus {
     outline: none;
 }

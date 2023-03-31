@@ -34,9 +34,7 @@ async function appendSong() {
     newSongElement.addEventListener("dragend", (e) => {
         e.target.classList.remove("dragging");
     })
-    const btn = newSongElement.children[1].children[0];
-    console.log(btn);
-    btn.addEventListener("click", (e) => {
+    newSongElement.children[1].children[0].addEventListener("click", (e) => {
         const id = e.target.id.replace('close_', '');
         songs_list.removeChild(document.getElementById(`song_${id}`));
     });
