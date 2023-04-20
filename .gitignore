@@ -2,3 +2,4 @@
 api_data
 config.ini
 .aliases.sh
+**/__pycache__/

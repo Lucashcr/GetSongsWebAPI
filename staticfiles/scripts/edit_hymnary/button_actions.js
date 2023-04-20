@@ -2,6 +2,14 @@ function togglePopUp() {
     document.querySelector(".pop-up").toggleAttribute("hidden");
 }
 
+function removeSong(targetID) {
+    songs_list.removeChild(
+        document.getElementById(
+            targetID.replace('close', 'song')
+        )
+    );
+}
+
 async function appendSong() {
     const song = await songs.then(data => data.find(song => song.id == song_select.value));
     if (document.getElementById(`song_${song.id}`)) {
@@ -35,16 +43,12 @@ async function appendSong() {
         e.target.classList.remove("dragging");
     })
     newSongElement.children[1].children[0].addEventListener("click", (e) => {
-        const id = e.target.id.replace('close_', '');
-        songs_list.removeChild(document.getElementById(`song_${id}`));
+        removeSong(e.target.id);
     });
 }
 
 for (const btn of songs_list.getElementsByClassName('btn-close')) {
-    btn.addEventListener("click", (e) => {
-        const id = btn.id.replace('close_', '');
-        songs_list.removeChild(document.getElementById(`song_${id}`));
-    });
+    btn.addEventListener("click", (e) => { removeSong(e.target.id); })
 }
 
 function getCookie(name) {
@@ -71,14 +75,12 @@ function saveHymnary() {
     let songs_id = Array.from(songs_list.querySelectorAll('.song_id'))
         .map(song_id => parseInt(song_id.value));
 
-    const csrftoken = getCookie('csrftoken');
-
     fetch(window.location.pathname.replace('edit', 'save'), {
         method: 'PUT',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'X-CSRFToken': csrftoken,
+            'X-CSRFToken': getCookie('csrftoken'),
         },
         body: JSON.stringify({
             'songs_id': songs_id,
@@ -86,12 +88,7 @@ function saveHymnary() {
             'template': document.getElementById('template').value,
             'new_title': document.getElementById('new-title').value
         })
-    }).then(response => response.json()).then(data => {
-        alert(data.alert);
-        if (data.status == 200) {
-            window.location.replace(
-                window.location.pathname.replace('/edit', '')
-            );
-        }
-    });
+    })
+        .then(response => response.json())
+        .then(data => { alert(data.alert); });
 }

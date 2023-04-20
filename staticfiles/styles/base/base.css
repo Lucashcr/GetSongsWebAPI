@@ -108,11 +108,6 @@ main .editing table {
 
     border-radius: 10px;
     box-shadow: 3px 3px 4px #0003;
-
-}
-
-.dragging {
-    transition: 0.5s;
 }
 
 .song_item * {
