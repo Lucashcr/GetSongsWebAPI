@@ -41,6 +41,10 @@ header>nav {
     text-decoration: none;
 }
 
+header>a {
+    text-decoration: none;
+}
+
 header h4 {
     margin: 0;
     font-family: 'Ubuntu', 'Open Sans', 'Helvetica Neue', sans-serif;
