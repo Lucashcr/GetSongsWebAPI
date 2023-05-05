@@ -14,8 +14,6 @@ songs_list.addEventListener("dragover", (e) => {
     const dragging = document.querySelector(".dragging");
     const applyAfter = getNewPosition(e.clientY);
 
-    console.log(applyAfter);
-
     if (applyAfter) {
         applyAfter.insertAdjacentElement("afterend", dragging);
     } else {
@@ -27,7 +25,6 @@ function getNewPosition(posY) {
     const items = songs_list.querySelectorAll(".song_item:not(.dragging)");
     let result;
 
-    console.log("posY: ", posY)
     for (let refer_item of items) {
         const box = refer_item.getBoundingClientRect();
 
