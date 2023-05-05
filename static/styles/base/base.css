@@ -79,6 +79,10 @@ main {
     padding: 50px;
 }
 
+main table td {
+    text-align: center;
+}
+
 main .buttons {
     display: flex;
     justify-content: center;
@@ -118,6 +122,14 @@ main .editing table {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+.song_item .right {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+
+    text-align: right;
 }
 
 .song_item h3 {

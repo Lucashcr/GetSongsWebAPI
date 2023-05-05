@@ -10,28 +10,31 @@
 <h2>Aqui estão seus hinários:</h2>
 <table class="table table-striped">
     <thead class="bg-dark text-light">
-        <td>Nome</td>
-        <td>Data da criação</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <tr>
+            <td>Nome</td>
+            <td>Data da criação</td>
+            <td></td>
+        </tr>
     </thead>
-    {% for hymnary in hymnaries %}
+    <tbody>
+        {% for hymnary in hymnaries %}
         <tr>
             <td>{{hymnary.title}}</td>
             <td>{{hymnary.created_at}}</td>
-            <td><a href="/hymnary/{{hymnary.id}}" class="btn btn-light">Abrir</a></td>
-            <td><a href="/hymnary/{{hymnary.id}}/edit" class="btn btn-info">Editar</a></td>
-            <td><a href="/hymnary/{{hymnary.id}}/export" class="btn btn-secondary">Visualizar</a></td>
-            <td><a href="/hymnary/{{hymnary.id}}/export?as_attachment=1" class="btn btn-success">Exportar</a></td>
-            <td><a href="/hymnary/{{hymnary.id}}/delete" class="btn btn-danger">Excluir</a></td>
+            <td>
+                <div class="btn-group centered">
+                    <a href="/hymnary/{{hymnary.id}}" class="btn btn-light">Abrir</a>
+                    <a href="/hymnary/{{hymnary.id}}/edit" class="btn btn-info">Editar</a>
+                    <a href="/hymnary/{{hymnary.id}}/export" class="btn btn-secondary">Visualizar</a>
+                    <a href="/hymnary/{{hymnary.id}}/export?as_attachment=1" class="btn btn-success">Exportar</a>
+                    <a href="/hymnary/{{hymnary.id}}/delete" class="btn btn-danger">Excluir</a>
+                </div>
+            </td>
         </tr>
     {% endfor %}
+    </tbody>
 </table>
 <div class="buttons">
-    {% comment %} <a href="/hymnary/new" class="btn btn-dark">Novo</a> {% endcomment %}
     <button class="btn btn-dark" onclick="createHymnary()">Novo</button>
 </div>
 
