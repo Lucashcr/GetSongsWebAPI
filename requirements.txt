@@ -10,4 +10,4 @@ djangorestframework
 
 bs4
 reportlab
-requests
+httpx

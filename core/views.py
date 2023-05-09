@@ -1,6 +1,7 @@
 import os
 import json
 from datetime import datetime
+from httpx import Client
 
 from django.core.mail import send_mail
 from django.views.generic import TemplateView
@@ -131,12 +132,14 @@ def export_hymnary(request, hymnary_id):
     for item in hymnary.hymnary_songs.all():
         song = item.song
         preview_url = song.preview_url.replace('embed/', '')
-        doc.insert_heading(
-            song.category.name) if hymnary.print_category else None
+        if hymnary.print_category:
+            doc.insert_heading(song.category.name)
         doc.insert_heading_link(
-            f'{song.name} - {song.artist}', preview_url, 'heading2')
-        for p in song.get_lyrics():
-            doc.insert_paragraph(p)
+            f'{song.name} - {song.artist}', preview_url, 'heading2'
+        )
+        with Client() as client:
+            for p in song.get_lyrics(client):
+                doc.insert_paragraph(p)
         if hymnary.template == 'each-song-by-page':
             doc.add_new_page()
     doc.build()
@@ -152,7 +155,7 @@ def export_hymnary(request, hymnary_id):
 def save_hymnary(request: HttpRequest, hymnary_id):
     try:
         hymnary = Hymnary.objects.get(id=hymnary_id)
-    
+
         if request.method == 'PUT' and hymnary.owner == request.user:
             request_body = json.loads(request.body)
             hymnary.print_category = request_body['print_category']

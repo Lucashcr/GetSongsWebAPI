@@ -1,6 +1,5 @@
 import re
 from bs4 import BeautifulSoup
-import requests
 
 from django.db import models
 
@@ -34,8 +33,8 @@ class Song(models.Model):
     def __str__(self) -> str:
         return f'{self.name} - {self.artist.name}'
 
-    def get_lyrics(self):
-        soup = BeautifulSoup(requests.get(self.lyrics_url).text, 'html.parser')
+    def get_lyrics(self, client):
+        soup = BeautifulSoup(client.get(self.lyrics_url).text, 'html.parser')
 
         lyrics = re.findall(
             r'<p>(.*?)</p>', str(soup.find('div', {'class': 'cnt-letra'})))
