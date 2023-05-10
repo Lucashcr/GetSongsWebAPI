@@ -12,7 +12,7 @@ pdfmetrics.registerFont(
     TTFont('Ubuntu-Regular', './staticfiles/fonts/Ubuntu-Regular.ttf'))
 
 CENTERED_HEADING = ParagraphStyle(
-    'centered_heading', fontName='Ubuntu-Medium', fontSize=16,
+    'centered_heading', fontName='Ubuntu-Medium', fontSize=18,
     alignment=1, spaceBefore=16, spaceAfter=12
 )
 

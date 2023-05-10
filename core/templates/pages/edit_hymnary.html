@@ -79,8 +79,10 @@
 <div class="buttons btn-group">
     <input type="button" class="btn btn-primary" value="Adicionar" onclick="togglePopUp()">
     <input type="button" class="btn btn-info" value="Salvar" onclick="saveHymnary()">
-    <a href="/hymnary/{{hymnary.id}}/export" class="btn btn-secondary">Visualizar</a>
-    <a href="/hymnary/{{hymnary.id}}/export?as_attachment=1" class="btn btn-success">Exportar</a>
+    <input type="button" class="btn btn-secondary" value="Visualizar" onclick="viewHymnary()">
+    <input type="button" class="btn btn-success" value="Exportar" onclick="exportHymnary()">
+    {% comment %} <a href="/hymnary/{{hymnary.id}}/export" class="btn btn-secondary">Visualizar</a>
+    <a href="/hymnary/{{hymnary.id}}/export?as_attachment=1" class="btn btn-success">Exportar</a> {% endcomment %}
 </div>
 {% else %}
 <h1>Ops, sinto muito, não conseguimos encontrar este hinário! :(</h1>

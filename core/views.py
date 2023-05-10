@@ -135,9 +135,14 @@ def export_hymnary(request, hymnary_id):
         preview_url = song.preview_url.replace('embed/', '')
         if hymnary.print_category:
             doc.insert_heading(song.category.name)
-        doc.insert_heading_link(
-            f'{song.name} - {song.artist}', preview_url, HEADING_2
-        )
+            doc.insert_heading_link(
+                f'{song.name} - {song.artist}', preview_url, HEADING_2
+            )
+        else:
+            doc.insert_heading_link(
+                f'{song.name} - {song.artist}', preview_url
+            )
+
         with Client() as client:
             for p in song.get_lyrics(client):
                 doc.insert_paragraph(p)

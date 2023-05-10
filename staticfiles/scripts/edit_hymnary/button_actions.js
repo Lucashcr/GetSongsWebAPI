@@ -71,11 +71,11 @@ function getCookie(name) {
     return cookieValue;
 }
 
-function saveHymnary() {
+async function saveHymnary() {
     let songs_id = Array.from(songs_list.querySelectorAll('.song_id'))
         .map(song_id => parseInt(song_id.value));
 
-    fetch(window.location.pathname.replace('edit', 'save'), {
+    await fetch(window.location.pathname.replace('edit', 'save'), {
         method: 'PUT',
         headers: {
             'Accept': 'application/json',
@@ -91,4 +91,14 @@ function saveHymnary() {
     })
         .then(response => response.json())
         .then(data => { alert(data.alert); });
+}
+
+async function viewHymnary() {
+    await saveHymnary();
+    window.open(window.location.pathname.replace('edit', 'export'), '_blank');
+}
+
+async function exportHymnary() {
+    await saveHymnary();
+    window.open(window.location.pathname.replace('edit', 'export?as_attachment=1'), '_blank');
 }
