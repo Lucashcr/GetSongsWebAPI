@@ -1,7 +1,7 @@
 from reportlab.lib.units import mm
 from reportlab.platypus import *
 
-from .styles import paragraphs, headings
+from .styles import *
 
 
 class CustomBaseTemplate(BaseDocTemplate):
@@ -9,19 +9,19 @@ class CustomBaseTemplate(BaseDocTemplate):
         super().__init__(filename, **kw)
         self.__body = []
 
-    def insert_paragraph(self, text, style='left-aligned'):
-        self.__body.append(Paragraph(text, paragraphs[style]))
+    def insert_paragraph(self, text, style=LEFT_ALIGNED):
+        self.__body.append(Paragraph(text, style))
 
-    def insert_paragraph_link(self, text, href, style='left-aligned'):
+    def insert_paragraph_link(self, text, href, style=LEFT_ALIGNED):
         self.__body.append(
-            Paragraph(f'<a href="{href}">{text}</a>', paragraphs[style]))
+            Paragraph(f'<a href="{href}">{text}</a>', style))
 
-    def insert_heading_link(self, text, href, style='heading1'):
+    def insert_heading_link(self, text, href, style=HEADING_1):
         self.__body.append(
-            Paragraph(f'<a href="{href}">{text}</a>', headings[style]))
+            Paragraph(f'<a href="{href}">{text}</a>', style))
 
-    def insert_heading(self, text, style='heading1'):
-        self.__body.append(Paragraph(text, headings[style]))
+    def insert_heading(self, text, style=HEADING_1):
+        self.__body.append(Paragraph(text, style))
 
     def add_new_page(self):
         self.__body.append(PageBreak())

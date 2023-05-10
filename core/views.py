@@ -10,6 +10,7 @@ from django.http.response import FileResponse
 from django.http import HttpRequest, JsonResponse
 
 from build_doc.templates import SingleColumnTemplate, TwoColumnsTemplate
+from build_doc.styles import *
 
 from api.models import *
 from core.models import Hymnary
@@ -128,14 +129,14 @@ def export_hymnary(request, hymnary_id):
         HymnaryTemplate = TwoColumnsTemplate
 
     doc = HymnaryTemplate(file_path, title=hymnary.title)
-    doc.insert_heading(hymnary.title, 'heading1-centered')
+    doc.insert_heading(hymnary.title, CENTERED_HEADING)
     for item in hymnary.hymnary_songs.all():
         song = item.song
         preview_url = song.preview_url.replace('embed/', '')
         if hymnary.print_category:
             doc.insert_heading(song.category.name)
         doc.insert_heading_link(
-            f'{song.name} - {song.artist}', preview_url, 'heading2'
+            f'{song.name} - {song.artist}', preview_url, HEADING_2
         )
         with Client() as client:
             for p in song.get_lyrics(client):
