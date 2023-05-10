@@ -28,7 +28,7 @@ function getNewPosition(posY) {
     for (let refer_item of items) {
         const box = refer_item.getBoundingClientRect();
 
-        if (posY >= box.top) {
+        if (posY >= box.top + box.height / 2) {
             result = refer_item
         };
     }
