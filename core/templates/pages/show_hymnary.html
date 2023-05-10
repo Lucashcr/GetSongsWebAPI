@@ -28,10 +28,10 @@
     </tr>
     {% endfor %}
 </table>
-<div class="buttons">
-    <a href="/hymnary/{{hymnary.id}}/edit" class="btn btn-dark">Editar</a>
-    <a href="/hymnary/{{hymnary.id}}/export" class="btn btn-dark">Visualizar</a>
-    <a href="/hymnary/{{hymnary.id}}/export?as_attachment=1" class="btn btn-dark">Exportar</a>
+<div class="buttons btn-group">
+    <a href="/hymnary/{{hymnary.id}}/edit" class="btn btn-info">Editar</a>
+    <a href="/hymnary/{{hymnary.id}}/export" class="btn btn-secondary">Visualizar</a>
+    <a href="/hymnary/{{hymnary.id}}/export?as_attachment=1" class="btn btn-success">Exportar</a>
 </div>
 {% else %}
 <h1>Ops, sinto muito, não conseguimos encontrar este hinário! :(</h1>

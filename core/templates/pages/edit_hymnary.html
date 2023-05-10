@@ -78,7 +78,9 @@
 
 <div class="buttons btn-group">
     <input type="button" class="btn btn-primary" value="Adicionar" onclick="togglePopUp()">
-    <input type="button" class="btn btn-success" value="Salvar" onclick="saveHymnary()">
+    <input type="button" class="btn btn-info" value="Salvar" onclick="saveHymnary()">
+    <a href="/hymnary/{{hymnary.id}}/export" class="btn btn-secondary">Visualizar</a>
+    <a href="/hymnary/{{hymnary.id}}/export?as_attachment=1" class="btn btn-success">Exportar</a>
 </div>
 {% else %}
 <h1>Ops, sinto muito, não conseguimos encontrar este hinário! :(</h1>
