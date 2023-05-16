@@ -118,6 +118,9 @@ def new_hymnary(request, hymnary_name):
 
 
 def export_hymnary(request, hymnary_id):
+    if Hymnary.objects.get(id=hymnary_id).owner != request.user:
+        return redirect('/hymnary')
+
     hymnary = Hymnary.objects.get(id=hymnary_id)
 
     file_name = f'{hymnary.title}_{datetime.now().strftime("%d_%m_%Y-%H_%M")}.pdf'
