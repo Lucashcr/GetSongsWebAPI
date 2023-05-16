@@ -155,16 +155,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Email settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
-if DEBUG:
-    EMAIL_HOST = cfg["EMAIL"]["HOST"]
-    EMAIL_PORT = cfg["EMAIL"]["PORT"]
-    EMAIL_HOST_USER = cfg["EMAIL"]["HOST_USER"]
-    EMAIL_HOST_PASSWORD = cfg["EMAIL"]["HOST_PASSWORD"]
-else:
-    EMAIL_HOST = os.environ["EMAIL_HOST"]
-    EMAIL_PORT = os.environ["EMAIL_PORT"]
-    EMAIL_HOST_USER = os.environ["EMAIL_HOST_USER"]
-    EMAIL_HOST_PASSWORD = os.environ["EMAIL_HOST_PASSWORD"]
+EMAIL_HOST = os.environ["EMAIL_HOST"]
+EMAIL_PORT = os.environ["EMAIL_PORT"]
+EMAIL_HOST_USER = os.environ["EMAIL_HOST_USER"]
+EMAIL_HOST_PASSWORD = os.environ["EMAIL_HOST_PASSWORD"]
 
 EMAIL_USE_TLS = True
