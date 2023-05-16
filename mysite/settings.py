@@ -11,17 +11,12 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 # import dj_database_url
-from configparser import ConfigParser
 import os
 from pathlib import Path
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-cfg = ConfigParser()
-cfg.read(BASE_DIR / 'config.ini')
 
 
 # Quick-start development settings - unsuitable for production
@@ -31,7 +26,7 @@ cfg.read(BASE_DIR / 'config.ini')
 SECRET_KEY = 'django-insecure-rc^*w^w&6g9_(uvx#6s*bnt!w)l0rdi%!l7mv#y%uc&x%wo5pk'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ['DEBUG']
+DEBUG = os.environ.get('DEBUG', False)
 
 ALLOWED_HOSTS = ['getsongs.up.railway.app']
 

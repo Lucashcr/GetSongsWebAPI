@@ -153,8 +153,11 @@ def export_hymnary(request, hymnary_id):
             doc.add_new_page()
     doc.build()
     as_attachment = bool(request.GET.get('as_attachment'))
-    response = FileResponse(open(file_path, 'rb'),
-                            as_attachment=as_attachment, filename=file_name)
+    response = FileResponse(
+        open(file_path, 'rb'),
+        as_attachment=as_attachment,
+        filename=file_name
+    )
 
     os.remove(file_path)
 
