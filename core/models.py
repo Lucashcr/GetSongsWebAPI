@@ -5,6 +5,7 @@ from api.models import Song
 
 
 class Hymnary(models.Model):
+    id = models.AutoField('ID', primary_key=True)
     title = models.CharField('Título', max_length=64)
     owner = models.ForeignKey(
         User,

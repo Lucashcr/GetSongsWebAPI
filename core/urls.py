@@ -17,7 +17,8 @@ urlpatterns = [
          login_required(DeleteHymnary.as_view())),
     path('hymnary/<int:hymnary_id>/edit',
          login_required(EditHymnary.as_view())),
-    path('hymnary/<int:hymnary_id>/export', login_required(export_hymnary)),
+    path('hymnary/<int:hymnary_id>/export',
+         login_required(export_hymnary)),
     path('hymnary/<int:hymnary_id>/save',
          login_required(csrf_protect(save_hymnary))),
 ]

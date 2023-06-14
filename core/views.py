@@ -1,3 +1,4 @@
+import random
 import os
 import json
 from datetime import datetime
@@ -7,7 +8,7 @@ from django.core.mail import send_mail
 from django.views.generic import TemplateView
 from django.shortcuts import redirect
 from django.http.response import FileResponse
-from django.http import HttpRequest, JsonResponse
+from django.http import HttpRequest, HttpResponseForbidden, HttpResponseNotAllowed, HttpResponseNotFound, JsonResponse
 
 from build_doc.templates import SingleColumnTemplate, TwoColumnsTemplate
 from build_doc.styles import *
@@ -76,10 +77,13 @@ class TemplateHymnaryView(TemplateView):
         return context
 
     def get(self, request, *args, **kwargs):
-        hymnary_owner = Hymnary.objects.get(id=kwargs.get('hymnary_id')).owner
-        if request.user == hymnary_owner:
+        try:
+            hymnary = Hymnary.objects.get(
+                id=kwargs.get('hymnary_id'),
+                owner=request.user
+            )
             return super().get(request, *args, **kwargs)
-        else:
+        except:
             return redirect('/hymnary')
 
 
@@ -118,10 +122,10 @@ def new_hymnary(request, hymnary_name):
 
 
 def export_hymnary(request, hymnary_id):
-    if Hymnary.objects.get(id=hymnary_id).owner != request.user:
+    try:
+        hymnary = Hymnary.objects.get(id=hymnary_id, owner=request.user)
+    except:
         return redirect('/hymnary')
-
-    hymnary = Hymnary.objects.get(id=hymnary_id)
 
     file_name = f'{hymnary.title}_{datetime.now().strftime("%d_%m_%Y-%H_%M")}.pdf'
     file_path = os.path.join(file_name)
@@ -138,19 +142,21 @@ def export_hymnary(request, hymnary_id):
         preview_url = song.preview_url.replace('embed/', '')
         if hymnary.print_category:
             doc.insert_heading(song.category.name)
-            doc.insert_heading_link(
-                f'{song.name} - {song.artist}', preview_url, HEADING_2
-            )
+            heading_style = HEADING_2
         else:
-            doc.insert_heading_link(
-                f'{song.name} - {song.artist}', preview_url
-            )
+            heading_style = HEADING_1
+
+        doc.insert_heading_link(
+            f'{song.name}<br/>{song.artist}', preview_url, heading_style
+        )
 
         with Client() as client:
             for p in song.get_lyrics(client):
                 doc.insert_paragraph(p)
+
         if hymnary.template == 'each-song-by-page':
             doc.add_new_page()
+
     doc.build()
     as_attachment = bool(request.GET.get('as_attachment'))
     response = FileResponse(
@@ -165,21 +171,25 @@ def export_hymnary(request, hymnary_id):
 
 
 def save_hymnary(request: HttpRequest, hymnary_id):
+    if request.method != 'PUT':
+        return HttpResponseNotAllowed('Método não permitido')
+    elif hymnary.owner != request.user:
+        return HttpResponseForbidden('Você não tem permissão para editar este hinário')
+
     try:
         hymnary = Hymnary.objects.get(id=hymnary_id)
 
-        if request.method == 'PUT' and hymnary.owner == request.user:
-            request_body = json.loads(request.body)
-            hymnary.print_category = request_body['print_category']
-            hymnary.template = request_body['template']
-            hymnary.title = request_body['new_title']
+        request_body = json.loads(request.body)
+        hymnary.print_category = request_body['print_category']
+        hymnary.template = request_body['template']
+        hymnary.title = request_body['new_title']
 
-            hymnary.songs.clear()
-            for i, song_id in enumerate(request_body['songs_id']):
-                hymnary.songs.add(
-                    Song.objects.get(id=song_id),
-                    through_defaults={'order': i + 1}
-                )
+        hymnary.songs.clear()
+        for i, song_id in enumerate(request_body['songs_id']):
+            hymnary.songs.add(
+                Song.objects.get(id=song_id),
+                through_defaults={'order': i + 1}
+            )
     except Exception as e:
         alert = 'Ops, tivemos um problema em salvar seu hinário! Tente novamente mais tarde ou entre em contato.'
         error = e

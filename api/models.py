@@ -37,7 +37,8 @@ class Song(models.Model):
         soup = BeautifulSoup(client.get(self.lyrics_url).text, 'html.parser')
 
         lyrics = re.findall(
-            r'<p>(.*?)</p>', str(soup.find('div', {'class': 'cnt-letra'})))
+            r'<p>(.*?)</p>', str(soup.find('div', {'class': 'cnt-letra'}))
+        )
         for i in range(len(lyrics)):
             lyrics[i] = lyrics[i].replace('<br>', '<br/>')
             lyrics[i] = lyrics[i].replace('</br>', '<br/>')
