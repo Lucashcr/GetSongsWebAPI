@@ -171,13 +171,13 @@ def export_hymnary(request, hymnary_id):
 
 
 def save_hymnary(request: HttpRequest, hymnary_id):
-    if request.method != 'PUT':
-        return HttpResponseNotAllowed('Método não permitido')
-    elif hymnary.owner != request.user:
-        return HttpResponseForbidden('Você não tem permissão para editar este hinário')
-
     try:
         hymnary = Hymnary.objects.get(id=hymnary_id)
+
+        if request.method != 'PUT':
+            return HttpResponseNotAllowed('Método não permitido')
+        elif hymnary.owner != request.user:
+            return HttpResponseForbidden('Você não tem permissão para editar este hinário')
 
         request_body = json.loads(request.body)
         hymnary.print_category = request_body['print_category']
@@ -192,7 +192,7 @@ def save_hymnary(request: HttpRequest, hymnary_id):
             )
     except Exception as e:
         alert = 'Ops, tivemos um problema em salvar seu hinário! Tente novamente mais tarde ou entre em contato.'
-        error = e
+        error = None
         status = 500
     else:
         hymnary.save()
