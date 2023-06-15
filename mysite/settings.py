@@ -91,10 +91,8 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 
 if DEBUG:
-    ALLOWED_HOSTS.extend([
-        "127.0.0.1",
-        'getsongs-test.up.railway.app'
-    ])
+    ALLOWED_HOSTS.append('getsongs-test.up.railway.app')
+    CSRF_TRUSTED_ORIGINS.append('https://getsongs-test.up.railway.app')
 
 DATABASES = {
     'default': {
