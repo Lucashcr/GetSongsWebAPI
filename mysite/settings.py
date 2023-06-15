@@ -91,7 +91,10 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 
 if DEBUG:
-    ALLOWED_HOSTS.append("127.0.0.1")
+    ALLOWED_HOSTS.extend([
+        "127.0.0.1",
+        'getsongs-test.up.railway.app'
+    ])
 
 DATABASES = {
     'default': {
