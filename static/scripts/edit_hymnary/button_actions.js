@@ -90,7 +90,12 @@ async function saveHymnary() {
         })
     })
         .then(response => response.json())
-        .then(data => { alert(data.alert); });
+        .then(data => {
+            if (data.status == 200)
+                alert(data.alert);
+            else
+                alert(data.alert + "\n\n" + data.error);
+        });
 }
 
 async function viewHymnary() {
