@@ -71,7 +71,7 @@ function getCookie(name) {
     return cookieValue;
 }
 
-async function saveHymnary() {
+async function saveHymnary(showAlert = false) {
     let songs_id = Array.from(songs_list.querySelectorAll('.song_id'))
         .map(song_id => parseInt(song_id.value));
 
@@ -91,9 +91,18 @@ async function saveHymnary() {
     })
         .then(response => response.json())
         .then(data => {
-            alert(data.alert);
-            if (data.status != 200)
+            if (showAlert) {
+                alert(data.alert);
+                showAlert = false;
+            }
+
+            if (data.status != 200) {
+                if (showAlert)
+                    alert(data.alert);
+
                 console.log(data);
+            }
+
         });
 }
 

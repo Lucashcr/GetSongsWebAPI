@@ -78,7 +78,7 @@
 
 <div class="buttons btn-group">
     <input type="button" class="btn btn-primary" value="Adicionar" onclick="togglePopUp()">
-    <input type="button" class="btn btn-info" value="Salvar" onclick="saveHymnary()">
+    <input type="button" class="btn btn-info" value="Salvar" onclick="saveHymnary(true)">
     <input type="button" class="btn btn-secondary" value="Visualizar" onclick="viewHymnary()">
     <input type="button" class="btn btn-success" value="Exportar" onclick="exportHymnary()">
     {% comment %} <a href="/hymnary/{{hymnary.id}}/export" class="btn btn-secondary">Visualizar</a>
@@ -91,4 +91,15 @@
 <script src="{% static 'scripts/edit_hymnary/drag_and_drop.js' %}"></script>
 <script src="{% static 'scripts/edit_hymnary/button_actions.js' %}"></script>
 <script src="{% static 'scripts/edit_hymnary/filter_select.js' %}"></script>
+<script>    
+    setInterval(() => {
+        var previous_songs_id = songs_id ? songs_id : [];
+        var songs_id = Array.from(songs_list.querySelectorAll('.song_id'))
+            .map(song_id => parseInt(song_id.value));
+    
+        if (previous_songs_id != songs_id) {
+            saveHymnary();
+        }
+    }, 30000);
+</script>
 {% endblock content %}
