@@ -192,7 +192,7 @@ def save_hymnary(request: HttpRequest, hymnary_id):
             )
     except Exception as e:
         alert = 'Ops, tivemos um problema em salvar seu hinário! Tente novamente mais tarde ou entre em contato.'
-        error = e
+        error = e.args[0]
         status = 500
     else:
         hymnary.save()
