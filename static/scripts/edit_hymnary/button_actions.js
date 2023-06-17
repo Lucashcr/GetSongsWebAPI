@@ -91,10 +91,9 @@ async function saveHymnary() {
     })
         .then(response => response.json())
         .then(data => {
-            if (data.status == 200)
-                alert(data.alert);
-            else
-                alert(data.alert + "\n\n" + data.error);
+            alert(data.alert);
+            if (data.status != 200)
+                console.log(data);
         });
 }
 
