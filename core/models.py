@@ -44,7 +44,7 @@ class HymnarySong(models.Model):
         on_delete=models.CASCADE,
         related_name='hymnary_songs'
     )
-    order = models.IntegerField('Ordem', unique=True)
+    order = models.IntegerField('Ordem')
 
 
 # class Contact(models.Model):
