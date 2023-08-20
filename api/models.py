@@ -29,6 +29,7 @@ class Song(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     lyrics_url = models.CharField('Link da letra', max_length=256)
     preview_url = models.CharField('Link do preview', max_length=256)
+    lyrics = models.TextField('Letra', blank=True)
 
     def __str__(self) -> str:
         return f'{self.name} - {self.artist.name}'
