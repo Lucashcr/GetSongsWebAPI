@@ -84,7 +84,7 @@ class TemplateHymnaryView(TemplateView):
             )
             return super().get(request, *args, **kwargs)
         except:
-            return redirect('/hymnary')
+            return HttpResponseNotFound('Hinário não encontrado')
 
 
 class ShowHymnary(TemplateHymnaryView):
@@ -104,10 +104,14 @@ class DeleteHymnary(TemplateHymnaryView):
     template_name = 'pages/delete_hymnary.html'
 
     def post(self, request, *args, **kwargs):
-        hymnary = Hymnary.objects.get(id=kwargs.get('hymnary_id'))
-        if request.user == hymnary.owner:
+        try:
+            hymnary = Hymnary.objects.get(
+                id=kwargs.get('hymnary_id'),
+                owner=request.user
+            )
             hymnary.delete()
-        return redirect('/hymnary')
+        except:
+            return HttpResponseNotFound('Hinário não encontrado')
 
 
 # ------------------------------------------------------------------------------------------------------
@@ -125,7 +129,7 @@ def export_hymnary(request, hymnary_id):
     try:
         hymnary = Hymnary.objects.get(id=hymnary_id, owner=request.user)
     except:
-        return redirect('/hymnary')
+        return HttpResponseNotFound('Hinário não encontrado')
 
     file_name = f'{hymnary.title}_{datetime.now().strftime("%d_%m_%Y-%H_%M")}.pdf'
     file_path = os.path.join(file_name)
@@ -172,12 +176,13 @@ def export_hymnary(request, hymnary_id):
 
 def save_hymnary(request: HttpRequest, hymnary_id):
     try:
-        hymnary = Hymnary.objects.get(id=hymnary_id)
+        hymnary = Hymnary.objects.get(
+            id=hymnary_id,
+            owner=request.user
+        )
 
         if request.method != 'PUT':
             return HttpResponseNotAllowed('Método não permitido')
-        elif hymnary.owner != request.user:
-            return HttpResponseForbidden('Você não tem permissão para editar este hinário')
 
         request_body = json.loads(request.body)
         hymnary.print_category = request_body['print_category']
