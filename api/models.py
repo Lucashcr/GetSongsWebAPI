@@ -1,5 +1,7 @@
 import re
+from typing import Any
 from bs4 import BeautifulSoup
+from httpx import get
 
 from django.db import models
 
@@ -31,11 +33,15 @@ class Song(models.Model):
     preview_url = models.CharField('Link do preview', max_length=256)
     lyrics = models.TextField('Letra', blank=True)
 
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        self.lyrics = '<br/><br/>'.join(self.get_lyrics())
+
     def __str__(self) -> str:
         return f'{self.name} - {self.artist.name}'
 
-    def get_lyrics(self, client):
-        soup = BeautifulSoup(client.get(self.lyrics_url).text, 'html.parser')
+    def get_lyrics(self):
+        soup = BeautifulSoup(get(self.lyrics_url).text, 'html.parser')
 
         lyrics = re.findall(
             r'<p>(.*?)</p>', str(soup.find('div', {'class': 'lyric-original'}))

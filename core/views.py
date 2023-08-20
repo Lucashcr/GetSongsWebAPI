@@ -154,9 +154,7 @@ def export_hymnary(request, hymnary_id):
             f'{song.name}<br/>{song.artist}', preview_url, heading_style
         )
 
-        with Client() as client:
-            for p in song.get_lyrics(client):
-                doc.insert_paragraph(p)
+        doc.insert_paragraph(song.lyrics)
 
         if hymnary.template == 'each-song-by-page':
             doc.add_new_page()
