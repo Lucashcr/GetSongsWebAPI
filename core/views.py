@@ -1,8 +1,6 @@
-import random
 import os
 import json
 from datetime import datetime
-from httpx import Client
 
 from django.core.mail import send_mail
 from django.views.generic import TemplateView
