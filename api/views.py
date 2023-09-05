@@ -1,12 +1,29 @@
-from time import time
+from django.forms import model_to_dict
 from django.views.generic import TemplateView
+from django.http import JsonResponse
 
 from rest_framework import viewsets
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 
 from .models import *
 from .serializers import *
 
 # Create your views here.
+
+
+class GetCurrentUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        data = model_to_dict(request.user, [
+            'username',
+            'email',
+            'first_name',
+            'last_name',
+        ])
+        data['full_name'] = f"{data['first_name']} {data['last_name']}"
+        return JsonResponse(data)
 
 
 class HomeView(TemplateView):
