@@ -21,4 +21,7 @@ urlpatterns = [
          login_required(export_hymnary)),
     path('hymnary/<int:hymnary_id>/save',
          login_required(csrf_protect(save_hymnary))),
+
+    path('api/hymnary', ListHymanariesAPIView.as_view()),
+    path('api/hymnary/<int:hymnary_id>', DetailHymnaryAPIView.as_view()),
 ]

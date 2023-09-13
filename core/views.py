@@ -5,8 +5,13 @@ from datetime import datetime
 from django.core.mail import send_mail
 from django.views.generic import TemplateView
 from django.shortcuts import redirect
+from django.forms import model_to_dict
 from django.http.response import FileResponse
-from django.http import HttpRequest, HttpResponseForbidden, HttpResponseNotAllowed, HttpResponseNotFound, JsonResponse
+from django.http import HttpRequest, HttpResponseForbidden, HttpResponseBadRequest, HttpResponseNotAllowed, HttpResponseNotFound, JsonResponse
+
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import permission_classes, api_view
 
 from build_doc.templates import SingleColumnTemplate, TwoColumnsTemplate
 from build_doc.styles import *
@@ -113,6 +118,62 @@ class DeleteHymnary(TemplateHymnaryView):
 
 
 # ------------------------------------------------------------------------------------------------------
+# API VIEWS
+
+class ListHymanariesAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        hymnaries = Hymnary.objects.filter(owner=request.user)
+        return JsonResponse([
+            {
+                'id': hymnary.id,
+                'title': hymnary.title,
+                'created_at': hymnary.created_at,
+            }
+            for hymnary in hymnaries
+        ], safe=False)
+
+    def post(self, request):
+        if not (hymnary_title := request.data.get('title')):
+            return HttpResponseBadRequest('Missing hymnary title')
+            
+        hymnary = Hymnary.objects.create(
+            title=hymnary_title,
+            owner=request.user
+        )
+
+        return JsonResponse(model_to_dict(hymnary))
+
+
+class DetailHymnaryAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, hymnary_id):
+        hymnary = Hymnary.objects.get(id=hymnary_id, owner=request.user)
+        return JsonResponse({
+            'id': hymnary.id,
+            'title': hymnary.title,
+            'created_at': hymnary.created_at,
+            'print_category': hymnary.print_category,
+            'template': hymnary.template,
+            'songs': [
+                {
+                    'id': song.id,
+                    'name': song.name,
+                    'artist': song.artist.name,
+                    'lyrics': song.lyrics,
+                    'preview_url': song.preview_url,
+                    'category': song.category.name,
+                }
+                for song in hymnary.songs.all()
+            ]
+        })
+
+
+# ------------------------------------------------------------------------------------------------------
+# FUNCTION BASED VIEWS
+
 
 def new_hymnary(request, hymnary_name):
     new_hymnary = Hymnary(
