@@ -29,11 +29,13 @@ SECRET_KEY = 'django-insecure-rc^*w^w&6g9_(uvx#6s*bnt!w)l0rdi%!l7mv#y%uc&x%wo5pk
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get('DEBUG'))
 
-ALLOWED_HOSTS = ['getsongs.up.railway.app', 'getsongswebui-test.up.railway.app']
+ALLOWED_HOSTS = ['getsongs.up.railway.app', 'getsongswebui.up.railway.app']
 
 # FORM SUBMISSION
 # Comment out the following line and place your railway URL, and your production URL in the array.
 CSRF_TRUSTED_ORIGINS = list(map(lambda x: f'https://{x}', ALLOWED_HOSTS))
+
+CORS_ORIGIN_WHITELIST = CSRF_TRUSTED_ORIGINS
 
 # Application definition
 
@@ -50,6 +52,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
 
     'rest_framework',
+    'corsheaders',
 
     'core',
     'api',
@@ -105,6 +108,12 @@ if DEBUG:
         'https://127.0.0.1',
         'https://localhost'
     ])
+    CORS_ORIGIN_WHITELIST.extend([
+        'https://getsongs-test.up.railway.app',
+        'https://getsongswebui-test.up.railway.app',
+        'https://127.0.0.1',
+        'https://localhost'
+    ])
 
 DATABASES = {
     'default': {
@@ -142,8 +151,6 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=2),
 }
-
-CORS_ORIGIN_WHITELIST = ["http://localhost:3000", "http://127.0.0.1:3000"]
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
