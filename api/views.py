@@ -1,10 +1,13 @@
-from django.forms import model_to_dict
+from django.forms import ValidationError, model_to_dict
 from django.views.generic import TemplateView
 from django.http import JsonResponse
+from django.contrib.auth.models import User
+from django.utils.decorators import method_decorator
 
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import permission_classes
 
 from .models import *
 from .serializers import *
@@ -24,6 +27,28 @@ class GetCurrentUserView(APIView):
         ])
         data['full_name'] = f"{data['first_name']} {data['last_name']}"
         return JsonResponse(data)
+
+
+class RegisterUserView(APIView):
+    permission_classes = []
+
+    def post(self, request):
+        new_user = User(
+            username=request.data.get('username'),
+            email=request.data.get('email'),
+            first_name=request.data.get('first_name'),
+            last_name=request.data.get('last_name'),
+        )
+        new_user.set_password(request.data.get('password'))
+
+        try:
+            new_user.validate_unique()
+        except ValidationError as e:
+            print(e)
+            return JsonResponse(e.messages, status=400, safe=False)
+        else:
+            new_user.save()
+            return JsonResponse(model_to_dict(new_user), status=201)
 
 
 class HomeView(TemplateView):

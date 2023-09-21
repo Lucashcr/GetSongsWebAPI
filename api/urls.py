@@ -12,7 +12,6 @@ router.register(r'song', SongViewSet)
 
 urlpatterns = [
     path('', HomeView.as_view()),
-    path('user/me/', GetCurrentUserView.as_view()),
     path('show-categories/', ShowCategoriesView.as_view()),
     path('show-artists/', ShowArtistsView.as_view()),
     path('show-songs/', ShowSongsView.as_view()),

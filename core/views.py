@@ -7,7 +7,10 @@ from django.views.generic import TemplateView
 from django.shortcuts import redirect
 from django.forms import model_to_dict
 from django.http.response import FileResponse
-from django.http import HttpRequest, HttpResponseForbidden, HttpResponseBadRequest, HttpResponseNotAllowed, HttpResponseNotFound, JsonResponse
+from django.http import (
+    HttpRequest, HttpResponse, HttpResponseForbidden, HttpResponseBadRequest,
+    HttpResponseNotAllowed, HttpResponseNotFound, JsonResponse
+)
 
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
@@ -144,6 +147,7 @@ class ListHymanariesAPIView(APIView):
         )
 
         return JsonResponse(model_to_dict(hymnary))
+            
 
 
 class DetailHymnaryAPIView(APIView):
@@ -155,6 +159,7 @@ class DetailHymnaryAPIView(APIView):
             'id': hymnary.id,
             'title': hymnary.title,
             'created_at': hymnary.created_at,
+            'updated_at': hymnary.updated_at,
             'print_category': hymnary.print_category,
             'template': hymnary.template,
             'songs': [
@@ -169,6 +174,15 @@ class DetailHymnaryAPIView(APIView):
                 for song in hymnary.songs.all()
             ]
         })
+
+    def delete(self, request, hymnary_id):
+        try:
+            hymnary = Hymnary.objects.get(id=hymnary_id, owner=request.user)
+        except:
+            return HttpResponseNotFound('Hinário não encontrado')
+        else:
+            hymnary.delete()
+            return HttpResponse('Hinário deletado com sucesso')
 
 
 # ------------------------------------------------------------------------------------------------------

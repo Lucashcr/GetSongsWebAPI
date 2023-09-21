@@ -12,6 +12,7 @@ class Hymnary(models.Model):
         on_delete=models.CASCADE
     )
     created_at = models.DateTimeField('Criado em', auto_now_add=True)
+    updated_at = models.DateTimeField('Atualizado em', auto_now=True)
     print_category = models.BooleanField('Imprimir categoria', default=True)
     songs = models.ManyToManyField(
         Song,

@@ -105,14 +105,14 @@ if DEBUG:
     CSRF_TRUSTED_ORIGINS.extend([
         'https://getsongs-test.up.railway.app',
         'https://getsongswebui-test.up.railway.app',
-        'https://127.0.0.1',
-        'https://localhost'
+        'http://127.0.0.1:3000',
+        'http://localhost:3000'
     ])
     CORS_ORIGIN_WHITELIST.extend([
         'https://getsongs-test.up.railway.app',
         'https://getsongswebui-test.up.railway.app',
-        'https://127.0.0.1',
-        'https://localhost'
+        'http://127.0.0.1:3000',
+        'http://localhost:3000'
     ])
 
 DATABASES = {
@@ -175,7 +175,9 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": ["rest_framework_simplejwt.authentication.JWTAuthentication"],
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
-    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.DjangoModelPermissions",),
+    "DEFAULT_PERMISSION_CLASSES": (
+        "rest_framework.permissions.DjangoModelPermissions",
+    ),
 }
 
 # Default primary key field type
