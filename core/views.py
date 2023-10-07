@@ -284,7 +284,7 @@ def export_hymnary(request, hymnary_id):
         filename=file_name
     )
 
-    hymnary.file = response
+    hymnary.file.save(file_name, response)
 
     os.remove(file_path)
 
