@@ -5,9 +5,9 @@ from .views import *
 
 
 router = routers.DefaultRouter()
-router.register(r'category', CategoryViewSet)
-router.register(r'artist', ArtistViewSet)
-router.register(r'song', SongViewSet)
+router.register(r'category', CategoryViewSet, basename='category')
+router.register(r'artist', ArtistViewSet, basename='artist')
+router.register(r'song', SongViewSet, basename='song')
 
 
 urlpatterns = [

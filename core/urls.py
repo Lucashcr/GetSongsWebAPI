@@ -24,4 +24,5 @@ urlpatterns = [
 
     path('api/hymnary', ListHymanariesAPIView.as_view()),
     path('api/hymnary/<int:hymnary_id>', DetailHymnaryAPIView.as_view()),
+    path('api/hymnary/<int:hymnary_id>/add', AddSongToHymnaryAPIView.as_view()),
 ]

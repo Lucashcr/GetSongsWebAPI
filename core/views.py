@@ -20,7 +20,7 @@ from build_doc.templates import SingleColumnTemplate, TwoColumnsTemplate
 from build_doc.styles import *
 
 from api.models import *
-from core.models import Hymnary
+from core.models import Hymnary, HymnarySong
 from mysite.settings import BASE_DIR, TIME_ZONE
 
 
@@ -167,11 +167,10 @@ class DetailHymnaryAPIView(APIView):
                     'id': song.id,
                     'name': song.name,
                     'artist': song.artist.name,
-                    'lyrics': song.lyrics,
-                    'preview_url': song.preview_url,
                     'category': song.category.name,
+                    'preview_url': song.preview_url,
                 }
-                for song in hymnary.songs.all()
+                for song in hymnary.songs.all().order_by('song_hymnaries__order')
             ]
         })
 
@@ -183,7 +182,52 @@ class DetailHymnaryAPIView(APIView):
         else:
             hymnary.delete()
             return HttpResponse('Hinário deletado com sucesso')
+        
+    def put(self, request, hymnary_id):
+        try:
+            hymnary = Hymnary.objects.get(id=hymnary_id, owner=request.user)
+        except:
+            return HttpResponseNotFound('Hinário não encontrado')
+        else:
+            hymnary.print_category = request.data['print_category']
+            hymnary.template = request.data['template']
+            hymnary.title = request.data['title']
+            hymnary.save()
 
+            return HttpResponse('Hinário atualizado com sucesso')
+        
+
+class AddSongToHymnaryAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, hymnary_id):
+        try:
+            hymnary = Hymnary.objects.get(id=hymnary_id, owner=request.user)
+        except:
+            return HttpResponseNotFound('Hinário não encontrado')
+        else:
+            song_id = request.data.get('song_id')
+            if not song_id:
+                return HttpResponseBadRequest('Missing song_id')
+
+            try:
+                song = Song.objects.prefetch_related('artist', 'category').get(id=song_id)
+            except:
+                return HttpResponseNotFound('Música não encontrada')
+
+            HymnarySong.objects.create(
+                hymnary=hymnary,
+                song=song,
+                order=hymnary.songs.count() + 1
+            )
+
+            return JsonResponse({
+                'id': song.id,
+                'name': song.name,
+                'artist': song.artist.name,
+                'category': song.category.name,
+                'preview_url': song.preview_url
+            })
 
 # ------------------------------------------------------------------------------------------------------
 # FUNCTION BASED VIEWS
@@ -239,6 +283,8 @@ def export_hymnary(request, hymnary_id):
         as_attachment=as_attachment,
         filename=file_name
     )
+
+    hymnary.file = response
 
     os.remove(file_path)
 

@@ -30,6 +30,12 @@ class Hymnary(models.Model):
         choices=TEMPLATE_CHOICES,
         default='single-column'
     )
+    file = models.FileField(
+        'Arquivo',
+        upload_to='hymnaries/',
+        null=True,
+        blank=True
+    )
 
 
 class HymnarySong(models.Model):
@@ -46,6 +52,10 @@ class HymnarySong(models.Model):
         related_name='hymnary_songs'
     )
     order = models.IntegerField('Ordem', unique=False)
+
+    class Meta:
+        unique_together = ('song', 'hymnary')
+        ordering = ('order',)
 
 
 # class Contact(models.Model):

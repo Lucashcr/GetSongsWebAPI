@@ -86,8 +86,21 @@ class ShowArtistsView(TemplateView):
 
 
 class SongViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Song.objects.all()
+    # queryset = Song.objects.all()
     serializer_class = SongSerializer
+
+    def get_queryset(self):
+        queryset = Song.objects.all()
+        artist_id = self.request.query_params.get('artist_id', None)
+        category_id = self.request.query_params.get('category_id', None)
+
+        if artist_id:
+            queryset = queryset.filter(artist__id=artist_id)
+
+        if category_id:
+            queryset = queryset.filter(category__id=category_id)
+
+        return queryset
 
 
 class ShowSongsView(TemplateView):
