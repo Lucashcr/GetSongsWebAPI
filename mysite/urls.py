@@ -26,8 +26,10 @@ urlpatterns = [
     path('api/', include('api.urls')),
     path('', include('core.urls')),
 
-    path('user/me/', GetCurrentUserView.as_view()),
-    path('user/register/', RegisterUserView.as_view()),
-    path("user/token/", TokenObtainPairView.as_view(), name="token"),
-    path("user/refresh_token/", TokenRefreshView.as_view(), name="refresh_token"),
+    path('user/', include([
+        path('me/', GetCurrentUserView.as_view()),
+        path('register/', RegisterUserView.as_view()),
+        path("token/", TokenObtainPairView.as_view(), name="token"),
+        path("refresh_token/", TokenRefreshView.as_view(), name="refresh_token"),
+    ])),
 ]

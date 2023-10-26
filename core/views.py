@@ -13,6 +13,7 @@ from django.http import (
 )
 
 from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes, api_view
 
@@ -21,6 +22,7 @@ from build_doc.styles import *
 
 from api.models import *
 from core.models import Hymnary, HymnarySong
+from core.serializers import HymnarySerializer
 from mysite.settings import BASE_DIR, TIME_ZONE
 
 
@@ -122,6 +124,18 @@ class DeleteHymnary(TemplateHymnaryView):
 
 # ------------------------------------------------------------------------------------------------------
 # API VIEWS
+
+class HymnaryViewSet(ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = Hymnary.objects.all()
+    serializer_class = HymnarySerializer
+
+    def get_queryset(self):
+        return self.queryset.filter(owner=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        request.data['owner'] = request.user.id
+        return super().create(request, *args, **kwargs)
 
 class ListHymanariesAPIView(APIView):
     permission_classes = [IsAuthenticated]
