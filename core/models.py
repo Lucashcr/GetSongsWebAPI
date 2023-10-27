@@ -33,8 +33,7 @@ class Hymnary(models.Model):
     file = models.FileField(
         'Arquivo',
         upload_to='hymnaries/',
-        null=True,
-        blank=True
+        null=True
     )
 
 

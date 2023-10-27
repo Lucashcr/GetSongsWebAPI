@@ -242,6 +242,59 @@ class AddSongToHymnaryAPIView(APIView):
                 'category': song.category.name,
                 'preview_url': song.preview_url
             })
+        
+class ExportHymnaryAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, hymnary_id):
+        try:
+            hymnary = Hymnary.objects.get(id=hymnary_id, owner=request.user)
+        except:
+            return HttpResponseNotFound('Hinário não encontrado')
+
+        file_name = f'{hymnary.title}_{datetime.now().strftime("%d_%m_%Y-%H_%M")}.pdf'
+        file_path = os.path.join(file_name)
+
+        if hymnary.template in ('single-column', 'each-song-by-page'):
+            HymnaryTemplate = SingleColumnTemplate
+        elif hymnary.template == 'two-columns':
+            HymnaryTemplate = TwoColumnsTemplate
+
+        doc = HymnaryTemplate(file_path, title=hymnary.title)
+        doc.insert_heading(hymnary.title, CENTERED_HEADING)
+        for item in hymnary.hymnary_songs.all():
+            song = item.song
+            preview_url = song.preview_url.replace('embed/', '')
+            if hymnary.print_category:
+                doc.insert_heading(song.category.name)
+                heading_style = HEADING_2
+            else:
+                heading_style = HEADING_1
+
+            doc.insert_heading_link(
+                f'{song.name}<br/>{song.artist}', preview_url, heading_style
+            )
+
+            doc.insert_paragraph(song.lyrics)
+
+            if hymnary.template == 'each-song-by-page':
+                doc.add_new_page()
+
+        doc.build()
+
+        if hymnary.file:
+            hymnary.file.delete()
+
+        response = FileResponse(
+            open(file_path, 'rb'),
+            as_attachment=False,
+            filename=file_name
+        )
+
+        hymnary.file.save(file_name, open(file_path, 'rb'))
+
+        return response
+    
 
 # ------------------------------------------------------------------------------------------------------
 # FUNCTION BASED VIEWS
