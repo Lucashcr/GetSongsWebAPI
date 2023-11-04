@@ -22,7 +22,7 @@ from build_doc.styles import *
 
 from api.models import *
 from core.models import Hymnary, HymnarySong
-from core.serializers import HymnarySerializer
+from core.serializers import HymnarySerializer, HymnarySongSerializer
 from mysite.settings import BASE_DIR, TIME_ZONE
 
 
@@ -127,15 +127,24 @@ class DeleteHymnary(TemplateHymnaryView):
 
 class HymnaryViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
-    queryset = Hymnary.objects.all()
     serializer_class = HymnarySerializer
 
     def get_queryset(self):
-        return self.queryset.filter(owner=self.request.user)
+        return Hymnary.objects.filter(owner=self.request.user)
 
     def create(self, request, *args, **kwargs):
         request.data['owner'] = request.user.id
         return super().create(request, *args, **kwargs)
+
+
+class HymnarySongViewSet(ModelViewSet):
+    permission_classes = []
+    serializer_class = HymnarySongSerializer
+    queryset = HymnarySong.objects.all()
+
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
 
 class ListHymanariesAPIView(APIView):
     permission_classes = [IsAuthenticated]
@@ -154,14 +163,13 @@ class ListHymanariesAPIView(APIView):
     def post(self, request):
         if not (hymnary_title := request.data.get('title')):
             return HttpResponseBadRequest('Missing hymnary title')
-            
+
         hymnary = Hymnary.objects.create(
             title=hymnary_title,
             owner=request.user
         )
 
         return JsonResponse(model_to_dict(hymnary))
-            
 
 
 class DetailHymnaryAPIView(APIView):
@@ -196,7 +204,7 @@ class DetailHymnaryAPIView(APIView):
         else:
             hymnary.delete()
             return HttpResponse('Hinário deletado com sucesso')
-        
+
     def put(self, request, hymnary_id):
         try:
             hymnary = Hymnary.objects.get(id=hymnary_id, owner=request.user)
@@ -209,7 +217,7 @@ class DetailHymnaryAPIView(APIView):
             hymnary.save()
 
             return HttpResponse('Hinário atualizado com sucesso')
-        
+
 
 class AddSongToHymnaryAPIView(APIView):
     permission_classes = [IsAuthenticated]
@@ -225,7 +233,8 @@ class AddSongToHymnaryAPIView(APIView):
                 return HttpResponseBadRequest('Missing song_id')
 
             try:
-                song = Song.objects.prefetch_related('artist', 'category').get(id=song_id)
+                song = Song.objects.prefetch_related(
+                    'artist', 'category').get(id=song_id)
             except:
                 return HttpResponseNotFound('Música não encontrada')
 
@@ -242,7 +251,8 @@ class AddSongToHymnaryAPIView(APIView):
                 'category': song.category.name,
                 'preview_url': song.preview_url
             })
-        
+
+
 class ExportHymnaryAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -294,7 +304,32 @@ class ExportHymnaryAPIView(APIView):
         hymnary.file.save(file_name, open(file_path, 'rb'))
 
         return response
-    
+
+
+class ReorderSongsAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+    queryset = HymnarySong.objects.all()
+
+    def post(self, request, hymnary_id):
+        try:
+            hymnary = Hymnary.objects.get(id=hymnary_id, owner=request.user)
+        except:
+            return HttpResponseNotFound('Hinário não encontrado')
+        else:
+            songs = request.data['songs']
+
+            new_songs = []
+            for i, song in enumerate(songs):
+                h = HymnarySong.objects.get(
+                    song_id=song['id'], hymnary=hymnary)
+                h.order = i + 1
+                new_songs.append(h)
+
+            print([(hs.song_id, hs.order) for hs in new_songs])
+            HymnarySong.objects.bulk_update(new_songs, ['order'])
+
+            return HttpResponse('Ordem das músicas atualizada com sucesso')
+
 
 # ------------------------------------------------------------------------------------------------------
 # FUNCTION BASED VIEWS
