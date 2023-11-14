@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-rc^*w^w&6g9_(uvx#6s*bnt!w)l0rdi%!l7mv#y%uc&x%wo5pk
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get('DEBUG'))
 
-ALLOWED_HOSTS = ['getsongs.up.railway.app', 'getsongswebui.up.railway.app']
+ALLOWED_HOSTS = ['getsongs.up.railway.app', 'getsongs-api.up.railway.app']
 
 # FORM SUBMISSION
 # Comment out the following line and place your railway URL, and your production URL in the array.
@@ -49,7 +49,7 @@ INSTALLED_APPS = [
 
     'allauth',
     'allauth.account',
-    'allauth.socialaccount',
+    # 'allauth.socialaccount',
 
     'rest_framework',
     'corsheaders',
@@ -104,7 +104,7 @@ if DEBUG:
     ])
     CSRF_TRUSTED_ORIGINS.extend([
         'https://getsongs-test.up.railway.app',
-        'https://getsongswebui-test.up.railway.app',
+        'https://getsongs-api-test.up.railway.app',
         'http://127.0.0.1:3000',
         'http://localhost:3000',
         'http://127.0.0.1:5173',
@@ -112,7 +112,7 @@ if DEBUG:
     ])
     CORS_ORIGIN_WHITELIST.extend([
         'https://getsongs-test.up.railway.app',
-        'https://getsongswebui-test.up.railway.app',
+        'https://getsongs-api-test.up.railway.app',
         'http://127.0.0.1:3000',
         'http://localhost:3000',
         'http://127.0.0.1:5173',

@@ -54,10 +54,3 @@ class HymnarySong(models.Model):
 
     class Meta:
         unique_together = ('song', 'hymnary')
-        ordering = ('order',)
-
-
-# class Contact(models.Model):
-#     name = models.CharField(max_length=64)
-#     email = models.EmailField(max_length=128)
-#     message = models.TextField()
