@@ -3,3 +3,4 @@ api_data
 config.ini
 .aliases.sh
 **/__pycache__/
+/media

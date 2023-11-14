@@ -29,11 +29,13 @@ SECRET_KEY = 'django-insecure-rc^*w^w&6g9_(uvx#6s*bnt!w)l0rdi%!l7mv#y%uc&x%wo5pk
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get('DEBUG'))
 
-ALLOWED_HOSTS = ['getsongs.up.railway.app']
+ALLOWED_HOSTS = ['getsongs.up.railway.app', 'getsongs-api.up.railway.app']
 
 # FORM SUBMISSION
 # Comment out the following line and place your railway URL, and your production URL in the array.
-CSRF_TRUSTED_ORIGINS = ['https://getsongs.up.railway.app']
+CSRF_TRUSTED_ORIGINS = list(map(lambda x: f'https://{x}', ALLOWED_HOSTS))
+
+CORS_ORIGIN_WHITELIST = CSRF_TRUSTED_ORIGINS
 
 # Application definition
 
@@ -47,9 +49,10 @@ INSTALLED_APPS = [
 
     'allauth',
     'allauth.account',
-    'allauth.socialaccount',
+    # 'allauth.socialaccount',
 
     'rest_framework',
+    'corsheaders',
 
     'core',
     'api',
@@ -95,13 +98,25 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 if DEBUG:
     ALLOWED_HOSTS.extend([
         'getsongs-test.up.railway.app',
+        'getsongswebui-test.up.railway.app'
         '127.0.0.1',
         'localhost'
     ])
     CSRF_TRUSTED_ORIGINS.extend([
         'https://getsongs-test.up.railway.app',
-        'https://127.0.0.1',
-        'https://localhost'
+        'https://getsongs-api-test.up.railway.app',
+        'http://127.0.0.1:3000',
+        'http://localhost:3000',
+        'http://127.0.0.1:5173',
+        'http://localhost:5173'
+    ])
+    CORS_ORIGIN_WHITELIST.extend([
+        'https://getsongs-test.up.railway.app',
+        'https://getsongs-api-test.up.railway.app',
+        'http://127.0.0.1:3000',
+        'http://localhost:3000',
+        'http://127.0.0.1:5173',
+        'http://localhost:5173'
     ])
 
 DATABASES = {
@@ -134,14 +149,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LOGIN_URL = "/api/v1/signin"
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=24),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=2),
 }
-
-CORS_ORIGIN_WHITELIST = ["http://localhost:3000", "http://127.0.0.1:3000"]
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
@@ -166,7 +180,9 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": ["rest_framework_simplejwt.authentication.JWTAuthentication"],
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
-    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.DjangoModelPermissions",),
+    "DEFAULT_PERMISSION_CLASSES": (
+        "rest_framework.permissions.DjangoModelPermissions",
+    ),
 }
 
 # Default primary key field type

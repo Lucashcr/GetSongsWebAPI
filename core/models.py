@@ -12,6 +12,7 @@ class Hymnary(models.Model):
         on_delete=models.CASCADE
     )
     created_at = models.DateTimeField('Criado em', auto_now_add=True)
+    updated_at = models.DateTimeField('Atualizado em', auto_now=True)
     print_category = models.BooleanField('Imprimir categoria', default=True)
     songs = models.ManyToManyField(
         Song,
@@ -28,6 +29,11 @@ class Hymnary(models.Model):
         'Modelo', max_length=32,
         choices=TEMPLATE_CHOICES,
         default='single-column'
+    )
+    file = models.FileField(
+        'Arquivo',
+        upload_to='hymnaries/',
+        null=True
     )
 
 
@@ -46,8 +52,5 @@ class HymnarySong(models.Model):
     )
     order = models.IntegerField('Ordem', unique=False)
 
-
-# class Contact(models.Model):
-#     name = models.CharField(max_length=64)
-#     email = models.EmailField(max_length=128)
-#     message = models.TextField()
+    class Meta:
+        unique_together = ('song', 'hymnary')

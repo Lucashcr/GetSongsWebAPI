@@ -18,11 +18,18 @@ from django.urls import path, include
 
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
+from api.views import GetCurrentUserView, RegisterUserView
+
 urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
     path('', include('core.urls')),
-    path("api/token/", TokenObtainPairView.as_view(), name="token"),
-    path("api/refresh_token/", TokenRefreshView.as_view(), name="refresh_token"),
+
+    path('user/', include([
+        path('me/', GetCurrentUserView.as_view()),
+        path('register/', RegisterUserView.as_view()),
+        path("token/", TokenObtainPairView.as_view(), name="token"),
+        path("refresh_token/", TokenRefreshView.as_view(), name="refresh_token"),
+    ])),
 ]

@@ -1,13 +1,14 @@
-from django.forms import model_to_dict
-from django.views.generic import TemplateView
+from django.forms import ValidationError, model_to_dict
 from django.http import JsonResponse
+from django.contrib.auth.models import User
 
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import permission_classes
 
-from .models import *
-from .serializers import *
+from .models import Artist, Category, Song
+from .serializers import CategorySerializer, ArtistSerializer, SongSerializer
 
 # Create your views here.
 
@@ -26,8 +27,31 @@ class GetCurrentUserView(APIView):
         return JsonResponse(data)
 
 
-class HomeView(TemplateView):
-    template_name: str = "api/index.html"
+class RegisterUserView(APIView):
+    permission_classes = []
+
+    def post(self, request):
+        new_user = User.objects.create_user(
+            username=request.data.get('username'),
+            email=request.data.get('email'),
+            password=request.data.get('password'),
+            first_name=request.data.get('first_name'),
+            last_name=request.data.get('last_name'),
+        )
+
+        try:
+            new_user.validate_unique()
+        except ValidationError as e:
+            print(e)
+            return JsonResponse(e.messages, status=400, safe=False)
+        else:
+            new_user.save()
+            return JsonResponse(
+                model_to_dict(
+                    new_user, ['username', 'email', 'first_name', 'last_name']
+                ),
+                status=201
+            )
 
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
@@ -35,54 +59,36 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = CategorySerializer
 
 
-class ShowCategoriesView(TemplateView):
-    template_name = "api/show-api-data.html"
-
-    def get_context_data(self, **kwargs):
-        context_data = super().get_context_data(**kwargs)
-        context_data['collection'] = Category.objects.all()
-        context_data['datatype'] = 'categorias'
-        return context_data
-
-
 class ArtistViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Artist.objects.all()
+    permission_classes = []
     serializer_class = ArtistSerializer
 
+    def get_queryset(self):
+        queryset = Artist.objects.all()
+        category_id = self.request.query_params.get('category_id', None)
 
-class ShowArtistsView(TemplateView):
-    template_name = "api/show-api-data.html"
+        if category_id:
+            queryset = (
+                queryset
+                .filter(song__category_id=category_id)
+                .distinct()
+            )
 
-    def get_context_data(self, **kwargs):
-        context_data = super().get_context_data(**kwargs)
-        context_data['collection'] = Artist.objects.all()
-        context_data['datatype'] = 'artistas'
-        return context_data
+        return queryset.order_by('id')
 
 
 class SongViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Song.objects.all()
     serializer_class = SongSerializer
 
+    def get_queryset(self):
+        queryset = Song.objects.all()
+        artist_id = self.request.query_params.get('artist_id', 0)
+        category_id = self.request.query_params.get('category_id', 0)
 
-class ShowSongsView(TemplateView):
-    template_name = "api/show-api-songs.html"
+        if int(artist_id):
+            queryset = queryset.filter(artist__id=artist_id)
 
-    def get_context_data(self, **kwargs):
-        context_data = super().get_context_data(**kwargs)
-        context_data['collection'] = Song.objects.all()
+        if int(category_id):
+            queryset = queryset.filter(category__id=category_id)
 
-        slug = kwargs.pop('slug', None)
-        if slug is not None:
-            by_artist = Song.objects.filter(artist__slug=slug)
-            by_category = Song.objects.filter(category__slug=slug)
-
-            if by_artist.count() > 0:
-                context_data['collection'] = by_artist
-                context_data['filtered'] = Artist.objects.get(slug=slug).name
-            elif by_category.count() > 0:
-                context_data['collection'] = by_category
-                context_data['filtered'] = Category.objects.get(slug=slug).name
-
-        context_data['datatype'] = 'músicas'
-        return context_data
+        return queryset
