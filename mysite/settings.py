@@ -98,7 +98,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 if DEBUG:
     ALLOWED_HOSTS.extend([
         'getsongs-test.up.railway.app',
-        'getsongswebui-test.up.railway.app'
+        'getsongs-api-test.up.railway.app',
         '127.0.0.1',
         'localhost'
     ])
@@ -107,16 +107,12 @@ if DEBUG:
         'https://getsongs-api-test.up.railway.app',
         'http://127.0.0.1:3000',
         'http://localhost:3000',
-        'http://127.0.0.1:5173',
-        'http://localhost:5173'
     ])
     CORS_ORIGIN_WHITELIST.extend([
         'https://getsongs-test.up.railway.app',
         'https://getsongs-api-test.up.railway.app',
         'http://127.0.0.1:3000',
         'http://localhost:3000',
-        'http://127.0.0.1:5173',
-        'http://localhost:5173'
     ])
 
 DATABASES = {
