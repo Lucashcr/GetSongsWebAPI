@@ -98,7 +98,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 if DEBUG:
     ALLOWED_HOSTS.extend([
         'getsongs-test.up.railway.app',
-        'getsongs-api-test.up.railway.app'
+        'getsongs-api-test.up.railway.app',
         '127.0.0.1',
         'localhost'
     ])
