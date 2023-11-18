@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.dispatch import receiver
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 
 from api.models import Song
 
@@ -59,7 +59,7 @@ class HymnarySong(models.Model):
         unique_together = ('song', 'hymnary')
 
 
-@receiver(post_save, sender=HymnarySong)
+@receiver([post_save, post_delete], sender=HymnarySong)
 def hymnary_song_post_save(sender, instance, **kwargs):
     hymnary = instance.hymnary
     hymnary.updated = True
