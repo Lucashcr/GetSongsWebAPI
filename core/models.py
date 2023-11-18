@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 from api.models import Song
 
@@ -13,6 +15,7 @@ class Hymnary(models.Model):
     )
     created_at = models.DateTimeField('Criado em', auto_now_add=True)
     updated_at = models.DateTimeField('Atualizado em', auto_now=True)
+    updated = models.BooleanField('Atualizado', default=True)
     print_category = models.BooleanField('Imprimir categoria', default=True)
     songs = models.ManyToManyField(
         Song,
@@ -54,3 +57,10 @@ class HymnarySong(models.Model):
 
     class Meta:
         unique_together = ('song', 'hymnary')
+
+
+@receiver(post_save, sender=HymnarySong)
+def hymnary_song_post_save(sender, instance, **kwargs):
+    hymnary = instance.hymnary
+    hymnary.updated = True
+    hymnary.save()
