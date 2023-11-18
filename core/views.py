@@ -60,7 +60,7 @@ class ExportHymnaryAPIView(APIView):
 
         doc = HymnaryTemplate(file_path, title=hymnary.title)
         doc.insert_heading(hymnary.title, CENTERED_HEADING)
-        for item in hymnary.hymnary_songs.all():
+        for item in hymnary.hymnary_songs.all().order_by('order'):
             song = item.song
             preview_url = song.preview_url.replace('embed/', '')
             if hymnary.print_category:
