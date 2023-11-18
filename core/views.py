@@ -48,9 +48,7 @@ class ExportHymnaryAPIView(APIView):
             return HttpResponseNotFound('Hinário não encontrado')
 
         if not hymnary.updated:
-            print('not updated')
             return FileResponse(hymnary.file, as_attachment=False, filename=hymnary.file.name)
-        print('updated')
 
         file_name = f'{hymnary.title}_{datetime.now().strftime("%d_%m_%Y-%H_%M")}.pdf'
         file_path = os.path.join(file_name)
