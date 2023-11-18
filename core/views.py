@@ -37,9 +37,6 @@ class HymnarySongViewSet(ModelViewSet):
     serializer_class = HymnarySongSerializer
     queryset = HymnarySong.objects.all()
 
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
-
 
 class ExportHymnaryAPIView(APIView):
     permission_classes = [IsAuthenticated]
@@ -49,6 +46,11 @@ class ExportHymnaryAPIView(APIView):
             hymnary = Hymnary.objects.get(id=hymnary_id, owner=request.user)
         except:
             return HttpResponseNotFound('Hinário não encontrado')
+
+        if not hymnary.updated:
+            print('not updated')
+            return FileResponse(hymnary.file, as_attachment=False, filename=hymnary.file.name)
+        print('updated')
 
         file_name = f'{hymnary.title}_{datetime.now().strftime("%d_%m_%Y-%H_%M")}.pdf'
         file_path = os.path.join(file_name)
@@ -93,6 +95,9 @@ class ExportHymnaryAPIView(APIView):
 
         os.remove(file_path)
 
+        hymnary.updated = False
+        hymnary.save()
+
         return response
 
 
@@ -116,5 +121,8 @@ class ReorderSongsAPIView(APIView):
                 new_songs.append(h)
 
             HymnarySong.objects.bulk_update(new_songs, ['order'])
+
+            hymnary.updated = True
+            hymnary.save()
 
             return HttpResponse('Ordem das músicas atualizada com sucesso')
