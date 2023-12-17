@@ -17,7 +17,7 @@ CENTERED_HEADING = ParagraphStyle(
 )
 
 HEADING_1 = ParagraphStyle(
-    'heading1', fontName='Ubuntu-Medium', fontSize=16,
+    'heading1', fontName='Ubuntu-Medium', fontSize=14,
     alignment=0, spaceBefore=16, spaceAfter=12
 )
 

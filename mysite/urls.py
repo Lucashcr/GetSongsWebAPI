@@ -20,11 +20,17 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from api.views import GetCurrentUserView, RegisterUserView
 
+
+def trigger_error(request):
+    division_by_zero = 1 / 0
+
+
 urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
     path('', include('core.urls')),
+    path('sentry-debug/', trigger_error),
 
     path('user/', include([
         path('me/', GetCurrentUserView.as_view()),

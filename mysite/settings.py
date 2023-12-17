@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 # import dj_database_url
+import sentry_sdk
 from datetime import timedelta
 import os
 from pathlib import Path
@@ -69,6 +70,17 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
+
+sentry_sdk.init(
+    dsn="https://4f4f13d9d50123498e095ff76eb4f8a9@o4506305868333056.ingest.sentry.io/4506305870430208",
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    traces_sample_rate=1.0,
+    # Set profiles_sample_rate to 1.0 to profile 100%
+    # of sampled transactions.
+    # We recommend adjusting this value in production.
+    profiles_sample_rate=1.0,
+)
 
 ROOT_URLCONF = 'mysite.urls'
 
