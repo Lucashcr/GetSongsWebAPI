@@ -55,6 +55,7 @@ class RegisterUserView(APIView):
 
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = []
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
@@ -78,6 +79,7 @@ class ArtistViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class SongViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = []
     serializer_class = SongSerializer
 
     def get_queryset(self):
