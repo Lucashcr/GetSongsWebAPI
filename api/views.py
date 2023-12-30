@@ -1,16 +1,15 @@
-from django.forms import ValidationError, model_to_dict
+from django.db.utils import IntegrityError
+from django.core.exceptions import ValidationError
+from django.forms import model_to_dict
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import permission_classes
 
 from .models import Artist, Category, Song
 from .serializers import CategorySerializer, ArtistSerializer, SongSerializer
-
-# Create your views here.
 
 
 class GetCurrentUserView(APIView):
@@ -31,18 +30,18 @@ class RegisterUserView(APIView):
     permission_classes = []
 
     def post(self, request):
-        new_user = User.objects.create_user(
+        new_user = User(
             username=request.data.get('username'),
             email=request.data.get('email'),
-            password=request.data.get('password'),
             first_name=request.data.get('first_name'),
             last_name=request.data.get('last_name'),
         )
 
         try:
             new_user.validate_unique()
+            new_user.set_password(request.data.get('password'))
+            new_user.clean_fields()
         except ValidationError as e:
-            print(e)
             return JsonResponse(e.messages, status=400, safe=False)
         else:
             new_user.save()
