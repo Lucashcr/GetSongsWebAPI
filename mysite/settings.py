@@ -111,18 +111,21 @@ if DEBUG:
     ALLOWED_HOSTS.extend([
         'getsongs-test.up.railway.app',
         'getsongs-api-test.up.railway.app',
+        'getsongs-test.railway.internal',
         '127.0.0.1',
         'localhost'
     ])
     CSRF_TRUSTED_ORIGINS.extend([
         'https://getsongs-test.up.railway.app',
         'https://getsongs-api-test.up.railway.app',
+        'http://getsongs-test.railway.internal',
         'http://127.0.0.1:3000',
         'http://localhost:3000',
     ])
     CORS_ORIGIN_WHITELIST.extend([
         'https://getsongs-test.up.railway.app',
         'https://getsongs-api-test.up.railway.app',
+        'http://getsongs-test.railway.internal',
         'http://127.0.0.1:3000',
         'http://localhost:3000',
     ])
