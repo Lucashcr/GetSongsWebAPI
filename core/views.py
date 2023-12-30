@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 
 from django.http.response import FileResponse
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
 
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
@@ -109,7 +109,9 @@ class ReorderSongsAPIView(APIView):
         except:
             return HttpResponseNotFound('Hinário não encontrado')
         else:
-            songs = request.data['songs']
+            songs = request.data.get('songs')
+            if not songs:
+                return HttpResponseBadRequest('Atributo songs não enviado')
 
             new_songs = []
             for i, song in enumerate(songs):
