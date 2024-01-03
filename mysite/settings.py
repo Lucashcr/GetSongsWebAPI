@@ -72,7 +72,7 @@ MIDDLEWARE = [
 ]
 
 sentry_sdk.init(
-    dsn="https://4f4f13d9d50123498e095ff76eb4f8a9@o4506305868333056.ingest.sentry.io/4506305870430208",
+    dsn=os.environ["SENTRY_DSN"],
     # Set traces_sample_rate to 1.0 to capture 100%
     # of transactions for performance monitoring.
     traces_sample_rate=1.0,
@@ -111,21 +111,18 @@ if DEBUG:
     ALLOWED_HOSTS.extend([
         'getsongs-test.up.railway.app',
         'getsongs-api-test.up.railway.app',
-        'getsongs-test.railway.internal',
         '127.0.0.1',
         'localhost'
     ])
     CSRF_TRUSTED_ORIGINS.extend([
         'https://getsongs-test.up.railway.app',
         'https://getsongs-api-test.up.railway.app',
-        'http://getsongs-test.railway.internal',
         'http://127.0.0.1:3000',
         'http://localhost:3000',
     ])
     CORS_ORIGIN_WHITELIST.extend([
         'https://getsongs-test.up.railway.app',
         'https://getsongs-api-test.up.railway.app',
-        'http://getsongs-test.railway.internal',
         'http://127.0.0.1:3000',
         'http://localhost:3000',
     ])
