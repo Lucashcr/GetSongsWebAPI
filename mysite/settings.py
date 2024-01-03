@@ -72,7 +72,7 @@ MIDDLEWARE = [
 ]
 
 sentry_sdk.init(
-    dsn="https://4f4f13d9d50123498e095ff76eb4f8a9@o4506305868333056.ingest.sentry.io/4506305870430208",
+    dsn=os.environ["SENTRY_DSN"],
     # Set traces_sample_rate to 1.0 to capture 100%
     # of transactions for performance monitoring.
     traces_sample_rate=1.0,
