@@ -37,6 +37,17 @@ class HymnarySongViewSet(ModelViewSet):
     serializer_class = HymnarySongSerializer
     queryset = HymnarySong.objects.all()
 
+    def get_queryset(self):
+        return HymnarySong.objects.filter(hymnary__owner=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        if not Hymnary.objects.filter(
+            id=request.data['hymnary'],
+            owner=request.user
+        ).exists():
+            return HttpResponseBadRequest('Hinário não encontrado')
+        return super().create(request, *args, **kwargs)
+
 
 class ExportHymnaryAPIView(APIView):
     permission_classes = [IsAuthenticated]
