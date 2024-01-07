@@ -37,6 +37,17 @@ class HymnarySongViewSet(ModelViewSet):
     serializer_class = HymnarySongSerializer
     queryset = HymnarySong.objects.all()
 
+    def get_queryset(self):
+        return HymnarySong.objects.filter(hymnary__owner=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        if not Hymnary.objects.filter(
+            id=request.data['hymnary'],
+            owner=request.user
+        ).exists():
+            return HttpResponseBadRequest('Hinário não encontrado')
+        return super().create(request, *args, **kwargs)
+
 
 class ExportHymnaryAPIView(APIView):
     permission_classes = [IsAuthenticated]
@@ -113,12 +124,12 @@ class ReorderSongsAPIView(APIView):
             if not songs:
                 return HttpResponseBadRequest('Atributo songs não enviado')
 
-            new_songs = []
-            for i, song in enumerate(songs):
-                h = HymnarySong.objects.get(
-                    song_id=song['id'], hymnary=hymnary)
-                h.order = i + 1
-                new_songs.append(h)
+            new_songs = [
+                HymnarySong.objects.get(song_id=song, hymnary=hymnary)
+                for song in songs
+            ]
+            for i, song in enumerate(new_songs):
+                song.order = i + 1
 
             HymnarySong.objects.bulk_update(new_songs, ['order'])
 
