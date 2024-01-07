@@ -125,7 +125,7 @@ class ReorderSongsAPIView(APIView):
                 return HttpResponseBadRequest('Atributo songs não enviado')
 
             new_songs = [
-                HymnarySong.objects.get(song_id=song['id'], hymnary=hymnary)
+                HymnarySong.objects.get(song_id=song, hymnary=hymnary)
                 for song in songs
             ]
             for i, song in enumerate(new_songs):
