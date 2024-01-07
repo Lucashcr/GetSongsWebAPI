@@ -47,6 +47,6 @@ jobs:
         run: bash <(curl -fsSL cli.new)
 
       - name: Deploy
-        run: railway up --service GetSongsAPI
+        run: railway up --service API
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
