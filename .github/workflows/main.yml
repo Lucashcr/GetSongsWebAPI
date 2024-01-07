@@ -43,14 +43,10 @@ jobs:
         run: |
           python ./manage.py test
 
-  deploy:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    steps:
       - name: Install Railway
         run: bash <(curl -fsSL cli.new)
 
       - name: Deploy
-        run: railway up
+        run: railway up --service GetSongsAPI
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
