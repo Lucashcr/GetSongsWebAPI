@@ -88,10 +88,7 @@ class TestReorderSongsAPIView(APITestCase):
 
         response = self.client.post(
             f'/api/hymnary/{self.hymnary.id}/reorder/',
-            {'songs': [
-                {'id': self.song2.id},
-                {'id': self.song1.id}
-            ]}
+            {'songs': [self.song2.id, self.song1.id]}
         )
 
         self.assertEqual(response.status_code, 200)
@@ -111,7 +108,7 @@ class TestReorderSongsAPIView(APITestCase):
     def test_should_not_reorder_songs_if_hymnary_does_not_exist(self):
         response = self.client.post(
             '/api/hymnary/999/reorder/',
-            {'songs': [{'id': 2}, {'id': 1}]}
+            {'songs': [self.song2.id, self.song1.id]}
         )
 
         self.assertEqual(response.status_code, 404)
@@ -119,7 +116,7 @@ class TestReorderSongsAPIView(APITestCase):
     def test_should_not_reorder_songs_if_user_is_not_owner(self):
         response = self.client.post(
             f'/api/hymnary/{self.another_hymnary.id}/reorder/',
-            {'songs': [{'id': 2}, {'id': 1}]}
+            {'songs': [self.song2.id, self.song1.id]}
         )
 
         self.assertEqual(response.status_code, 404)
