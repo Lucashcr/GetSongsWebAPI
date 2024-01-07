@@ -124,12 +124,12 @@ class ReorderSongsAPIView(APIView):
             if not songs:
                 return HttpResponseBadRequest('Atributo songs não enviado')
 
-            new_songs = []
-            for i, song in enumerate(songs):
-                h = HymnarySong.objects.get(
-                    song_id=song['id'], hymnary=hymnary)
-                h.order = i + 1
-                new_songs.append(h)
+            new_songs = [
+                HymnarySong.objects.get(song_id=song['id'], hymnary=hymnary)
+                for song in songs
+            ]
+            for i, song in enumerate(new_songs):
+                song.order = i + 1
 
             HymnarySong.objects.bulk_update(new_songs, ['order'])
 
