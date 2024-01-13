@@ -99,14 +99,15 @@ class ArtistViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         queryset = Artist.objects.all()
-        category_id = self.request.query_params.get('category_id', None)
+        category_id = self.request.query_params.get('category_id', 0)
 
-        if category_id:
+        if int(category_id):
             queryset = (
                 queryset
-                .filter(song__category_id=category_id)
+                .filter(song__category__id=category_id)
                 .distinct()
             )
+            print(queryset.values())
 
         return queryset.order_by('id')
 

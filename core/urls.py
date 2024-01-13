@@ -1,6 +1,4 @@
-from django.contrib.auth.decorators import login_required
 from django.urls import path, include
-from django.views.decorators.csrf import csrf_protect
 
 from rest_framework.routers import DefaultRouter
 
@@ -14,4 +12,5 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('api/hymnary/<int:hymnary_id>/export', ExportHymnaryAPIView.as_view()),
     path('api/hymnary/<int:hymnary_id>/reorder/', ReorderSongsAPIView.as_view()),
+    path('api/sendmail/', SendEmailAPIView.as_view(), name='send_mail'),
 ]
