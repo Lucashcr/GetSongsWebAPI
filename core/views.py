@@ -1,9 +1,6 @@
 import os
-import smtplib
 from datetime import datetime
 
-from django.conf import settings
-from django.core.mail import send_mail
 from django.http.response import FileResponse
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
 
@@ -140,31 +137,3 @@ class ReorderSongsAPIView(APIView):
             hymnary.save()
 
             return HttpResponse('Ordem das músicas atualizada com sucesso')
-
-
-class SendEmailAPIView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request):
-        if not all([
-            request.data.get(fields)
-            for fields in ('name', 'email', 'message')
-        ]):
-            return HttpResponseBadRequest('Dados inválidos')
-
-        message = f'Usuário: {request.data["name"]}'
-        message += f'\nEmail: {request.data["email"]}'
-        message += f'\n\n{request.data["message"]}'
-
-        response = send_mail(
-            'Contato - GetSongs',
-            message,
-            settings.EMAIL_HOST_USER,
-            ['lucash.rocha123@gmail.com'],
-            fail_silently=False,
-        )
-
-        if response == 1:
-            return HttpResponse('Email enviado com sucesso')
-
-        return HttpResponse('Erro ao enviar email', status=500)
