@@ -81,6 +81,8 @@ sentry_sdk.init(
 
 ROOT_URLCONF = 'mysite.urls'
 
+FRONTEND_BASE_URL = os.environ["FRONTEND_BASE_URL"]
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

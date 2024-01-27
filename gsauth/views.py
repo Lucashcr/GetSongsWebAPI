@@ -9,7 +9,9 @@ from django.forms import model_to_dict
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.utils.translation import gettext_lazy as _
 
-from mysite import settings
+from gsauth.models import PasswordRecoveryToken
+
+from mysite.settings import FRONTEND_BASE_URL, EMAIL_HOST_USER
 
 
 class GetCurrentUserView(APIView):
@@ -26,29 +28,29 @@ class GetCurrentUserView(APIView):
         return JsonResponse(data)
 
 
+def validate_password(user, password):
+    msg = []
+
+    if len(password) < 8:
+        msg.append(_('A senha deve ter no mínimo 8 caracteres'))
+
+    if password.isdigit() or password.isalpha():
+        msg.append(_('A senha deve conter letras e números'))
+
+    if password.lower().find(user.username.lower()) != -1:
+        msg.append(_('A senha não deve conter o nome de usuário'))
+
+    if password.lower().find(user.first_name.lower()) != -1:
+        msg.append(_('A senha não deve conter o primeiro nome'))
+
+    if password.lower().find(user.last_name.lower()) != -1:
+        msg.append(_('A senha não deve conter o último nome'))
+
+    return msg
+
+
 class RegisterUserView(APIView):
     permission_classes = []
-
-    def validate_password(self):
-        msg = []
-        user = self.request.data
-
-        if len(user['password']) < 8:
-            msg.append(_('A senha deve ter no mínimo 8 caracteres'))
-
-        if user['password'].isdigit() or user['password'].isalpha():
-            msg.append(_('A senha deve conter letras e números'))
-
-        if user['password'].lower().find(user.get('username').lower()) != -1:
-            msg.append(_('A senha não deve conter o nome de usuário'))
-
-        if user['password'].lower().find(user.get('first_name').lower()) != -1:
-            msg.append(_('A senha não deve conter o primeiro nome'))
-
-        if user['password'].lower().find(user.get('last_name').lower()) != -1:
-            msg.append(_('A senha não deve conter o último nome'))
-
-        return msg
 
     def post(self, request: HttpRequest):
         new_user = User(
@@ -58,9 +60,6 @@ class RegisterUserView(APIView):
             last_name=request.data.get('last_name'),
         )
 
-        password = request.data.get('password')
-        new_user.set_password(password)
-
         if User.objects.filter(email=new_user.email).exists():
             return JsonResponse(
                 [_('Email já cadastrado')],
@@ -68,8 +67,11 @@ class RegisterUserView(APIView):
                 safe=False
             )
 
-        if msg := self.validate_password():
+        password = request.data.get('password')
+        if msg := validate_password(new_user, password):
             return JsonResponse(msg, status=400, safe=False)
+
+        new_user.set_password(password)
 
         try:
             validate_email(new_user.email)
@@ -103,7 +105,7 @@ class SendEmailAPIView(APIView):
         response = send_mail(
             'Contato - GetSongs',
             message,
-            settings.EMAIL_HOST_USER,
+            EMAIL_HOST_USER,
             ['lucash.rocha123@gmail.com'],
             fail_silently=False,
         )
@@ -112,3 +114,82 @@ class SendEmailAPIView(APIView):
             return HttpResponse('Email enviado com sucesso')
 
         return HttpResponse('Erro ao enviar email', status=500)
+
+
+class ForgotPasswordAPIView(APIView):
+    permission_classes = []
+
+    def post(self, request):
+        if not request.data.get('email'):
+            return JsonResponse({'ok': False, 'message': 'Email não pode ser vazio'})
+
+        try:
+            user = User.objects.get(email=request.data['email'])
+        except User.DoesNotExist:
+            return JsonResponse({'ok': True, 'message': 'Email enviado com sucesso'})
+
+        token = PasswordRecoveryToken.objects.create(user=user)
+
+        message = f'<h1>Olá, {user.first_name}!</h1>'
+        message += '<p>Para recuperar sua senha, clique no link abaixo:</p>'
+        message += f'<div><a href="{FRONTEND_BASE_URL}/auth/recover-password?t={token.token}">Recuperar senha</a></div>'
+        message += '<p>Se você não solicitou a recuperação de senha, desconsidere este email.</p>'
+
+        response = send_mail(
+            'Recuperação de senha - GetSongs',
+            '',
+            EMAIL_HOST_USER,
+            [user.email],
+            html_message=message,
+            fail_silently=False,
+        )
+
+        if response == 1:
+            return JsonResponse({'ok': True, 'message': 'Email enviado com sucesso'})
+
+        return JsonResponse({'ok': False, 'message': 'Erro ao enviar email'})
+
+
+class ResetPasswordAPIView(APIView):
+    permission_classes = []
+
+    def get(self, request):
+        token = request.GET.get('t')
+        if not token:
+            return JsonResponse({'ok': False})
+
+        try:
+            token = PasswordRecoveryToken.objects.get(token=token)
+        except:
+            return JsonResponse({'ok': False})
+
+        if not token.is_valid or token.expired:
+            return JsonResponse({'ok': False})
+
+        return JsonResponse({'ok': True})
+
+    def post(self, request):
+        if not all([
+            request.data.get(fields)
+            for fields in ('token', 'password')
+        ]):
+            return JsonResponse({'ok': False, 'messages': ['Dados inválidos']})
+
+        try:
+            token = PasswordRecoveryToken.objects.get(
+                token=request.data['token']
+            )
+        except:
+            return JsonResponse({'ok': False, 'messages': ['Dados inválidos']})
+
+        user = token.user
+
+        if msg := validate_password(user, request.data['password']):
+            return JsonResponse({'ok': False, 'messages': msg})
+
+        user.set_password(request.data['password'])
+        user.save()
+
+        token.delete()
+
+        return JsonResponse({'ok': True, 'messages': ['Senha alterada com sucesso']})
