@@ -25,10 +25,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ["SECRET_KEY"]
+SECRET_KEY = os.environ.get("SECRET_KEY", "")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.environ.get('DEBUG'))
+DEBUG = bool(os.environ.get('DEBUG', False))
 
 ALLOWED_HOSTS = ['getsongs.up.railway.app', 'getsongs-api.up.railway.app']
 
@@ -69,7 +69,7 @@ MIDDLEWARE = [
 ]
 
 sentry_sdk.init(
-    dsn=os.environ["SENTRY_DSN"],
+    dsn=os.environ.get("SENTRY_DSN", ""),
     # Set traces_sample_rate to 1.0 to capture 100%
     # of transactions for performance monitoring.
     traces_sample_rate=1.0,
@@ -81,7 +81,7 @@ sentry_sdk.init(
 
 ROOT_URLCONF = 'mysite.urls'
 
-FRONTEND_BASE_URL = os.environ["FRONTEND_BASE_URL"]
+FRONTEND_BASE_URL = os.environ.get("FRONTEND_BASE_URL", "")
 
 TEMPLATES = [
     {
@@ -128,12 +128,12 @@ if DEBUG:
 
 DATABASES = {
     'default': {
-        'ENGINE': os.environ["DB_ENGINE"],
-        'NAME': os.environ["DB_NAME"],
-        'USER': os.environ["DB_USER"],
-        'PASSWORD': os.environ["DB_PASSWORD"],
-        'HOST': os.environ["DB_HOST"],
-        'PORT': os.environ["DB_PORT"],
+        'ENGINE': os.environ.get("DB_ENGINE", ""),
+        'NAME': os.environ.get("DB_NAME", ""),
+        'USER': os.environ.get("DB_USER", ""),
+        'PASSWORD': os.environ.get("DB_PASSWORD", ""),
+        'HOST': os.environ.get("DB_HOST", ""),
+        'PORT': os.environ.get("DB_PORT", ""),
     }
 }
 
@@ -199,12 +199,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Email settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = os.environ["EMAIL_HOST"]
-EMAIL_PORT = os.environ["EMAIL_PORT"]
-EMAIL_HOST_USER = os.environ["EMAIL_HOST_USER"]
-EMAIL_HOST_PASSWORD = os.environ["EMAIL_HOST_PASSWORD"]
+EMAIL_HOST = os.environ.get("EMAIL_HOST", "")
+EMAIL_PORT = os.environ.get("EMAIL_PORT", "")
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
 
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
-DEFAULT_FROM_EMAIL = os.environ["EMAIL_HOST_USER"]
+DEFAULT_FROM_EMAIL = os.environ.get("EMAIL_HOST_USER", "")

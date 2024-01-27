@@ -34,13 +34,7 @@ jobs:
           DB_NAME: getsongs
           DB_HOST: localhost
           DB_PORT: 5432
-          EMAIL_HOST: ""
-          EMAIL_PORT: ""
-          EMAIL_HOST_USER: ""
-          EMAIL_HOST_PASSWORD: ""
           DEBUG: False
-          SENTRY_DSN: ""
-          FRONEND_BASE_URL: ""
         run: |
           python ./manage.py test
 
