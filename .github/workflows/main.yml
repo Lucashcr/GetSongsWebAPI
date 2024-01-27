@@ -40,6 +40,7 @@ jobs:
           EMAIL_HOST_PASSWORD: ""
           DEBUG: False
           SENTRY_DSN: ""
+          FRONEND_BASE_URL: ""
         run: |
           python ./manage.py test
 
