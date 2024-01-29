@@ -193,3 +193,27 @@ class ResetPasswordAPIView(APIView):
         token.delete()
 
         return JsonResponse({'ok': True, 'messages': ['Senha alterada com sucesso']})
+
+
+class ChangePasswordAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        if not all([
+            request.data.get(fields)
+            for fields in ('old_password', 'new_password')
+        ]):
+            return JsonResponse({'ok': False, 'messages': ['Dados inválidos']})
+
+        user = request.user
+
+        if not user.check_password(request.data['old_password']):
+            return JsonResponse({'ok': False, 'messages': ['Senha atual incorreta']})
+
+        if msg := validate_password(user, request.data['new_password']):
+            return JsonResponse({'ok': False, 'messages': msg})
+
+        user.set_password(request.data['new_password'])
+        user.save()
+
+        return JsonResponse({'ok': True, 'messages': ['Senha alterada com sucesso']})

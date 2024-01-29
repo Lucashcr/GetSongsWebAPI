@@ -9,4 +9,5 @@ urlpatterns = [
     path('sendmail/', SendEmailAPIView.as_view()),
     path('forgot-password/', ForgotPasswordAPIView.as_view()),
     path('reset-password/', ResetPasswordAPIView.as_view()),
+    path('change-password/', ChangePasswordAPIView.as_view()),
 ]
