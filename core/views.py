@@ -68,6 +68,8 @@ class ExportHymnaryAPIView(APIView):
             HymnaryTemplate = SingleColumnTemplate
         elif hymnary.template == 'two-columns':
             HymnaryTemplate = TwoColumnsTemplate
+        else:
+            return HttpResponseBadRequest('Template inválido')
 
         doc = HymnaryTemplate(file_path, title=hymnary.title)
         doc.insert_heading(hymnary.title, CENTERED_HEADING)

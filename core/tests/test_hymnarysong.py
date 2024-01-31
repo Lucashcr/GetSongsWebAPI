@@ -148,3 +148,16 @@ class TestHymnaryViewSet(APITestCase):
         )
 
         self.assertEqual(response.status_code, 404)
+
+    def test_should_set_hymnary_updated_to_true(self):
+        response = self.client.post(
+            f'/api/hymnarysong/', {
+                'hymnary': self.hymnary.id,
+                'song': self.another_song.id,
+                'order': 2
+            }
+        )
+
+        self.assertEqual(response.status_code, 201)
+        hs = HymnarySong.objects.get(id=response.json()['id'])
+        self.assertEqual(hs.hymnary.updated, True)

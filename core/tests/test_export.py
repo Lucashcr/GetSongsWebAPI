@@ -94,3 +94,35 @@ class TestExportHymnaryAPIView(APITestCase):
         response = self.client.get('/api/hymnary/999/export')
 
         self.assertEqual(response.status_code, 404)
+
+    def test_should_export_with_print_category_false(self):
+        self.hymnary.print_category = False
+        self.hymnary.save()
+        response = self.client.get(f'/api/hymnary/{self.hymnary.id}/export')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'application/pdf')
+
+    def test_should_export_with_template_each_song_by_page(self):
+        self.hymnary.template = 'each-song-by-page'
+        self.hymnary.save()
+        response = self.client.get(f'/api/hymnary/{self.hymnary.id}/export')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'application/pdf')
+
+    def test_should_export_with_template_two_columns(self):
+        self.hymnary.template = 'two-columns'
+        self.hymnary.save()
+        response = self.client.get(f'/api/hymnary/{self.hymnary.id}/export')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'application/pdf')
+
+    def test_should_not_export_with_unknown_hymnary_template(self):
+        self.hymnary.template = 'unknown'
+        self.hymnary.save()
+        response = self.client.get(f'/api/hymnary/{self.hymnary.id}/export')
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.content.decode(), 'Template inválido')

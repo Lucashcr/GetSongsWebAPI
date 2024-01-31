@@ -120,3 +120,15 @@ class TestReorderSongsAPIView(APITestCase):
         )
 
         self.assertEqual(response.status_code, 404)
+
+    def test_should_not_reorder_songs_if_songs_is_not_provided(self):
+        response = self.client.post(
+            f'/api/hymnary/{self.hymnary.id}/reorder/',
+            {'songs': []}
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.content.decode(),
+            'Atributo songs não enviado'
+        )
