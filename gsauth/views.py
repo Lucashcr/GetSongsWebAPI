@@ -92,15 +92,16 @@ class SendEmailAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        if not all([
-            request.data.get(fields)
-            for fields in ('name', 'email', 'message')
-        ]):
+        if not (message := request.data.get('message')):
             return HttpResponseBadRequest('Dados inválidos')
 
-        message = f'Usuário: {request.data["name"]}'
-        message += f'\nEmail: {request.data["email"]}'
-        message += f'\n\n{request.data["message"]}'
+        full_name = f"{request.user.first_name} {request.user.last_name}"
+        name = request.data.get('name', full_name)
+        email = request.data.get('email', request.user.email)
+
+        message = f'Usuário: {name}'
+        message += f'\nEmail: {email}'
+        message += f'\n\n{message}'
 
         response = send_mail(
             'Contato - GetSongs',
