@@ -2,7 +2,7 @@ import uuid
 from django.test import TestCase
 
 
-class TestAuthFeatures(TestCase):
+class TestRegisterUserView(TestCase):
     def setUp(self):
         self.password = uuid.uuid4().hex
 
