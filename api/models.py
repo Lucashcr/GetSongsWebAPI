@@ -47,9 +47,9 @@ class Song(models.Model):
             lyrics[i] = lyrics[i].replace('<br>', '<br/>')
             lyrics[i] = lyrics[i].replace('</br>', '<br/>')
 
-        return lyrics
+        return '<br/><br/>'.join(lyrics)
 
     def save(self, *args, **kwargs) -> None:
         if not self.lyrics:
-            self.lyrics = '<br/><br/>'.join(self.get_lyrics())
+            self.lyrics = self.get_lyrics()
         super().save(*args, **kwargs)
