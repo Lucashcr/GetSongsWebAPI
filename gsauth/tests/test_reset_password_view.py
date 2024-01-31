@@ -31,10 +31,32 @@ class TestResetPasswordAPIView(TestCase):
             is_valid=True
         )
 
-    def test_should_not_get_reset_password(self):
+    def test_should_not_get_reset_password_with_no_token(self):
+        response = self.client.get(
+            '/user/reset-password/',
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {'ok': False})
+
+    def test_should_not_get_reset_password_with_invalid_token(self):
         response = self.client.get(
             '/user/reset-password/',
             QUERY_STRING=f't={uuid.uuid4().hex}'
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {'ok': False})
+
+    def test_should_not_get_reset_password_with_expired_token(self):
+        token = PasswordRecoveryToken.objects.create(
+            user=User.objects.get(username=self.username),
+            is_valid=False
+        )
+
+        response = self.client.get(
+            '/user/reset-password/',
+            QUERY_STRING=f't={token.token}'
         )
 
         self.assertEqual(response.status_code, 200)
@@ -51,6 +73,18 @@ class TestResetPasswordAPIView(TestCase):
 
     def test_should_not_post_reset_password_without_token(self):
         response = self.client.post('/user/reset-password/', {
+            'password': uuid.uuid4().hex,
+        })
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.json(),
+            {'ok': False, 'messages': ['Dados inválidos']}
+        )
+
+    def test_should_not_post_reset_password_with_invalid_token(self):
+        response = self.client.post('/user/reset-password/', {
+            'token': uuid.uuid4().hex,
             'password': uuid.uuid4().hex,
         })
 
