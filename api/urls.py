@@ -11,5 +11,6 @@ router.register(r'song', SongViewSet, basename='song')
 
 
 urlpatterns = [
-    path('', include(router.urls))
+    path('', include(router.urls)),
+    path('song-search', SongSearchAPIView.as_view(), name='song-search'),
 ]

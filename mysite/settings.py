@@ -138,6 +138,12 @@ DATABASES = {
 }
 
 
+MEILI_SETTINGS = {
+    "url": os.environ.get("MEILI_URL", ""),
+    "api_key": os.environ.get("MEILI_MASTER_KEY", "")
+}
+
+
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 

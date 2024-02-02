@@ -1,4 +1,6 @@
+from django.http import JsonResponse
 from rest_framework import viewsets
+from rest_framework.views import APIView
 
 from .models import Artist, Category, Song
 from .serializers import CategorySerializer, ArtistSerializer, SongSerializer
@@ -44,3 +46,19 @@ class SongViewSet(viewsets.ReadOnlyModelViewSet):
             queryset = queryset.filter(category__id=category_id)
 
         return queryset
+
+
+class SongSearchAPIView(APIView):
+    permission_classes = []
+    
+    def get(self, request):
+        query = request.query_params.get('q', '')
+        songs = Song.search(query)
+
+        hits = songs["hits"]
+        for hit in hits:
+            hit["artist"] = ArtistSerializer(hit.pop("artist_id")).data
+            hit["category"] = CategorySerializer(hit.pop("category_id")).data
+            
+        return JsonResponse(SongSerializer(hits, many=True).data, safe=False)
+        # return JsonResponse(songs)

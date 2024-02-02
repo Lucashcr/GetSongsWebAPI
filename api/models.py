@@ -4,6 +4,9 @@ from bs4 import BeautifulSoup
 from httpx import get
 
 from django.db import models
+from meilisearch import Client
+
+from mysite.settings import MEILI_SETTINGS
 
 # Create your models here.
 
@@ -53,3 +56,23 @@ class Song(models.Model):
         if not self.lyrics:
             self.lyrics = self.get_lyrics()
         super().save(*args, **kwargs)
+
+    meili_client = Client(**MEILI_SETTINGS)
+    meili_index = meili_client.index('songs')
+
+    @classmethod
+    def search(cls, query: str, **opt_params) -> Iterable[dict[str, Any]]:
+        return cls.meili_index.search(query, opt_params)
+    
+    @classmethod
+    def populate(cls) -> None:
+        songs = cls.objects.select_related('artist', 'category').all()
+        index = cls.meili_index
+        
+        count_db = songs.count()
+        count_index = index.get_stats().number_of_documents
+        
+        index.add_documents(list(songs.values()), primary_key='id')
+        
+        count_index_new = index.get_stats().number_of_documents
+        return count_index_new, count_index_new - count_index, count_db - count_index
