@@ -33,7 +33,7 @@ class SongViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = SongSerializer
 
     def get_queryset(self):
-        queryset = Song.objects.all()
+        queryset = Song.objects.all().select_related('artist', 'category')
         artist_id = self.request.query_params.get('artist_id', 0)
         category_id = self.request.query_params.get('category_id', 0)
 
