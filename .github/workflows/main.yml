@@ -35,6 +35,7 @@ jobs:
           DB_HOST: localhost
           DB_PORT: 5432
           DEBUG: False
+          FRONTEND_BASE_URL: http://localhost:3000
         run: |
           python ./manage.py test
 
