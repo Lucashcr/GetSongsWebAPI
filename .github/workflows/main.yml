@@ -38,10 +38,14 @@ jobs:
 
       - name: Run Tests
         env:
-          SECRET_KEY: 69tgugtg%^fgJO&*^
+          SECRET_KEY: "69tgugtg%^fgJO&*^"
           DEBUG: False
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
-          FRONTEND_BASE_URL: http://localhost:3000
+          DATABASE_URL: "postgres://postgres:postgres@localhost:5432/postgres"
+          FRONTEND_BASE_URL: "http://localhost:3000"
+          EMAIL_HOST: ""
+          EMAIL_PORT: ""
+          EMAIL_HOST_USER: ""
+          EMAIL_HOST_PASSWORD: ""
         run: |
           python ./manage.py test
 
