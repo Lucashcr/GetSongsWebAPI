@@ -12,6 +12,17 @@ jobs:
       matrix:
         python-version: [3.11]
 
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports: 
+          - "5432:5432"
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
     steps:
       - uses: actions/checkout@v2
 
@@ -28,13 +39,8 @@ jobs:
       - name: Run Tests
         env:
           SECRET_KEY: 69tgugtg%^fgJO&*^
-          DB_ENGINE: django.db.backends.sqlite3
-          DB_USER: dbuser
-          DB_PASSWORD: dbpass
-          DB_NAME: getsongs
-          DB_HOST: localhost
-          DB_PORT: 5432
           DEBUG: False
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
           FRONTEND_BASE_URL: http://localhost:3000
         run: |
           python ./manage.py test
