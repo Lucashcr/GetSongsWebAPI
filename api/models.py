@@ -1,10 +1,14 @@
 import re
-from typing import Any, Iterable, Optional
+from typing import Any, Iterable
 from bs4 import BeautifulSoup
 from httpx import get
 
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 from meilisearch import Client
+from meilisearch.errors import MeilisearchApiError
 
 from mysite.settings import MEILI_SETTINGS
 
@@ -66,13 +70,39 @@ class Song(models.Model):
     
     @classmethod
     def populate(cls) -> None:
+        try:
+            cls.meili_client.get_index('songs')
+        except MeilisearchApiError:
+            cls.meili_client.create_index('songs', {'primaryKey': 'id'})
+            cls.meili_index.update_filterable_attributes(['artist.id', 'category.id'])
+        
         songs = cls.objects.select_related('artist', 'category').all()
         index = cls.meili_index
         
         count_db = songs.count()
         count_index = index.get_stats().number_of_documents
         
-        index.add_documents(list(songs.values()), primary_key='id')
+        from api.serializers import SongSerializerFull
+        data = SongSerializerFull(songs, many=True).data
+        index.add_documents(data, primary_key='id')
         
         count_index_new = index.get_stats().number_of_documents
         return count_index_new, count_index_new - count_index, count_db - count_index
+    
+    @classmethod
+    def rebuild(cls) -> None:
+        try:
+            cls.meili_client.get_index('songs')
+        except MeilisearchApiError:
+            cls.meili_client.create_index('songs', {'primaryKey': 'id'})
+            cls.meili_index.update_filterable_attributes(['artist.id', 'category.id'])
+            
+        cls.meili_index.delete_all_documents()
+        cls.meili_index.update_filterable_attributes(['artist.id', 'category.id'])
+        return cls.populate()
+
+
+@receiver(post_save, sender=Song)
+def update_index(sender, instance, **kwargs):
+    from api.serializers import SongSerializerFull
+    instance.__class__.meili_index.add_documents(SongSerializerFull(instance).data, primary_key='id')

@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+
 from rest_framework import viewsets
 from rest_framework.views import APIView
 
@@ -35,7 +36,7 @@ class SongViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = SongSerializer
 
     def get_queryset(self):
-        queryset = Song.objects.all()
+        queryset = Song.objects.all().select_related('artist', 'category')
         artist_id = self.request.query_params.get('artist_id', 0)
         category_id = self.request.query_params.get('category_id', 0)
 
@@ -53,12 +54,19 @@ class SongSearchAPIView(APIView):
     
     def get(self, request):
         query = request.query_params.get('q', '')
-        songs = Song.search(query)
+        options = {}
+        
+        filter = []
+        if request.query_params.get('artist_id'):
+            filter.append(f'artist.id = {request.query_params["artist_id"]}')
 
-        hits = songs["hits"]
-        for hit in hits:
-            hit["artist"] = ArtistSerializer(hit.pop("artist_id")).data
-            hit["category"] = CategorySerializer(hit.pop("category_id")).data
+        if request.query_params.get('category_id'):
+            filter.append(f'category.id = {request.query_params["category_id"]}')
             
-        return JsonResponse(SongSerializer(hits, many=True).data, safe=False)
+        if filter:
+            options['filter'] = ' AND '.join(filter)
+        
+        songs = Song.search(query, **options)
+
+        return JsonResponse(SongSerializer(songs["hits"], many=True).data, safe=False)
         # return JsonResponse(songs)
