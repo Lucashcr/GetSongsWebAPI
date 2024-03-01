@@ -23,6 +23,14 @@ jobs:
           - "5432:5432"
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
+      meilisearch:
+        image: getmeili/meilisearch:latest
+        ports:
+          - "7700:7700"
+        env:
+          MEILI_MASTER_KEY: "meilimasterkey"
+        options: --health-cmd "wget -q localhost:7700/health -O /dev/null" --health-interval 10s --health-timeout 5s --health-retries 10
+
     steps:
       - uses: actions/checkout@v2
 
@@ -46,6 +54,8 @@ jobs:
           EMAIL_PORT: ""
           EMAIL_HOST_USER: ""
           EMAIL_HOST_PASSWORD: ""
+          MEILI_URL: "http://localhost:7700"
+          MEILI_MASTER_KEY: "meilimasterkey"
         run: |
           python ./manage.py test
 
