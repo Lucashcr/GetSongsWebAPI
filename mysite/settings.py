@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
-# import dj_database_url
+import dj_database_url
 import sentry_sdk
 from datetime import timedelta
 import os
@@ -126,15 +126,11 @@ if DEBUG:
         'http://localhost:3000',
     ])
 
+
 DATABASES = {
-    'default': {
-        'ENGINE': os.environ["DB_ENGINE"],
-        'NAME': os.environ["DB_NAME"],
-        'USER': os.environ["DB_USER"],
-        'PASSWORD': os.environ["DB_PASSWORD"],
-        'HOST': os.environ["DB_HOST"],
-        'PORT': os.environ["DB_PORT"],
-    }
+    'default': dj_database_url.config(
+        default=os.environ["DATABASE_URL"]
+    )
 }
 
 
