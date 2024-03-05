@@ -75,7 +75,7 @@ class ExportHymnaryAPIView(APIView):
         doc.insert_heading(hymnary.title, CENTERED_HEADING)
         for item in hymnary.hymnary_songs.all().order_by('order'):
             song = item.song
-            preview_url = song.preview_url.replace('embed/', '')
+            preview_url = song.preview_url.replace('www.youtube.com', 'youtu.be')
             if hymnary.print_category:
                 doc.insert_heading(song.category.name)
                 heading_style = HEADING_2
