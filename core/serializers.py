@@ -1,7 +1,7 @@
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 
 from core.models import Hymnary, HymnarySong
-from api.serializers import SongSerializer
+from api.serializers import SongSerializerPrivate
 import json
 
 
@@ -10,7 +10,7 @@ class HymnarySerializer(ModelSerializer):
 
     def get_songs(self, hymnary):
         songs = hymnary.songs.all().order_by('hymnarysongs__order')
-        return SongSerializer(songs, many=True).data
+        return SongSerializerPrivate(songs, many=True).data
 
     class Meta:
         model = Hymnary

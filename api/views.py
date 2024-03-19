@@ -3,8 +3,10 @@ from django.http import JsonResponse
 from rest_framework import viewsets
 from rest_framework.views import APIView
 
+from api.index import search
+
 from .models import Artist, Category, Song
-from .serializers import CategorySerializer, ArtistSerializer, SongSerializer
+from .serializers import CategorySerializer, ArtistSerializer, SongSerializer, SongSerializerPrivate
 
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
@@ -33,7 +35,7 @@ class ArtistViewSet(viewsets.ReadOnlyModelViewSet):
 
 class SongViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = []
-    serializer_class = SongSerializer
+    serializer_class = SongSerializerPrivate
 
     def get_queryset(self):
         queryset = Song.objects.all().select_related('artist', 'category')
@@ -66,7 +68,6 @@ class SongSearchAPIView(APIView):
         if filter:
             options['filter'] = ' AND '.join(filter)
         
-        songs = Song.search(query, **options)
+        songs = search(query, **options)
 
         return JsonResponse(SongSerializer(songs["hits"], many=True).data, safe=False)
-        # return JsonResponse(songs)

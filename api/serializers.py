@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
-from .models import Artist, Category, Song
-
+from api.models import Artist, Category, Song
 
 class ArtistSerializer(serializers.ModelSerializer):
     class Meta:
@@ -19,6 +18,16 @@ class SongSerializer(serializers.ModelSerializer):
     artist = ArtistSerializer()
     category = CategorySerializer()
 
+    class Meta:
+        model = Song
+        fields = ['id', 'name', 'slug', 'artist', 'category',
+                  'lyrics_url', 'preview_url']
+
+
+class SongSerializerPrivate(serializers.ModelSerializer):
+    artist = ArtistSerializer()
+    category = CategorySerializer()
+    
     class Meta:
         model = Song
         fields = ['id', 'name', 'slug', 'artist', 'category',
