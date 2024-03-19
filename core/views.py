@@ -58,10 +58,14 @@ class ExportHymnaryAPIView(APIView):
         except:
             return HttpResponseNotFound('Hinário não encontrado')
 
-        if not hymnary.updated:
+        if not hymnary.updated and os.path.exists(hymnary.file.path):
             return FileResponse(hymnary.file, as_attachment=False, filename=hymnary.file.name)
+        
+        owner_folder = f'{request.user.username}'
+        if not os.path.exists(owner_folder):
+            os.makedirs(owner_folder)
 
-        file_name = f'{hymnary.title}_{datetime.now().strftime("%d_%m_%Y-%H_%M")}.pdf'
+        file_name = f'{owner_folder}/{hymnary.title}_{datetime.now().strftime("%d_%m_%Y-%H_%M")}.pdf'
         file_path = os.path.join(file_name)
 
         if hymnary.template in ('single-column', 'each-song-by-page'):
