@@ -22,7 +22,7 @@ class SongSerializer(serializers.ModelSerializer):
     class Meta:
         model = Song
         fields = ['id', 'name', 'slug', 'artist', 'category',
-                  'lyrics_url', 'preview_url']
+                  'lyrics_url', 'preview_url', 'song_hymnaries']
 
 
 class SongSerializerFull(serializers.ModelSerializer):
