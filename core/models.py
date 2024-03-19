@@ -45,13 +45,13 @@ class HymnarySong(models.Model):
         Song,
         verbose_name='Música',
         on_delete=models.CASCADE,
-        related_name='song_hymnaries'
+        related_name='hymnarysongs'
     )
     hymnary = models.ForeignKey(
         Hymnary,
         verbose_name='Hinário',
         on_delete=models.CASCADE,
-        related_name='hymnary_songs'
+        related_name='hymnarysongs'
     )
     order = models.IntegerField('Ordem', unique=False)
 

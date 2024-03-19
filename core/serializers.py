@@ -9,7 +9,7 @@ class HymnarySerializer(ModelSerializer):
     songs = SerializerMethodField('get_songs')
 
     def get_songs(self, hymnary):
-        songs = hymnary.songs.all().order_by('song_hymnaries__order')
+        songs = hymnary.songs.all().order_by('hymnarysongs__order')
         return SongSerializer(songs, many=True).data
 
     class Meta:
