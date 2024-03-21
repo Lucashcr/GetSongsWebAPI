@@ -2,16 +2,17 @@ from rest_framework import serializers
 
 from api.models import Artist, Category, Song
 
+
 class ArtistSerializer(serializers.ModelSerializer):
     class Meta:
         model = Artist
-        fields = ('id', 'name', 'slug')
+        fields = ("id", "name", "slug")
 
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ('id', 'name', 'slug')
+        fields = ("id", "name", "slug")
 
 
 class SongSerializer(serializers.ModelSerializer):
@@ -20,8 +21,15 @@ class SongSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Song
-        fields = ['id', 'name', 'slug', 'artist', 'category',
-                  'lyrics_url', 'preview_url']
+        fields = [
+            "id",
+            "name",
+            "slug",
+            "artist",
+            "category",
+            "lyrics_url",
+            "preview_url",
+        ]
 
 
 class SongSerializerFull(serializers.ModelSerializer):
@@ -30,4 +38,4 @@ class SongSerializerFull(serializers.ModelSerializer):
 
     class Meta:
         model = Song
-        fields = '__all__'
+        fields = "__all__"

@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0004_hymnary_template'),
+        ("core", "0004_hymnary_template"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='hymnarysong',
-            name='order',
-            field=models.IntegerField(verbose_name='Ordem'),
+            model_name="hymnarysong",
+            name="order",
+            field=models.IntegerField(verbose_name="Ordem"),
         ),
     ]

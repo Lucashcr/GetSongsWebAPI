@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0010_alter_hymnarysong_options_alter_hymnary_file'),
+        ("core", "0010_alter_hymnarysong_options_alter_hymnary_file"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='hymnary',
-            name='updated',
-            field=models.BooleanField(default=True, verbose_name='Atualizado'),
+            model_name="hymnary",
+            name="updated",
+            field=models.BooleanField(default=True, verbose_name="Atualizado"),
         ),
     ]

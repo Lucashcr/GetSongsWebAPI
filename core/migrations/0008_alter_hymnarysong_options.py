@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0007_alter_hymnarysong_unique_together'),
+        ("core", "0007_alter_hymnarysong_unique_together"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='hymnarysong',
-            options={'ordering': ('order',)},
+            name="hymnarysong",
+            options={"ordering": ("order",)},
         ),
     ]

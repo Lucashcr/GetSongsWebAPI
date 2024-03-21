@@ -6,17 +6,19 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0009_hymnary_file'),
+        ("core", "0009_hymnary_file"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='hymnarysong',
+            name="hymnarysong",
             options={},
         ),
         migrations.AlterField(
-            model_name='hymnary',
-            name='file',
-            field=models.FileField(null=True, upload_to='hymnaries/', verbose_name='Arquivo'),
+            model_name="hymnary",
+            name="file",
+            field=models.FileField(
+                null=True, upload_to="hymnaries/", verbose_name="Arquivo"
+            ),
         ),
     ]

@@ -21,16 +21,12 @@ class ArtistViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         queryset = Artist.objects.all()
-        category_id = self.request.query_params.get('category_id', 0)
+        category_id = self.request.query_params.get("category_id", 0)
 
         if int(category_id):
-            queryset = (
-                queryset
-                .filter(song__category__id=category_id)
-                .distinct()
-            )
+            queryset = queryset.filter(song__category__id=category_id).distinct()
 
-        return queryset.order_by('id')
+        return queryset.order_by("id")
 
 
 class SongViewSet(viewsets.ReadOnlyModelViewSet):
@@ -38,9 +34,9 @@ class SongViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = SongSerializer
 
     def get_queryset(self):
-        queryset = Song.objects.all().select_related('artist', 'category')
-        artist_id = self.request.query_params.get('artist_id', 0)
-        category_id = self.request.query_params.get('category_id', 0)
+        queryset = Song.objects.all().select_related("artist", "category")
+        artist_id = self.request.query_params.get("artist_id", 0)
+        category_id = self.request.query_params.get("category_id", 0)
 
         if int(artist_id):
             queryset = queryset.filter(artist__id=artist_id)
@@ -53,21 +49,21 @@ class SongViewSet(viewsets.ReadOnlyModelViewSet):
 
 class SongSearchAPIView(APIView):
     permission_classes = []
-    
+
     def get(self, request):
-        query = request.query_params.get('q', '')
+        query = request.query_params.get("q", "")
         options = {}
-        
+
         filter = []
-        if request.query_params.get('artist_id'):
+        if request.query_params.get("artist_id"):
             filter.append(f'artist.id = {request.query_params["artist_id"]}')
 
-        if request.query_params.get('category_id'):
+        if request.query_params.get("category_id"):
             filter.append(f'category.id = {request.query_params["category_id"]}')
-            
+
         if filter:
-            options['filter'] = ' AND '.join(filter)
-        
+            options["filter"] = " AND ".join(filter)
+
         songs = search(query, **options)
 
         return JsonResponse(SongSerializer(songs["hits"], many=True).data, safe=False)

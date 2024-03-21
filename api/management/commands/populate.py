@@ -12,6 +12,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         if options["index"] == "songs":
             indexed, added, from_db = populate()
-            self.stdout.write(f'Indexed: {indexed} | New: {added} | New from database: {from_db}', self.style.SUCCESS)
+            self.stdout.write(
+                f"Indexed: {indexed} | New: {added} | New from database: {from_db}",
+                self.style.SUCCESS,
+            )
         else:
             raise CommandError("Invalid index")

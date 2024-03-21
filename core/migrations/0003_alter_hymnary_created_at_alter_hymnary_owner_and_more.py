@@ -9,49 +9,68 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('api', '0003_alter_artist_name_alter_artist_slug_and_more'),
-        ('core', '0002_hymnary_print_category'),
+        ("api", "0003_alter_artist_name_alter_artist_slug_and_more"),
+        ("core", "0002_hymnary_print_category"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='hymnary',
-            name='created_at',
-            field=models.DateTimeField(auto_now_add=True, verbose_name='Criado em'),
+            model_name="hymnary",
+            name="created_at",
+            field=models.DateTimeField(auto_now_add=True, verbose_name="Criado em"),
         ),
         migrations.AlterField(
-            model_name='hymnary',
-            name='owner',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='Proprietário'),
+            model_name="hymnary",
+            name="owner",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
+                verbose_name="Proprietário",
+            ),
         ),
         migrations.AlterField(
-            model_name='hymnary',
-            name='print_category',
-            field=models.BooleanField(default=True, verbose_name='Imprimir categoria'),
+            model_name="hymnary",
+            name="print_category",
+            field=models.BooleanField(default=True, verbose_name="Imprimir categoria"),
         ),
         migrations.AlterField(
-            model_name='hymnary',
-            name='songs',
-            field=models.ManyToManyField(related_name='hymns', through='core.HymnarySong', to='api.song', verbose_name='Músicas'),
+            model_name="hymnary",
+            name="songs",
+            field=models.ManyToManyField(
+                related_name="hymns",
+                through="core.HymnarySong",
+                to="api.song",
+                verbose_name="Músicas",
+            ),
         ),
         migrations.AlterField(
-            model_name='hymnary',
-            name='title',
-            field=models.CharField(max_length=64, verbose_name='Título'),
+            model_name="hymnary",
+            name="title",
+            field=models.CharField(max_length=64, verbose_name="Título"),
         ),
         migrations.AlterField(
-            model_name='hymnarysong',
-            name='hymnary',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='hymnary_songs', to='core.hymnary', verbose_name='Hinário'),
+            model_name="hymnarysong",
+            name="hymnary",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="hymnary_songs",
+                to="core.hymnary",
+                verbose_name="Hinário",
+            ),
         ),
         migrations.AlterField(
-            model_name='hymnarysong',
-            name='order',
-            field=models.IntegerField(unique=True, verbose_name='Ordem'),
+            model_name="hymnarysong",
+            name="order",
+            field=models.IntegerField(unique=True, verbose_name="Ordem"),
         ),
         migrations.AlterField(
-            model_name='hymnarysong',
-            name='song',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='song_hymnaries', to='api.song', verbose_name='Música'),
+            model_name="hymnarysong",
+            name="song",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="song_hymnaries",
+                to="api.song",
+                verbose_name="Música",
+            ),
         ),
     ]

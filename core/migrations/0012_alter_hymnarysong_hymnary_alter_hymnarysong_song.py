@@ -7,19 +7,29 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0007_alter_song_lyrics'),
-        ('core', '0011_hymnary_updated'),
+        ("api", "0007_alter_song_lyrics"),
+        ("core", "0011_hymnary_updated"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='hymnarysong',
-            name='hymnary',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='hymnarysongs', to='core.hymnary', verbose_name='Hinário'),
+            model_name="hymnarysong",
+            name="hymnary",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="hymnarysongs",
+                to="core.hymnary",
+                verbose_name="Hinário",
+            ),
         ),
         migrations.AlterField(
-            model_name='hymnarysong',
-            name='song',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='hymnarysongs', to='api.song', verbose_name='Música'),
+            model_name="hymnarysong",
+            name="song",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="hymnarysongs",
+                to="api.song",
+                verbose_name="Música",
+            ),
         ),
     ]

@@ -6,13 +6,13 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0007_alter_song_lyrics'),
-        ('core', '0006_hymnary_updated_at'),
+        ("api", "0007_alter_song_lyrics"),
+        ("core", "0006_hymnary_updated_at"),
     ]
 
     operations = [
         migrations.AlterUniqueTogether(
-            name='hymnarysong',
-            unique_together={('song', 'hymnary')},
+            name="hymnarysong",
+            unique_together={("song", "hymnary")},
         ),
     ]
