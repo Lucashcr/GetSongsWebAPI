@@ -8,7 +8,6 @@ from django.dispatch import receiver
 
 from meilisearch import Client
 
-
 from mysite.settings import MEILI_SETTINGS
 
 

@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from api.index import search
 
 from .models import Artist, Category, Song
-from .serializers import CategorySerializer, ArtistSerializer, SongSerializer, SongSerializerPrivate
+from .serializers import CategorySerializer, ArtistSerializer, SongSerializer
 
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
@@ -35,7 +35,7 @@ class ArtistViewSet(viewsets.ReadOnlyModelViewSet):
 
 class SongViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = []
-    serializer_class = SongSerializerPrivate
+    serializer_class = SongSerializer
 
     def get_queryset(self):
         queryset = Song.objects.all().select_related('artist', 'category')

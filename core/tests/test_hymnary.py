@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 
 from rest_framework.test import APITestCase, APIClient
 
+from api.models import Artist, Category, Song
 from core.models import Hymnary
 
 
@@ -112,4 +113,104 @@ class TestHymnaryViewSet(APITestCase):
 
         response = self.client.get(f'/api/hymnary/{hymnary.id}/')
 
+        self.assertEqual(response.status_code, 404)
+
+    def test_should_add_song_to_hymnary(self):
+        hymnary = Hymnary.objects.create(
+            title='Test Hymnary',
+            owner=self.user,
+        )
+        
+        song = Song.objects.create(
+            name='Test Song 1',
+            slug='test-song-1',
+            artist=Artist.objects.create(
+                name='Test Artist 1',
+                slug='test-artist-1',
+            ),
+            category=Category.objects.create(
+                name='Test Category',
+                slug='test-category'
+            ),
+            lyrics='Test Lyrics 1'
+        )
+        
+        response = self.client.post(f'/api/hymnary/{hymnary.id}/add/{song.id}/')
+        
+        self.assertEqual(response.status_code, 200)
+    
+    def test_should_not_add_song_to_another_users_hymnary(self):
+        hymnary = Hymnary.objects.create(
+            title='Test Hymnary',
+            owner=self.another_user,
+        )
+        
+        song = Song.objects.create(
+            name='Test Song 1',
+            slug='test-song-1',
+            artist=Artist.objects.create(
+                name='Test Artist 1',
+                slug='test-artist-1',
+            ),
+            category=Category.objects.create(
+                name='Test Category',
+                slug='test-category'
+            ),
+            lyrics='Test Lyrics 1'
+        )
+        
+        response = self.client.post(f'/api/hymnary/{hymnary.id}/add/{song.id}/')
+        
+        self.assertEqual(response.status_code, 404)
+    
+    def test_should_remove_song_from_hymnary(self):
+        hymnary = Hymnary.objects.create(
+            title='Test Hymnary',
+            owner=self.user,
+        )
+        
+        song = Song.objects.create(
+            name='Test Song 1',
+            slug='test-song-1',
+            artist=Artist.objects.create(
+                name='Test Artist 1',
+                slug='test-artist-1',
+            ),
+            category=Category.objects.create(
+                name='Test Category',
+                slug='test-category'
+            ),
+            lyrics='Test Lyrics 1'
+        )
+        
+        hymnary.songs.add(song, through_defaults={'order': 1})
+        
+        response = self.client.delete(f'/api/hymnary/{hymnary.id}/remove/{song.id}/')
+        
+        self.assertEqual(response.status_code, 204)
+    
+    def test_should_not_remove_song_from_another_users_hymnary(self):
+        hymnary = Hymnary.objects.create(
+            title='Test Hymnary',
+            owner=self.another_user,
+        )
+        
+        song = Song.objects.create(
+            name='Test Song 1',
+            slug='test-song-1',
+            artist=Artist.objects.create(
+                name='Test Artist 1',
+                slug='test-artist-1',
+            ),
+            category=Category.objects.create(
+                name='Test Category',
+                slug='test-category'
+            ),
+            lyrics='Test Lyrics 1'
+        )
+        
+        hymnary.songs.add(song, through_defaults={'order': 1})
+        
+        response = self.client.post(f'/api/hymnary/{hymnary.id}/remove/{song.id}/')
+        
         self.assertEqual(response.status_code, 404)
