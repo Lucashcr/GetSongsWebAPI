@@ -181,7 +181,7 @@ class TestHymnaryViewSet(APITestCase):
 
         response = self.client.delete(f"/api/hymnary/{hymnary.id}/remove/{song.id}/")
 
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 200)
 
     def test_should_not_remove_song_from_another_users_hymnary(self):
         hymnary = Hymnary.objects.create(
@@ -204,6 +204,6 @@ class TestHymnaryViewSet(APITestCase):
 
         hymnary.songs.add(song, through_defaults={"order": 1})
 
-        response = self.client.post(f"/api/hymnary/{hymnary.id}/remove/{song.id}/")
+        response = self.client.delete(f"/api/hymnary/{hymnary.id}/remove/{song.id}/")
 
         self.assertEqual(response.status_code, 404)
