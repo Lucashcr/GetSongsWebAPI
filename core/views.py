@@ -1,4 +1,4 @@
-import os
+import os, re
 from datetime import datetime
 
 from django.http.response import FileResponse
@@ -55,7 +55,8 @@ class HymnaryViewSet(ModelViewSet):
         if not os.path.exists(owner_folder):
             os.makedirs(owner_folder)
 
-        file_name = f'{owner_folder}/{hymnary.title}_{datetime.now().strftime("%d_%m_%Y-%H_%M")}.pdf'
+        safe_hymnary_title = re.sub(r"[^a-zA-Z0-9]", "_", hymnary.title)
+        file_name = f'{owner_folder}/{safe_hymnary_title}_{datetime.now().strftime("%d_%m_%Y-%H_%M")}.pdf'
         file_path = os.path.join(file_name)
 
         if hymnary.template in ("single-column", "each-song-by-page"):
