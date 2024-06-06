@@ -6,6 +6,7 @@ from .views import *
 
 router = DefaultRouter()
 router.register(r"hymnary", HymnaryViewSet, basename="hymnary")
+router.register(r"tag", TagViewSet, basename="tag")
 
 urlpatterns = [
     path("", include(router.urls)),

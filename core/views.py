@@ -1,3 +1,4 @@
+import json
 import os, re
 from datetime import datetime
 
@@ -11,7 +12,6 @@ from django.http import (
 
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from api.serializers import SongSerializer
@@ -19,9 +19,9 @@ from build_doc.templates import SingleColumnTemplate, TwoColumnsTemplate
 from build_doc.styles import *
 
 from api.models import *
-from core.models import Hymnary, HymnarySong
-from core.serializers import HymnarySerializer, HymnarySongSerializer
-
+from core.models import Hymnary, HymnarySong, Tag
+from core.serializers import HymnarySerializer, TagSerializer
+from core.pagination import HymnaryListPageNumberPagination
 
 # Create your views here.
 # ------------------------------------------------------------------------------------------------------
@@ -31,9 +31,37 @@ from core.serializers import HymnarySerializer, HymnarySongSerializer
 class HymnaryViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = HymnarySerializer
+    pagination_class = HymnaryListPageNumberPagination
 
     def get_queryset(self):
-        return Hymnary.objects.filter(owner=self.request.user)
+        params = self.request.query_params
+        queryset = Hymnary.objects.filter(owner=self.request.user)
+
+        search = params.get("search")
+        if search:
+            queryset = queryset.filter(title__icontains=search)
+
+        date_filter = params.get("dateFilter")
+        from_date = params.get("fromDate")
+        to_date = params.get("toDate")
+
+        if date_filter:
+            if date_filter not in ["created_at", "updated_at"]:
+                raise ValueError("Parâmetro dateFilter inválido")
+
+            if from_date:
+                queryset = queryset.filter(**{f"{date_filter}__gte": from_date})
+
+            if to_date:
+                queryset = queryset.filter(**{f"{date_filter}__lte": to_date})
+
+        tags = params.get("tags")
+        if tags:
+            tags = json.loads(tags)
+            for tag in tags:
+                queryset = queryset.filter(tags__id=tag)
+
+        return queryset.order_by("-updated_at")
 
     def create(self, request, *args, **kwargs):
         request.data["owner"] = request.user.id
@@ -164,3 +192,60 @@ class HymnaryViewSet(ModelViewSet):
             hymnary.save()
 
             return HttpResponse("Ordem das músicas atualizada com sucesso")
+    
+    @action(detail=True, methods=["post"])
+    def add_tag(self, request, pk):
+        try:
+            hymnary = Hymnary.objects.get(id=pk, owner=request.user)
+        except:
+            return HttpResponseNotFound("Hinário não encontrado")
+        else:
+            tag_id = request.data.get("tag")
+            if not tag_id:
+                return HttpResponseBadRequest("Atributo tag não enviado")
+
+            tag = Tag.objects.get(id=tag_id)
+            hymnary.tags.add(tag)
+
+            return JsonResponse(HymnarySerializer(hymnary).data["tags"], safe=False)
+    
+    @action(detail=True, methods=["post"])
+    def remove_tag(self, request, pk):
+        try:
+            hymnary = Hymnary.objects.get(id=pk, owner=request.user)
+        except:
+            return HttpResponseNotFound("Hinário não encontrado")
+        else:
+            tag_id = request.data.get("tag")
+            if not tag_id:
+                return HttpResponseBadRequest("Atributo tag não enviado")
+
+            tag = Tag.objects.get(id=tag_id)
+            hymnary.tags.remove(tag)
+
+            return JsonResponse(HymnarySerializer(hymnary).data["tags"], safe=False)
+
+
+class TagViewSet(ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    serializer_class = TagSerializer
+
+    def get_queryset(self):
+        queryset = Tag.objects.filter(owner=self.request.user)
+        if self.request.query_params.get("mine"):
+            return queryset.order_by("name")
+        
+        queryset |= Tag.objects.filter(owner=None)        
+        
+        hymnary = self.request.query_params.get("hymnary")
+        if hymnary:
+            queryset = queryset.filter(hymnary__id=hymnary)
+        
+        owner = self.request.query_params.get("owner")
+        if owner:
+            queryset = queryset.filter(owner__id=owner)
+        
+        return queryset.order_by("name")
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
