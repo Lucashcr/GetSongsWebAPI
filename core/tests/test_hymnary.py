@@ -82,6 +82,18 @@ class TestHymnaryViewSet(APITestCase):
         self.assertEqual(response.data["results"][0]["title"], "Test Hymnary")
         self.assertEqual(response.data["results"][0]["template"], "single-column")
         self.assertEqual(response.data["results"][0]["owner"], self.user.id)
+    
+    def should_get_hymnary_titles_list(self):
+        Hymnary.objects.create(title="Test Hymnary 1", owner=self.user)
+        Hymnary.objects.create(title="Test Hymnary 2", owner=self.user)
+
+        response = self.client.get("/api/hymnary/list_titles/")
+        data = response.json()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(data), 2)
+        self.assertIn("Test Hymnary 1", data)
+        self.assertIn("Test Hymnary 2", data)
 
     def test_should_not_get_another_users_hymnaries_list(self):
         Hymnary.objects.create(title="Test Hymnary", owner=self.another_user)

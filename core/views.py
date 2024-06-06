@@ -67,6 +67,11 @@ class HymnaryViewSet(ModelViewSet):
         request.data["owner"] = request.user.id
         return super().create(request, *args, **kwargs)
 
+    @action(detail=False, methods=["get"])
+    def list_titles(self, request):
+        hymnary_names = Hymnary.objects.filter(owner=request.user).values_list("title", flat=True)
+        return JsonResponse(list(hymnary_names), safe=False)
+
     @action(detail=True, methods=["get"])
     def export(self, request, pk):
         try:
@@ -192,7 +197,7 @@ class HymnaryViewSet(ModelViewSet):
             hymnary.save()
 
             return HttpResponse("Ordem das músicas atualizada com sucesso")
-    
+
     @action(detail=True, methods=["post"])
     def add_tag(self, request, pk):
         try:
@@ -208,7 +213,7 @@ class HymnaryViewSet(ModelViewSet):
             hymnary.tags.add(tag)
 
             return JsonResponse(HymnarySerializer(hymnary).data["tags"], safe=False)
-    
+
     @action(detail=True, methods=["post"])
     def remove_tag(self, request, pk):
         try:
@@ -234,17 +239,17 @@ class TagViewSet(ModelViewSet):
         queryset = Tag.objects.filter(owner=self.request.user)
         if self.request.query_params.get("mine"):
             return queryset.order_by("name")
-        
-        queryset |= Tag.objects.filter(owner=None)        
-        
+
+        queryset |= Tag.objects.filter(owner=None)
+
         hymnary = self.request.query_params.get("hymnary")
         if hymnary:
             queryset = queryset.filter(hymnary__id=hymnary)
-        
+
         owner = self.request.query_params.get("owner")
         if owner:
             queryset = queryset.filter(owner__id=owner)
-        
+
         return queryset.order_by("name")
 
     def perform_create(self, serializer):
