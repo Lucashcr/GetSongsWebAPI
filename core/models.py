@@ -53,3 +53,20 @@ def hymnary_song_post_save(sender, instance, **kwargs):
     hymnary = instance.hymnary
     hymnary.updated = True
     hymnary.save()
+
+
+class Tag(models.Model):
+    name = models.CharField("Nome", max_length=255)
+    owner = models.ForeignKey(
+        User,
+        verbose_name="Proprietário",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
+    hymnaries = models.ManyToManyField(
+        Hymnary, verbose_name="Hinários", related_name="tags", blank=True
+    )
+
+    class Meta:
+        unique_together = ("name", "owner")
