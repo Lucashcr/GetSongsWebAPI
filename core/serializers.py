@@ -6,7 +6,10 @@ from core.validators import validate_existing_name_tag
 
 
 class TagSerializer(ModelSerializer):
-    name = CharField(max_length=255, validators=[validate_existing_name_tag])
+    def validate(self, attrs):
+        validate_existing_name_tag(attrs["name"], self.context["request"].user)
+        return super().validate(attrs)
+    
     class Meta:
         model = Tag
         fields = ["id", "name", "owner_id"]
@@ -15,7 +18,7 @@ class TagSerializer(ModelSerializer):
 
 class HymnarySerializer(ModelSerializer):
     songs = SerializerMethodField("get_songs")
-    tags = TagSerializer(many=True)
+    tags = TagSerializer(many=True, required=False)
 
     def get_songs(self, hymnary):
         songs = (
