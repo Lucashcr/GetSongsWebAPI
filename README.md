@@ -15,13 +15,13 @@ Portanto, se você precisa de um hinário para uma ocasião especial, o GetSongs
 |Dependência|Versão|
 |-|-|
 |Python|3.11|
-|Django|5.0|
-|Django REST Framework|3.14|
-|Gunicorn|2.12|
-|Beautiful Soup|4.12|
-|httpx|0.25|
-|Meilisearch|0.30|
-|Reportlab|4.0|
+|Django|5.0.6|
+|Django REST Framework|3.15|
+|Gunicorn|22.0.0|
+|Beautiful Soup|4.12.3|
+|httpx|0.27.0|
+|Meilisearch|0.31.3|
+|Reportlab|4.2.0|
 
 _Vide requirements.txt_
 
@@ -29,7 +29,7 @@ _Vide requirements.txt_
 
 1. Clone o repositório:
 
-> git clone https://github.com/Lucashcr/GetSongsWebAPI.git
+> git clone <https://github.com/Lucashcr/GetSongsWebAPI.git>
 
 2. Entre no diretório do projeto:
 
@@ -53,7 +53,7 @@ Acesse o projeto em [http://localhost:8000/](http://localhost:8000/)
 
 ## Contribuição
 
-1. Faça o fork do projeto (https://github.com/seu_usuario/seu_projeto/fork)
+1. Faça o fork do projeto (<https://github.com/seu_usuario/seu_projeto/fork>)
 2. Crie uma branch para sua modificação (`git checkout -b feature/sua_feature`)
 3. Faça o commit (`git commit -am 'Adicione sua feature'`)
 4. Faça o push para a branch (`git push origin feature/sua_feature`)
