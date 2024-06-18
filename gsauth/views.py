@@ -106,7 +106,7 @@ class SendEmailAPIView(APIView):
             "Contato - GetSongs",
             message,
             EMAIL_HOST_USER,
-            ["lucash.rocha123@gmail.com"],
+            [user.email for user in User.objects.filter(is_superuser=True)],
             fail_silently=False,
         )
 

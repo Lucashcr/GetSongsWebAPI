@@ -1,9 +1,19 @@
 import uuid
+from django.contrib.auth import get_user_model
 from django.test import TestCase, override_settings
 
+User = get_user_model()
 
 class TestSendmailView(TestCase):
     def setUp(self):
+        User.objects.create_superuser(
+            username="admin",
+            password="admin123",
+            email="admin@email.com",
+            first_name="Admin",
+            last_name="User",
+        )
+        
         self.username = "usertest"
         self.first_name = "Test"
         self.last_name = "User"
