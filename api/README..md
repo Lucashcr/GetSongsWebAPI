@@ -70,7 +70,7 @@ GET /api/category
 Exemplo de resposta:
 
 ```json
-RESPONSE 200 OK
+// RESPONSE 200 OK
 [
     {
         "id": 1,
@@ -82,7 +82,7 @@ RESPONSE 200 OK
         "name": "Ato Penitencial",
         "slug": "ato-penitencial"
     },
-    ...
+    // ...
 ]
 ```
 
@@ -97,7 +97,7 @@ GET /api/category/<int:category_id>
 Exemplo de resposta:
 
 ```json
-RESPONSE 200 OK
+// RESPONSE 200 OK
 {
     "id": 1,
     "name": "Canto de Entrada",
@@ -122,7 +122,7 @@ GET /api/artist
 Exemplo de resposta:
 
 ```json
-RESPONSE 200 OK
+// RESPONSE 200 OK
 [
     {
         "id": 1,
@@ -134,7 +134,7 @@ RESPONSE 200 OK
         "name": "Amor e Adoração",
         "slug": "amor-e-adoracao"
     },
-    ...
+    // ...
 ]
 ```
 
@@ -149,7 +149,7 @@ GET /api/artist/<int:artist_id>
 Exemplo de resposta:
 
 ```json
-RESPONSE 200 OK
+// RESPONSE 200 OK
 {
     "id": 1,
     "name": "Adoração e Vida",
@@ -175,7 +175,7 @@ GET /api/song
 Exemplo de resposta:
 
 ```json
-RESPONSE 200 OK
+// RESPONSE 200 OK
 [
     {
         "id": 20,
@@ -211,7 +211,7 @@ RESPONSE 200 OK
         "lyrics_url": "https://www.letras.mus.br/ministerio-amor-e-adoracao/1882956/",
         "preview_url": "https://www.youtube.com/embed/SJ8OBgF9xD0?si=fPbtqlNNNNKf9fju"
     },
-    ...
+    // ...
 ]
 ```
 
@@ -226,7 +226,7 @@ GET /api/song/<int:song_id>
 Exemplo de resposta:
 
 ```json
-RESPONSE 200 OK
+// RESPONSE 200 OK
 {
     "id": 20,
     "name": "Kyrie",
@@ -265,7 +265,7 @@ GET /api/song-search
 Exemplo de resposta:
 
 ```json
-RESPONSE 200 OK
+// RESPONSE 200 OK
 [
     {
         "id": 20,
@@ -301,6 +301,6 @@ RESPONSE 200 OK
         "lyrics_url": "https://www.letras.mus.br/ministerio-amor-e-adoracao/1882956/",
         "preview_url": "https://www.youtube.com/embed/SJ8OBgF9xD0?si=fPbtqlNNNNKf9fju"
     },
-    ...
+    // ...
 ]
 ```
