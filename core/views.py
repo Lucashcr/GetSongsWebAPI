@@ -198,14 +198,13 @@ class HymnaryViewSet(ModelViewSet):
 
             return HttpResponse("Ordem das músicas atualizada com sucesso")
 
-    @action(detail=True, methods=["post"])
-    def add_tag(self, request, pk):
+    @action(detail=True, methods=["post"], url_path="add_tag/(?P<tag_id>\d+)")
+    def add_tag(self, request, pk, tag_id):
         try:
             hymnary = Hymnary.objects.get(id=pk, owner=request.user)
         except:
             return HttpResponseNotFound("Hinário não encontrado")
         else:
-            tag_id = request.data.get("tag")
             if not tag_id:
                 return HttpResponseBadRequest("Atributo tag não enviado")
 
@@ -214,14 +213,13 @@ class HymnaryViewSet(ModelViewSet):
 
             return JsonResponse(HymnarySerializer(hymnary).data["tags"], safe=False)
 
-    @action(detail=True, methods=["post"])
-    def remove_tag(self, request, pk):
+    @action(detail=True, methods=["delete"], url_path="remove_tag/(?P<tag_id>\d+)")
+    def remove_tag(self, request, pk, tag_id):
         try:
             hymnary = Hymnary.objects.get(id=pk, owner=request.user)
         except:
             return HttpResponseNotFound("Hinário não encontrado")
         else:
-            tag_id = request.data.get("tag")
             if not tag_id:
                 return HttpResponseBadRequest("Atributo tag não enviado")
 
