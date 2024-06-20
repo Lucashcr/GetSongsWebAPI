@@ -14,7 +14,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:latest
+        image: postgres:15.0
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -24,7 +24,7 @@ jobs:
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
       meilisearch:
-        image: getmeili/meilisearch:latest
+        image: getmeili/meilisearch:v1.3.4
         ports:
           - "7700:7700"
         env:
