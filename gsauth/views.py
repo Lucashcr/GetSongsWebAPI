@@ -94,15 +94,15 @@ class SendEmailAPIView(APIView):
         name = request.data.get("name", full_name)
         email = request.data.get("email", request.user.email)
 
-        message = f"Usuário: {name}"
-        message += f"\nEmail: {email}"
-        message += f"\n\n{message}"
+        content = f"Usuário: {name}"
+        content += f"\nEmail: {email}"
+        content += f"\n\n{message}"
 
         email = EmailService(
             to_emails=[user.email for user in User.objects.filter(is_superuser=True)],
             subject="Contato - GetSongs",
         )
-        email.set_plain_text_message(message)
+        email.set_plain_text_message(content)
 
         response = email.send()
 
