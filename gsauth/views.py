@@ -15,8 +15,6 @@ from mysite.settings import FRONTEND_BASE_URL, EMAIL_HOST_USER
 
 
 class GetCurrentUserView(APIView):
-    permission_classes = [IsAuthenticated]
-
     def get(self, request):
         data = model_to_dict(
             request.user,
@@ -88,8 +86,6 @@ class RegisterUserView(APIView):
 
 
 class SendEmailAPIView(APIView):
-    permission_classes = [IsAuthenticated]
-
     def post(self, request):
         if not (message := request.data.get("message")):
             return HttpResponseBadRequest("Dados inválidos")
@@ -191,8 +187,6 @@ class ResetPasswordAPIView(APIView):
 
 
 class ChangePasswordAPIView(APIView):
-    permission_classes = [IsAuthenticated]
-
     def post(self, request):
         if not all(
             [request.data.get(fields) for fields in ("old_password", "new_password")]

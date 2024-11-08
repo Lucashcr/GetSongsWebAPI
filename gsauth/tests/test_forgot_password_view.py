@@ -27,7 +27,7 @@ class TestSendmailView(TestCase):
                 "username": self.username,
                 "password": self.password,
             },
-        ).json()["access"]
+        ).json()["token"]
 
     @override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
     def test_should_send_email(self):

@@ -29,7 +29,6 @@ from core.pagination import HymnaryListPageNumberPagination
 
 
 class HymnaryViewSet(ModelViewSet):
-    permission_classes = [IsAuthenticated]
     serializer_class = HymnarySerializer
     pagination_class = HymnaryListPageNumberPagination
 
@@ -230,7 +229,6 @@ class HymnaryViewSet(ModelViewSet):
 
 
 class TagViewSet(ModelViewSet):
-    permission_classes = [IsAuthenticated]
     serializer_class = TagSerializer
 
     def get_queryset(self):

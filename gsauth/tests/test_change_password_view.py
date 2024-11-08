@@ -27,7 +27,7 @@ class TestChangePasswordAPIView(TestCase):
                 "username": self.username,
                 "password": self.password,
             },
-        ).json()["access"]
+        ).json()["token"]
 
     def test_should_change_password(self):
         response = self.client.post(
@@ -36,7 +36,7 @@ class TestChangePasswordAPIView(TestCase):
                 "old_password": self.password,
                 "new_password": uuid.uuid4().hex,
             },
-            HTTP_AUTHORIZATION=f"Bearer {self.token}",
+            HTTP_AUTHORIZATION=f"Token {self.token}",
         )
 
         self.assertEqual(response.status_code, 200)
@@ -51,7 +51,7 @@ class TestChangePasswordAPIView(TestCase):
                 "old_password": uuid.uuid4().hex,
                 "new_password": uuid.uuid4().hex,
             },
-            HTTP_AUTHORIZATION=f"Bearer {self.token}",
+            HTTP_AUTHORIZATION=f"Token {self.token}",
         )
 
         self.assertEqual(response.status_code, 200)
@@ -65,7 +65,7 @@ class TestChangePasswordAPIView(TestCase):
             {
                 "new_password": uuid.uuid4().hex,
             },
-            HTTP_AUTHORIZATION=f"Bearer {self.token}",
+            HTTP_AUTHORIZATION=f"Token {self.token}",
         )
 
         self.assertEqual(response.status_code, 200)
@@ -79,7 +79,7 @@ class TestChangePasswordAPIView(TestCase):
             {
                 "old_password": self.password,
             },
-            HTTP_AUTHORIZATION=f"Bearer {self.token}",
+            HTTP_AUTHORIZATION=f"Token {self.token}",
         )
 
         self.assertEqual(response.status_code, 200)

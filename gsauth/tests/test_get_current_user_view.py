@@ -27,11 +27,11 @@ class TestGetCurrentUserView(TestCase):
                 "username": self.username,
                 "password": self.password,
             },
-        ).json()["access"]
+        ).json()["token"]
 
     def test_should_get_current_user(self):
         response = self.client.get(
-            "/user/me/", HTTP_AUTHORIZATION=f"Bearer {self.token}"
+            "/user/me/", HTTP_AUTHORIZATION=f"Token {self.token}"
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(

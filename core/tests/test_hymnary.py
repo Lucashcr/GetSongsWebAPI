@@ -15,8 +15,8 @@ class TestHymnaryViewSet(APITestCase):
         )
         self.token = self.client.post(
             "/user/token/", {"username": "testuser", "password": "testpassword"}
-        ).json()["access"]
-        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.token}")
+        ).json()["token"]
+        self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.token}")
 
         self.another_user = User.objects.create_user(
             username="anotheruser", password="anotherpassword"

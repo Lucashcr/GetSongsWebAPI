@@ -25,9 +25,9 @@ class TestRegisterUserView(TestCase):
                 "username": "testuser",
                 "password": self.password,
             },
-        ).json()["access"]
+        ).json()["token"]
 
-        response = self.client.get("/user/me/", HTTP_AUTHORIZATION=f"Bearer {token}")
+        response = self.client.get("/user/me/", HTTP_AUTHORIZATION=f"Token {token}")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             response.json(),

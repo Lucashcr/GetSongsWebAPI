@@ -37,7 +37,7 @@ class TestSendmailView(TestCase):
                 "username": self.username,
                 "password": self.password,
             },
-        ).json()["access"]
+        ).json()["token"]
 
     @override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
     def test_should_send_email(self):
@@ -48,7 +48,7 @@ class TestSendmailView(TestCase):
                 "email": self.email,
                 "message": "Test message",
             },
-            HTTP_AUTHORIZATION=f"Bearer {self.token}",
+            HTTP_AUTHORIZATION=f"Token {self.token}",
         )
 
         self.assertEqual(response.status_code, 200)
@@ -62,7 +62,7 @@ class TestSendmailView(TestCase):
                 "email": self.email,
                 "message": "Test message",
             },
-            HTTP_AUTHORIZATION=f"Bearer {self.token}",
+            HTTP_AUTHORIZATION=f"Token {self.token}",
         )
 
         self.assertEqual(response.status_code, 200)
@@ -76,7 +76,7 @@ class TestSendmailView(TestCase):
                 "name": "Test User",
                 "message": "Test message",
             },
-            HTTP_AUTHORIZATION=f"Bearer {self.token}",
+            HTTP_AUTHORIZATION=f"Token {self.token}",
         )
 
         self.assertEqual(response.status_code, 200)
@@ -90,7 +90,7 @@ class TestSendmailView(TestCase):
                 "name": "Test User",
                 "email": self.email,
             },
-            HTTP_AUTHORIZATION=f"Bearer {self.token}",
+            HTTP_AUTHORIZATION=f"Token {self.token}",
         )
 
         self.assertEqual(response.status_code, 400)
