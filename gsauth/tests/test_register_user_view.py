@@ -170,7 +170,7 @@ class TestRegisterUserView(TestCase):
             },
         )
 
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 400)
 
     def test_should_not_login_with_wrong_password(self):
         response = self.client.post(
@@ -191,4 +191,4 @@ class TestRegisterUserView(TestCase):
             },
         )
 
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 400)

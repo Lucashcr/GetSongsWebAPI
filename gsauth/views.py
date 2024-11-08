@@ -10,8 +10,8 @@ from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonR
 from django.utils.translation import gettext_lazy as _
 
 from gsauth.models import PasswordRecoveryToken
-
 from mysite.settings import FRONTEND_BASE_URL, EMAIL_HOST_USER
+from services.email import EmailService
 
 
 class GetCurrentUserView(APIView):
@@ -98,13 +98,13 @@ class SendEmailAPIView(APIView):
         message += f"\nEmail: {email}"
         message += f"\n\n{message}"
 
-        response = send_mail(
-            "Contato - GetSongs",
-            message,
-            EMAIL_HOST_USER,
-            [user.email for user in User.objects.filter(is_superuser=True)],
-            fail_silently=False,
+        email = EmailService(
+            to_emails=[user.email for user in User.objects.filter(is_superuser=True)],
+            subject="Contato - GetSongs",
         )
+        email.set_plain_text_message(message)
+
+        response = email.send()
 
         if response == 1:
             return HttpResponse("Email enviado com sucesso")

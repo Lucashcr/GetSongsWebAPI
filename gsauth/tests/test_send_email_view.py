@@ -1,10 +1,14 @@
+from unittest.mock import MagicMock, patch
 import uuid
+
 from django.contrib.auth import get_user_model
-from django.test import TestCase, override_settings
+from rest_framework.test import APITestCase
+
 
 User = get_user_model()
 
-class TestSendmailView(TestCase):
+
+class TestSendmailView(APITestCase):
     def setUp(self):
         User.objects.create_superuser(
             username="admin",
@@ -13,7 +17,7 @@ class TestSendmailView(TestCase):
             first_name="Admin",
             last_name="User",
         )
-        
+
         self.username = "usertest"
         self.first_name = "Test"
         self.last_name = "User"
@@ -39,8 +43,10 @@ class TestSendmailView(TestCase):
             },
         ).json()["token"]
 
-    @override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
-    def test_should_send_email(self):
+    @patch("services.email.EmailService.send")
+    def test_should_send_email(self, send_method_mock: MagicMock):
+        send_method_mock.return_value = 1
+
         response = self.client.post(
             "/user/sendmail/",
             {
@@ -51,11 +57,15 @@ class TestSendmailView(TestCase):
             HTTP_AUTHORIZATION=f"Token {self.token}",
         )
 
+        send_method_mock.assert_called_once()
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content.decode(), "Email enviado com sucesso")
+    
 
-    @override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
-    def test_should_send_email_without_name(self):
+    @patch("services.email.EmailService.send")
+    def test_should_send_email_without_name(self, send_method_mock: MagicMock):
+        send_method_mock.return_value = 1
+
         response = self.client.post(
             "/user/sendmail/",
             {
@@ -65,11 +75,14 @@ class TestSendmailView(TestCase):
             HTTP_AUTHORIZATION=f"Token {self.token}",
         )
 
+        send_method_mock.assert_called_once()
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content.decode(), "Email enviado com sucesso")
 
-    @override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
-    def test_should_send_email_without_email(self):
+    @patch("services.email.EmailService.send")
+    def test_should_send_email_without_email(self, send_method_mock: MagicMock):
+        send_method_mock.return_value = 1
+
         response = self.client.post(
             "/user/sendmail/",
             {
@@ -79,11 +92,14 @@ class TestSendmailView(TestCase):
             HTTP_AUTHORIZATION=f"Token {self.token}",
         )
 
+        send_method_mock.assert_called_once()
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content.decode(), "Email enviado com sucesso")
 
-    @override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
-    def test_should_not_send_email_without_message(self):
+    @patch("services.email.EmailService.send")
+    def test_should_not_send_email_without_message(self, send_method_mock: MagicMock):
+        send_method_mock.return_value = 1
+
         response = self.client.post(
             "/user/sendmail/",
             {
@@ -93,5 +109,6 @@ class TestSendmailView(TestCase):
             HTTP_AUTHORIZATION=f"Token {self.token}",
         )
 
+        send_method_mock.assert_not_called()
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.content.decode(), "Dados inválidos")
