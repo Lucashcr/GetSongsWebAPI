@@ -30,11 +30,11 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "secret_key")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get("DEBUG", False))
 
-ALLOWED_HOSTS = ["getsongs.up.railway.app", "getsongs-api.up.railway.app"]
+ALLOWED_HOSTS = ["getsongs.up.railway.app", "getsongs-api.up.railway.app", "prometheus.railway.internal", "getsongs-prometheus.up.railway.app"]
 
 # FORM SUBMISSION
 # Comment out the following line and place your railway URL, and your production URL in the array.
-CSRF_TRUSTED_ORIGINS = list(map(lambda x: f"https://{x}", ALLOWED_HOSTS))
+CSRF_TRUSTED_ORIGINS = list(map(lambda x: f"http://{x}" if "internal" in x else f"https://{x}", ALLOWED_HOSTS))
 
 CORS_ORIGIN_WHITELIST = CSRF_TRUSTED_ORIGINS
 
