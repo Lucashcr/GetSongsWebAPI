@@ -65,7 +65,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build-and-test
-    if: ${{ github.event_name == "push" and github.base_ref == "main" }}
+    if: ${{ github.event_name == 'push' and github.base_ref == 'main' }}
     steps:
       - name: Install Railway
         if: ${{  }}
