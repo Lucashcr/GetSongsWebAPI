@@ -1,4 +1,7 @@
-from rest_framework.serializers import ModelSerializer, SerializerMethodField, CharField
+from rest_framework.serializers import (
+    ModelSerializer,
+    SerializerMethodField,
+)
 
 from core.models import Hymnary, HymnarySong, Tag
 from api.serializers import SongSerializer
@@ -9,7 +12,7 @@ class TagSerializer(ModelSerializer):
     def validate(self, attrs):
         validate_existing_name_tag(attrs["name"], self.context["request"].user)
         return super().validate(attrs)
-    
+
     class Meta:
         model = Tag
         fields = ["id", "name", "owner_id"]

@@ -60,7 +60,6 @@ class TestSendmailView(APITestCase):
         send_method_mock.assert_called_once()
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content.decode(), "Email enviado com sucesso")
-    
 
     @patch("services.email.EmailService.send")
     def test_should_send_email_without_name(self, send_method_mock: MagicMock):

@@ -34,10 +34,10 @@ class SongViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = SongSerializer
 
     def get_queryset(self):
-        queryset = Song.objects.all().select_related("artist", "category")
         artist_id = self.request.query_params.get("artist_id", 0)
         category_id = self.request.query_params.get("category_id", 0)
 
+        queryset = Song.objects.select_related("artist", "category")
         if int(artist_id):
             queryset = queryset.filter(artist__id=artist_id)
 
@@ -56,10 +56,10 @@ class SongSearchAPIView(APIView):
 
         filter = []
         if request.query_params.get("artist_id"):
-            filter.append(f'artist.id = {request.query_params["artist_id"]}')
+            filter.append(f"artist.id = {request.query_params['artist_id']}")
 
         if request.query_params.get("category_id"):
-            filter.append(f'category.id = {request.query_params["category_id"]}')
+            filter.append(f"category.id = {request.query_params['category_id']}")
 
         if filter:
             options["filter"] = " AND ".join(filter)
