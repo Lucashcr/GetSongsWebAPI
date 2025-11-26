@@ -24,6 +24,8 @@ COPY poetry.lock $APP_DIR
 # run this command to install all dependencies
 RUN poetry install
 
+COPY . $APP_DIR
+
 # port where the Django app runs
 EXPOSE 8000
 
