@@ -39,8 +39,6 @@ ALLOWED_HOSTS = [
     "getsongs-api.up.railway.app",
 ]
 
-# FORM SUBMISSION
-# Comment out the following line and place your railway URL, and your production URL in the array.
 CSRF_TRUSTED_ORIGINS = [
     f"http://{x}" if "internal" in x else f"https://{x}" for x in ALLOWED_HOSTS
 ]
@@ -56,15 +54,19 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    
     "rest_framework",
     "rest_framework.authtoken",
     "corsheaders",
+    "django_prometheus",
+    
     "core",
     "api",
     "gsauth",
 ]
 
 MIDDLEWARE = [
+    "django_prometheus.middleware.PrometheusBeforeMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
@@ -74,6 +76,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "django_prometheus.middleware.PrometheusAfterMiddleware",
 ]
 
 sentry_sdk.init(
