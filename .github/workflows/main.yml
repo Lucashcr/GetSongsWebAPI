@@ -68,11 +68,9 @@ jobs:
     if: ${{ github.event_name == 'push' && github.base_ref == 'main' }}
     steps:
       - name: Install Railway
-        if: ${{  }}
         run: bash <(curl -fsSL cli.new)
 
       - name: Deploy
-        if: ${{ github
         run: railway up --service API
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
