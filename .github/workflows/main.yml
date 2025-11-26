@@ -70,6 +70,8 @@ jobs:
       - name: Install Railway
         run: bash <(curl -fsSL cli.new)
 
+      - uses: actions/checkout@v6
+
       - name: Deploy
         run: railway up --service API
         env:
