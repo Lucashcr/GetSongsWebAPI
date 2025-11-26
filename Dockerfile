@@ -15,7 +15,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # install dependencies
-RUN pip install poetry
+RUN pip install --no-cache-dir poetry
 
 # copy whole project to your docker home directory.
 COPY pyproject.toml $APP_DIR
