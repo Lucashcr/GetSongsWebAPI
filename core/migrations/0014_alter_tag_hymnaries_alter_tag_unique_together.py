@@ -7,18 +7,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0013_tag'),
+        ("core", "0013_tag"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='tag',
-            name='hymnaries',
-            field=models.ManyToManyField(blank=True, related_name='tags', to='core.hymnary', verbose_name='Hinários'),
+            model_name="tag",
+            name="hymnaries",
+            field=models.ManyToManyField(
+                blank=True,
+                related_name="tags",
+                to="core.hymnary",
+                verbose_name="Hinários",
+            ),
         ),
         migrations.AlterUniqueTogether(
-            name='tag',
-            unique_together={('name', 'owner')},
+            name="tag",
+            unique_together={("name", "owner")},
         ),
     ]

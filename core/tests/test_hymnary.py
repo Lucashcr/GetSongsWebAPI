@@ -82,7 +82,7 @@ class TestHymnaryViewSet(APITestCase):
         self.assertEqual(response.data["results"][0]["title"], "Test Hymnary")
         self.assertEqual(response.data["results"][0]["template"], "single-column")
         self.assertEqual(response.data["results"][0]["owner"], self.user.id)
-    
+
     def should_get_hymnary_titles_list(self):
         Hymnary.objects.create(title="Test Hymnary 1", owner=self.user)
         Hymnary.objects.create(title="Test Hymnary 2", owner=self.user)
@@ -99,7 +99,7 @@ class TestHymnaryViewSet(APITestCase):
         Hymnary.objects.create(title="Test Hymnary", owner=self.another_user)
 
         response = self.client.get("/api/hymnary/")
-        
+
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["count"], 0)
         self.assertEqual(len(response.data["results"]), 0)

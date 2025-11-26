@@ -9,7 +9,7 @@ from services.email.types import EmailServiceInitOptions
 class EmailService(EmailServiceBaseClass):
     def __init__(self, **init_options: Unpack[EmailServiceInitOptions]):
         super().__init__(**init_options)
-    
+
     def send(self):
         self.validate()
         return send_mail(

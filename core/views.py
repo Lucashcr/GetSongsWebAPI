@@ -6,12 +6,12 @@ from django.http.response import FileResponse
 from django.http import (
     HttpResponse,
     HttpResponseBadRequest,
+    HttpResponseForbidden,
     HttpResponseNotFound,
     JsonResponse,
 )
 
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from api.serializers import SongSerializer
@@ -68,7 +68,9 @@ class HymnaryViewSet(ModelViewSet):
 
     @action(detail=False, methods=["get"])
     def list_titles(self, request):
-        hymnary_names = Hymnary.objects.filter(owner=request.user).values_list("title", flat=True)
+        hymnary_names = Hymnary.objects.filter(owner=request.user).values_list(
+            "title", flat=True
+        )
         return JsonResponse(list(hymnary_names), safe=False)
 
     @action(detail=True, methods=["get"])
@@ -88,7 +90,7 @@ class HymnaryViewSet(ModelViewSet):
             os.makedirs(owner_folder)
 
         safe_hymnary_title = re.sub(r"[^a-zA-Z0-9]", "_", hymnary.title)
-        file_name = f'{owner_folder}/{safe_hymnary_title}_{datetime.now().strftime("%d_%m_%Y-%H_%M")}.pdf'
+        file_name = f"{owner_folder}/{safe_hymnary_title}_{datetime.now().strftime('%d_%m_%Y-%H_%M')}.pdf"
         file_path = os.path.join(file_name)
 
         if hymnary.template in ("single-column", "each-song-by-page"):
@@ -136,24 +138,30 @@ class HymnaryViewSet(ModelViewSet):
 
         return response
 
-    @action(detail=True, methods=["post"], url_path="add/(?P<song>\d+)")
+    @action(detail=True, methods=["post"], url_path=r"add/(?P<song>\d+)")
     def add(self, request, pk, song):
         try:
             hymnary = Hymnary.objects.get(id=pk, owner=request.user)
         except:
             return HttpResponseNotFound("Hinário não encontrado")
-        else:
-            if not song:
-                return HttpResponseBadRequest("Atributo song não enviado")
 
+        if not song:
+            return HttpResponseBadRequest("Atributo song não enviado")
+
+        if not Song.objects.filter(id=song).exists():
+            return HttpResponseNotFound("Música não encontrada")
+
+        try:
             hymnarysong = HymnarySong.objects.create(
                 hymnary=hymnary, song_id=song, order=hymnary.hymnarysongs.count() + 1
             )
+        except:
+            return HttpResponseForbidden("Está música já foi adicionada a este hinário")
 
-            hymnary.updated = True
-            hymnary.save()
+        hymnary.updated = True
+        hymnary.save()
 
-            return JsonResponse(SongSerializer(hymnarysong.song).data, safe=False)
+        return JsonResponse(SongSerializer(hymnarysong.song).data, safe=False)
 
     @action(detail=True, methods=["delete"], url_path="remove/(?P<song>\d+)")
     def remove(self, request, pk, song):
