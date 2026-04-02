@@ -1,5 +1,5 @@
 # base image
-FROM python:3.11
+FROM python:3.14
 
 # setup environment variable
 ENV APP_DIR=/app
