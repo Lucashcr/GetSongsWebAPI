@@ -162,7 +162,7 @@ class HymnaryViewSet(ModelViewSet):
 
         return JsonResponse(SongSerializer(hymnarysong.song).data, safe=False)
 
-    @action(detail=True, methods=["delete"], url_path="remove/(?P<song>\d+)")
+    @action(detail=True, methods=["delete"], url_path=r"remove/(?P<song>\d+)")
     def remove(self, request, pk, song):
         try:
             hymnary = Hymnary.objects.get(id=pk, owner=request.user)
@@ -204,7 +204,7 @@ class HymnaryViewSet(ModelViewSet):
 
         return HttpResponse("Ordem das músicas atualizada com sucesso")
 
-    @action(detail=True, methods=["post"], url_path="add_tag/(?P<tag_id>\d+)")
+    @action(detail=True, methods=["post"], url_path=r"add_tag/(?P<tag_id>\d+)")
     def add_tag(self, request, pk, tag_id):
         try:
             hymnary = Hymnary.objects.get(id=pk, owner=request.user)
@@ -219,7 +219,7 @@ class HymnaryViewSet(ModelViewSet):
 
         return JsonResponse(HymnarySerializer(hymnary).data["tags"], safe=False)
 
-    @action(detail=True, methods=["delete"], url_path="remove_tag/(?P<tag_id>\d+)")
+    @action(detail=True, methods=["delete"], url_path=r"remove_tag/(?P<tag_id>\d+)")
     def remove_tag(self, request, pk, tag_id):
         try:
             hymnary = Hymnary.objects.get(id=pk, owner=request.user)
