@@ -12,12 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
-      matrix:
-        python-version: [3.11]
 
     services:
       postgres:
-        image: postgres:15.0
+        image: postgres:17.0
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -27,7 +25,7 @@ jobs:
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
       meilisearch:
-        image: getmeili/meilisearch:v1.9.0
+        image: getmeili/meilisearch:v1.41.0
         ports:
           - "7700:7700"
         env:
@@ -37,10 +35,10 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python 3.14
         uses: actions/setup-python@v6
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: "3.14"
 
       - name: Install Dependencies
         run: |
