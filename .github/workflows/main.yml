@@ -71,7 +71,7 @@ jobs:
       - name: Check code vulnerabilities
         run: |
           set +e
-          report=$(poetry run bandit -r . 2>&1)
+          report=$(poetry run bandit -c pyproject.toml -r . 2>&1)
           exit_code=$?
           set -e
 
