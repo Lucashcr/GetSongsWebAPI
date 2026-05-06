@@ -43,7 +43,7 @@ jobs:
           report=$(python -m pip install --no-cache-dir poetry && poetry install 2>&1) || true
           exit_code=$?
 
-          if [ $? -ne 0 ]; then
+          if [ $exit_code -ne 0 ]; then
             echo "## ❌ Error installing dependencies" >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
             echo "$report" >> $GITHUB_STEP_SUMMARY
@@ -57,7 +57,7 @@ jobs:
           report=$(poetry run black --check .) || true
           exit_code=$?
 
-          if [ $? -ne 0 ]; then
+          if [ $exit_code -ne 0 ]; then
             echo "## ❌ Error checking code formatting" >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
             echo "$report" >> $GITHUB_STEP_SUMMARY
@@ -70,7 +70,7 @@ jobs:
           report=$(poetry run bandiit -r .) || true
           exit_code=$?
 
-          if [ $? -ne 0 ]; then
+          if [ $exit_code -ne 0 ]; then
             echo "## ❌ Error checking code vulnerabilities" >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
             echo "$report" >> $GITHUB_STEP_SUMMARY
