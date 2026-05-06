@@ -67,7 +67,7 @@ jobs:
 
       - name: Check code vulnerabilities
         run: |
-          report=$(poetry run bandiit -r .) || true
+          report=$(poetry run bandit -r .) || true
           exit_code=$?
 
           if [ $exit_code -ne 0 ]; then
