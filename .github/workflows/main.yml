@@ -51,14 +51,14 @@ jobs:
             exit $exit_code
           fi
 
-      - name: Check code format
+      - name: Check code formatting
         run: |
           poetry run black --check .
           report=$(poetry run black --check .) || true
           exit_code=$?
 
           if [ $? -ne 0 ]; then
-            echo "## ❌ Error installing dependencies" >> $GITHUB_STEP_SUMMARY
+            echo "## ❌ Error checking code formatting" >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
             echo "$report" >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
@@ -71,7 +71,7 @@ jobs:
           exit_code=$?
 
           if [ $? -ne 0 ]; then
-            echo "## ❌ Error installing dependencies" >> $GITHUB_STEP_SUMMARY
+            echo "## ❌ Error checking code vulnerabilities" >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
             echo "$report" >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
