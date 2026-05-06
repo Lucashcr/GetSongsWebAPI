@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  validate:
+  validate-project:
     runs-on: ubuntu-latest
     services:
       postgres:
