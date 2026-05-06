@@ -104,13 +104,13 @@ jobs:
 
   # build-image:
   #   runs-on: ubuntu-latest
-  #   needs: validate
+  #   needs: validate-project
   #   if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
   #   steps:
 
   deploy-railway:
     runs-on: ubuntu-latest
-    needs: validate
+    needs: validate-project
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     steps:
       - name: Install Railway
