@@ -149,6 +149,18 @@ jobs:
           echo "major=$major" >> "$GITHUB_OUTPUT"
           echo "minor=$minor" >> "$GITHUB_OUTPUT"
 
+      - name: Check if tag already exists
+        run: |
+          if git tag | grep -q "^${{ steps.version.outputs.version }}$"; then
+            message="Tag ${{ steps.version.outputs.version }} already exists!"
+            echo "$message"
+            echo "## ❌ Error validating project version" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "$message" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+
       - name: Generate release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
