@@ -22,12 +22,18 @@ dependencies = [
     "django-cors-headers (>=4.9.0,<5.0.0)",
     "psycopg[binary] (>=3.2.13,<4.0.0)",
     "whitenoise (>=6.11.0,<7.0.0)",
-    "django-anymail[resend] (>=14.0,<15.0)"
+    "django-anymail[resend] (>=14.0,<15.0)",
+    "drf-spectacular (>=0.29.0,<0.30.0)",
 ]
 
 
 [tool.poetry]
 package-mode = false
+
+
+[tool.bandit]
+targets = ["."]
+exclude_dirs = ["tests", ".venv"]
 
 
 [build-system]
@@ -36,5 +42,6 @@ build-backend = "poetry.core.masonry.api"
 
 [dependency-groups]
 dev = [
-    "black (>=25.11.0,<26.0.0)"
+    "black (>=25.11.0,<26.0.0)",
+    "bandit (>=1.9.4,<2.0.0)"
 ]

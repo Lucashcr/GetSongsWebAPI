@@ -54,12 +54,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
     "rest_framework",
     "rest_framework.authtoken",
     "corsheaders",
     "anymail",
-
     "core",
     "api",
     "gsauth",
@@ -208,8 +206,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Email settings
 EMAIL_BACKEND = "anymail.backends.resend.EmailBackend"
 EMAIL_HOST_USER = os.environ["EMAIL_HOST_USER"]
-ANYMAIL = {
-    "RESEND_API_KEY": os.environ["EMAIL_HOST_PASSWORD"]
-}
+ANYMAIL = {"RESEND_API_KEY": os.environ["EMAIL_HOST_PASSWORD"]}
 
 DEFAULT_FROM_EMAIL = os.environ["EMAIL_HOST_USER"]
