@@ -11,8 +11,8 @@ RUN mkdir -p $APP_DIR
 WORKDIR $APP_DIR
 
 # set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 # install dependencies
 RUN pip install --no-cache-dir poetry
