@@ -31,7 +31,8 @@ jobs:
           MEILI_NO_ANALYTICS: true
 
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout code
+        uses: actions/checkout@v6
 
       - name: Set up Python 3.14
         uses: actions/setup-python@v6
@@ -109,21 +110,68 @@ jobs:
             exit $exit_code
           fi
 
-  # build-image:
-  #   runs-on: ubuntu-latest
-  #   needs: validate-project
-  #   if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-  #   steps:
-
-  deploy-railway:
+  build-image:
     runs-on: ubuntu-latest
     needs: validate-project
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     steps:
+      - name: Install pipeline dependencies
+        run: pip install --no-cache-dir toml-cli
+
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Get version and generate tags
+        id: get-version-and-gen-tags
+        run: |
+          version=$(toml get project.version --toml-path pyproject.toml)
+          D='0|[1-9][0-9]*'
+          if [[ ! $version =~ ^($D)\.($D)\.($D)$ ]]; then
+            echo "## ❌ Error validating project version" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "Invalid version: $version" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+
+          major="${BASH_REMATCH[1]}"
+          minor="$major.${BASH_REMATCH[2]}"
+          patch="$major.$minor.${BASH_REMATCH[3]}"
+
+          echo "major=$major" >> "$GITHUB_OUTPUT"
+          echo "minor=$minor" >> "$GITHUB_OUTPUT"
+          echo "patch=$patch" >> "$GITHUB_OUTPUT"
+
+      - name: Generate release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release create ${{ steps.get-version-and-gen-tags.outputs.patch }} --latest
+
+      - name: Login to GHCR
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build image for tests
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ github.repository_owner }}/getsongsweb-api:latest
+            ${{ github.repository_owner }}/getsongsweb-api:${{ steps.get-version-and-gen-tags.outputs.patch }}
+            ${{ github.repository_owner }}/getsongsweb-api:${{ steps.get-version-and-gen-tags.outputs.minor }}
+            ${{ github.repository_owner }}/getsongsweb-api:${{ steps.get-version-and-gen-tags.outputs.major }}
+
+  deploy-railway:
+    runs-on: ubuntu-latest
+    needs: build-image
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    steps:
       - name: Install Railway
         run: bash <(curl -fsSL cli.new)
-
-      - uses: actions/checkout@v6
 
       - name: Deploy
         run: railway up --service API
