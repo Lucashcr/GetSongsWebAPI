@@ -165,7 +165,7 @@ jobs:
 
       - name: Set repo lowercase
         id: repo-lower
-        run: echo "repo=$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+        run: echo "repo=$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
 
       - name: Build image
         uses: docker/build-push-action@v7
