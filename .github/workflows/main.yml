@@ -169,10 +169,10 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/getsongsweb-api:latest
-            ghcr.io/${{ github.repository_owner }}/getsongsweb-api:${{ steps.version.outputs.version }}
-            ghcr.io/${{ github.repository_owner }}/getsongsweb-api:${{ steps.version.outputs.minor }}
-            ghcr.io/${{ github.repository_owner }}/getsongsweb-api:${{ steps.version.outputs.major }}
+            ghcr.io/${{ github.repository_owner }}/getsongswebapi:latest
+            ghcr.io/${{ github.repository_owner }}/getsongswebapi:${{ steps.version.outputs.version }}
+            ghcr.io/${{ github.repository_owner }}/getsongswebapi:${{ steps.version.outputs.minor }}
+            ghcr.io/${{ github.repository_owner }}/getsongswebapi:${{ steps.version.outputs.major }}
 
   deploy-railway:
     runs-on: ubuntu-latest
