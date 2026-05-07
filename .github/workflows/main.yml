@@ -173,10 +173,10 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ steps.repo-lower.output.repo }}:latest
-            ghcr.io/${{ steps.repo-lower.output.repo }}:${{ steps.version.outputs.version }}
-            ghcr.io/${{ steps.repo-lower.output.repo }}:${{ steps.version.outputs.minor }}
-            ghcr.io/${{ steps.repo-lower.output.repo }}:${{ steps.version.outputs.major }}
+            ghcr.io/${{ steps.repo-lower.outputs.repo }}:latest
+            ghcr.io/${{ steps.repo-lower.outputs.repo }}:${{ steps.version.outputs.version }}
+            ghcr.io/${{ steps.repo-lower.outputs.repo }}:${{ steps.version.outputs.minor }}
+            ghcr.io/${{ steps.repo-lower.outputs.repo }}:${{ steps.version.outputs.major }}
 
   deploy-railway:
     runs-on: ubuntu-latest
