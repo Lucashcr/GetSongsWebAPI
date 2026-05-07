@@ -163,6 +163,15 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set repo lowercase
+        id: repo
+        run: echo "repo=$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+
+      - name: Docker Metadata
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ steps.meta.outputs.repo }}
+
       - name: Build image
         uses: docker/build-push-action@v7
         with:
