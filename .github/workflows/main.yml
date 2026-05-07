@@ -123,9 +123,11 @@ jobs:
 
       - name: Checkout code
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Get version and generate tags
-        id: get-version-and-gen-tags
+        id: version
         run: |
           version=$(toml get project.version --toml-path pyproject.toml)
           D='0|[1-9][0-9]*'
@@ -148,9 +150,9 @@ jobs:
       - name: Generate release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        uses: ncipollo/release-action@v1
+        uses: softprops/action-gh-release@v3
         with:
-          name: ${{ steps.get-version-and-gen-tags.outputs.patch }}
+          tag-name: ${{ steps.version.outputs.patch }}
 
       - name: Login to GHCR
         uses: docker/login-action@v2
@@ -166,9 +168,9 @@ jobs:
           push: true
           tags: |
             ${{ github.repository_owner }}/getsongsweb-api:latest
-            ${{ github.repository_owner }}/getsongsweb-api:${{ steps.get-version-and-gen-tags.outputs.patch }}
-            ${{ github.repository_owner }}/getsongsweb-api:${{ steps.get-version-and-gen-tags.outputs.minor }}
-            ${{ github.repository_owner }}/getsongsweb-api:${{ steps.get-version-and-gen-tags.outputs.major }}
+            ${{ github.repository_owner }}/getsongsweb-api:${{ steps.version.outputs.patch }}
+            ${{ github.repository_owner }}/getsongsweb-api:${{ steps.version.outputs.minor }}
+            ${{ github.repository_owner }}/getsongsweb-api:${{ steps.version.outputs.major }}
 
   deploy-railway:
     runs-on: ubuntu-latest
