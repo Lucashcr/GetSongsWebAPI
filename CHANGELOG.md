@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.0.1](https://github.com/Lucashcr/getSongsWebAPI/releases/tag/1.0.1) - 2026-05-08
+## [1.0.1](https://github.com/Lucashcr/GetSongsWebAPI/releases/tag/1.0.1) - 2026-05-08
 
 ### Alterado
 
@@ -8,7 +8,7 @@
 - `CONTAINER_APP_HOSTNAME` (injetado automaticamente pelo Azure Container Apps) é adicionado a `ALLOWED_HOSTS` quando presente.
 - `ALLOWED_HOSTS` aceita lista de hosts separados por vírgula via variável de ambiente, permitindo múltiplos domínios customizados.
 
-## [1.0.0](https://github.com/Lucashcr/getSongsWebAPI/releases/tag/1.0.0) - 2026-05-07
+## [1.0.0](https://github.com/Lucashcr/GetSongsWebAPI/releases/tag/1.0.0) - 2026-05-07
 
 ### Adicionado
 
