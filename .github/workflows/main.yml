@@ -224,5 +224,5 @@ jobs:
           imageToDeploy: ${{ needs.build-image.outputs.image-tag }}
           registryUrl: ghcr.io
           registryUsername: ${{ github.actor }}
-          registryPassword: ${{ secrets.GITHUB_TOKEN }}
+          registryPassword: ${{ secrets.GHCR_TOKEN }}
 
