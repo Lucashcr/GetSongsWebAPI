@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.2](https://github.com/Lucashcr/GetSongsWebAPI/releases/tag/1.0.2) - 2026-05-08
+
+### Corrigido
+
+- Correção na pipeline de deploy no Railway.
+
 ## [1.0.1](https://github.com/Lucashcr/GetSongsWebAPI/releases/tag/1.0.1) - 2026-05-08
 
 ### Alterado
