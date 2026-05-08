@@ -98,7 +98,7 @@ jobs:
           MEILI_MASTER_KEY: "meilimasterkey"
         run: |
           set +e
-          report=$(poetry run python manage.py test | tee /dev/stderr)
+          report=$(poetry run pytest | tee /dev/stderr)
           exit_code=$?
           set -e
 
