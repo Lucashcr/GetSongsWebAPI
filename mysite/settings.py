@@ -35,15 +35,14 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "secret_key")
 DEBUG = bool(os.environ.get("DEBUG", False))
 
 ALLOWED_HOSTS = [
-    "getsongs.up.railway.app",
-    "getsongs-api.up.railway.app",
+    h.strip()
+    for h in os.environ.get("ALLOWED_HOSTS", "").split(",")
+    if h.strip()
 ]
 
-CSRF_TRUSTED_ORIGINS = [
-    f"http://{x}" if "internal" in x else f"https://{x}" for x in ALLOWED_HOSTS
-]
-
-CORS_ORIGIN_WHITELIST = CSRF_TRUSTED_ORIGINS
+_aca_hostname = os.environ.get("CONTAINER_APP_HOSTNAME", "")
+if _aca_hostname and _aca_hostname not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(_aca_hostname)
 
 # Application definition
 
@@ -113,31 +112,11 @@ WSGI_APPLICATION = "mysite.wsgi.application"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 
-if DEBUG:
-    ALLOWED_HOSTS.extend(
-        [
-            "getsongs-test.up.railway.app",
-            "getsongs-api-test.up.railway.app",
-            "127.0.0.1",
-            "localhost",
-        ]
-    )
-    CSRF_TRUSTED_ORIGINS.extend(
-        [
-            "https://getsongs-test.up.railway.app",
-            "https://getsongs-api-test.up.railway.app",
-            "http://127.0.0.1:3000",
-            "http://localhost:3000",
-        ]
-    )
-    CORS_ORIGIN_WHITELIST.extend(
-        [
-            "https://getsongs-test.up.railway.app",
-            "https://getsongs-api-test.up.railway.app",
-            "http://127.0.0.1:3000",
-            "http://localhost:3000",
-        ]
-    )
+CSRF_TRUSTED_ORIGINS = [
+    f"http://{x}" if "internal" in x else f"https://{x}" for x in ALLOWED_HOSTS
+]
+
+CORS_ORIGIN_WHITELIST = CSRF_TRUSTED_ORIGINS.copy()
 
 
 DATABASES = {"default": dj_database_url.config(default=os.environ["DATABASE_URL"])}
