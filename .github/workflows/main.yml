@@ -221,7 +221,7 @@ jobs:
         with:
           resourceGroup: getsongsweb
           containerAppName: getsongsweb-api
-          imageToDeploy: ${{ jobs.build-image.outputs.image-tag }}
+          imageToDeploy: ${{ needs.build-image.outputs.image-tag }}
           registryUrl: ghcr.io
           registryUsername: ${{ github.actor }}
           registryPassword: ${{ secrets.GITHUB_TOKEN }}
