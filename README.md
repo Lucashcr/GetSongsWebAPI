@@ -10,6 +10,8 @@ Portanto, se você precisa de um hinário para uma ocasião especial, o GetSongs
 
 [![Python](https://img.shields.io/badge/Python-3.11-blue.svg)](https://www.python.org/) [![Django](https://img.shields.io/badge/Django-5.0-green.svg)](https://www.djangoproject.com/) [![MeiliSearch](https://img.shields.io/badge/MeiliSearch-LATEST-green.svg)](https://github.com/meilisearch/MeiliSearch)
 
+[![Django CI](https://github.com/Lucashcr/GetSongsWebAPI/actions/workflows/main.yml/badge.svg)](https://github.com/Lucashcr/GetSongsWebAPI/actions/workflows/main.yml)
+
 ## Requisitos
 
 |Dependência|Versão|
