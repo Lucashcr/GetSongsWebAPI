@@ -8,50 +8,137 @@ Após finalizar a montagem do hinário, o GetSongs pode, com apenas um clique, e
 
 Portanto, se você precisa de um hinário para uma ocasião especial, o GetSongs é a escolha perfeita. Obrigado por escolher o GetSongs. Experimente já nosso serviço e veja como é fácil criar seu próprio hinário personalizado.
 
-[![Python](https://img.shields.io/badge/Python-3.11-blue.svg)](https://www.python.org/) [![Django](https://img.shields.io/badge/Django-5.0-green.svg)](https://www.djangoproject.com/) [![MeiliSearch](https://img.shields.io/badge/MeiliSearch-LATEST-green.svg)](https://github.com/meilisearch/MeiliSearch)
+[![Python](https://img.shields.io/badge/Python-3.14-blue.svg)](https://www.python.org/) [![Django](https://img.shields.io/badge/Django-5.2-green.svg)](https://www.djangoproject.com/) [![MeiliSearch](https://img.shields.io/badge/MeiliSearch-LATEST-green.svg)](https://github.com/meilisearch/MeiliSearch)
 
 [![Django CI](https://github.com/Lucashcr/GetSongsWebAPI/actions/workflows/main.yml/badge.svg)](https://github.com/Lucashcr/GetSongsWebAPI/actions/workflows/main.yml)
 
 ## Requisitos
 
-|Dependência|Versão|
-|-|-|
-|Python|3.11|
-|Django|5.0.6|
-|Django REST Framework|3.15|
-|Gunicorn|22.0.0|
-|Beautiful Soup|4.12.3|
-|httpx|0.27.0|
-|Meilisearch|0.31.3|
-|Reportlab|4.2.0|
+| Dependência | Versão |
+| - | - |
+| Python | 3.14+ |
+| Django | 5.2.8+ |
+| Django REST Framework | 3.16.1+ |
+| Gunicorn | 23.0.0+ |
+| psycopg | 3.2.13+ |
+| Pillow | 12.0.0+ |
+| python-dotenv | 1.2.1+ |
+| httpx | 0.28.1+ |
+| Meilisearch | 0.38.0+ |
+| Reportlab | 4.4.5+ |
+| Beautiful Soup | 0.0.2+ |
+| django-cors-headers | 4.9.0+ |
+| dj-database-url | 3.0.1+ |
+| django-anymail[resend] | 14.0+ |
+| WhiteNoise | 6.11.0+ |
+| drf-spectacular | 0.29.0+ |
+| sentry-sdk[django] | 2.46.0+ |
 
-_Vide requirements.txt_
+_Vide pyproject.toml_
+
+## Variáveis de ambiente
+
+Copie o arquivo de exemplo e preencha com seus valores:
+
+```bash
+cp .env.example .env
+```
+
+| Variável | Descrição |
+| - | - |
+| `DEBUG` | Modo debug do Django (`True` em desenvolvimento) |
+| `SECRET_KEY` | Chave secreta do Django |
+| `DATABASE_URL` | URL de conexão PostgreSQL |
+| `FRONTEND_BASE_URL` | URL base do frontend (usada em e-mails e CORS) |
+| `MEILI_URL` | URL da instância Meilisearch |
+| `MEILI_MASTER_KEY` | Chave mestre do Meilisearch |
+| `EMAIL_HOST_USER` | Endereço de e-mail remetente (Resend) |
+| `EMAIL_HOST_PASSWORD` | API key do Resend |
+| `SENTRY_DSN` | DSN do Sentry para error tracking (opcional) |
 
 ## Instalação
 
 1. Clone o repositório:
 
-> git clone <https://github.com/Lucashcr/GetSongsWebAPI.git>
+```bash
+git clone https://github.com/Lucashcr/GetSongsWebAPI.git
+```
 
 2. Entre no diretório do projeto:
 
-> cd GetSongsWebAPI
+```bash
+cd GetSongsWebAPI/backend
+```
 
-3. Instale as dependências:
+3. Instale o Poetry (gerenciador de dependências):
 
-> pip install -r requirements.txt
+```bash
+pip install poetry
+```
 
-4. Execute as migrações do banco de dados:
+4. Instale as dependências:
 
-> python manage.py migrate
+```bash
+poetry install
+```
+
+5. Configure as variáveis de ambiente:
+
+```bash
+cp .env.example .env
+```
+
+6. Execute as migrações do banco de dados:
+
+```bash
+poetry run python manage.py migrate
+```
 
 ## Uso
 
 Execute o servidor de desenvolvimento:
 
-> python manage.py runserver
+```bash
+poetry run python manage.py runserver
+```
 
 Acesse o projeto em [http://localhost:8000/](http://localhost:8000/)
+
+### Indexar músicas no Meilisearch
+
+Para popular o índice de busca com as músicas do banco de dados:
+
+```bash
+poetry run python manage.py populate songs
+```
+
+Para reconstruir o índice do zero:
+
+```bash
+poetry run python manage.py rebuild songs
+```
+
+### Testes
+
+Execute a suite de testes com:
+
+```bash
+poetry run pytest
+```
+
+### Docker
+
+Build da imagem:
+
+```bash
+docker build -t getsongs-api .
+```
+
+Execução do container:
+
+```bash
+docker run -p 8000:8000 --env-file .env getsongs-api
+```
 
 ## Contribuição
 
