@@ -1,7 +1,13 @@
 from reportlab.lib.units import mm
-from reportlab.platypus import *
+from reportlab.platypus import (
+    BaseDocTemplate,
+    Frame,
+    PageBreak,
+    PageTemplate,
+    Paragraph,
+)
 
-from .styles import *
+from .styles import HEADING_1, LEFT_ALIGNED
 
 
 def page_setup(canvas, doc):
@@ -37,7 +43,6 @@ class CustomBaseTemplate(BaseDocTemplate):
 
 
 class SingleColumnTemplate(CustomBaseTemplate):
-
     def __init__(self, filename, **kw):
         super().__init__(filename, **kw)
 
@@ -48,7 +53,6 @@ class SingleColumnTemplate(CustomBaseTemplate):
 
 
 class TwoColumnsTemplate(CustomBaseTemplate):
-
     def __init__(self, filename, **kw):
         super().__init__(filename, **kw)
 
@@ -69,6 +73,3 @@ class TwoColumnsTemplate(CustomBaseTemplate):
         self.addPageTemplates(
             PageTemplate("two_columns", [col1, col2], onPage=page_setup)
         )
-
-
-__all__ = ["SingleColumnTemplate", "TwoColumnTemplate"]

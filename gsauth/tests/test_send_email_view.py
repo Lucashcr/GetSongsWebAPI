@@ -1,9 +1,8 @@
-from unittest.mock import MagicMock, patch
 import uuid
+from unittest.mock import MagicMock, patch
 
 from django.contrib.auth import get_user_model
 from rest_framework.test import APITestCase
-
 
 User = get_user_model()
 

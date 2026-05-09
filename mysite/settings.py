@@ -10,13 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
-import dj_database_url
-import sentry_sdk
 import os
 from pathlib import Path
 
+import dj_database_url
+import sentry_sdk
 from dotenv import load_dotenv
-
 
 load_dotenv()
 
@@ -35,9 +34,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "secret_key")
 DEBUG = bool(os.environ.get("DEBUG", False))
 
 ALLOWED_HOSTS = [
-    h.strip()
-    for h in os.environ.get("ALLOWED_HOSTS", "").split(",")
-    if h.strip()
+    h.strip() for h in os.environ.get("ALLOWED_HOSTS", "").split(",") if h.strip()
 ]
 
 _aca_hostname = os.environ.get("CONTAINER_APP_HOSTNAME", "")
@@ -133,7 +130,7 @@ MEILI_SETTINGS = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",  # noqa: E501
     },
     {
         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",

@@ -1,15 +1,13 @@
 import re
-from bs4 import BeautifulSoup
-from httpx import get
 
+from bs4 import BeautifulSoup
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
+from httpx import get
 from meilisearch import Client
 
 from mysite.settings import MEILI_SETTINGS
-
 
 meili_client = Client(**MEILI_SETTINGS)
 meili_index = meili_client.index("songs")

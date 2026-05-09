@@ -1,6 +1,6 @@
 from abc import ABC
 from importlib import import_module
-from typing import Literal, Unpack
+from typing import Literal
 
 from services.email.base import EmailServiceBaseClass
 

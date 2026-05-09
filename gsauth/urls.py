@@ -1,7 +1,13 @@
 from django.urls import path
 
-from gsauth.views import *
-
+from gsauth.views import (
+    ChangePasswordAPIView,
+    ForgotPasswordAPIView,
+    GetCurrentUserView,
+    RegisterUserView,
+    ResetPasswordAPIView,
+    SendEmailAPIView,
+)
 
 urlpatterns = [
     path("me/", GetCurrentUserView.as_view()),

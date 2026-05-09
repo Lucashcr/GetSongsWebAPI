@@ -3,8 +3,8 @@ from rest_framework.serializers import (
     SerializerMethodField,
 )
 
-from core.models import Hymnary, HymnarySong, Tag
 from api.serializers import SongSerializer
+from core.models import Hymnary, HymnarySong, Tag
 from core.validators import validate_existing_name_tag
 
 

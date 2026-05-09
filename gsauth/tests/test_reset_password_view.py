@@ -1,6 +1,7 @@
 import uuid
-from django.test import TestCase, override_settings
+
 from django.contrib.auth.models import User
+from django.test import TestCase, override_settings
 
 from gsauth.models import PasswordRecoveryToken
 

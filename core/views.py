@@ -3,7 +3,7 @@ import os
 import re
 from datetime import datetime
 
-from django.http.response import FileResponse
+from django.db import IntegrityError
 from django.http import (
     HttpResponse,
     HttpResponseBadRequest,
@@ -11,22 +11,17 @@ from django.http import (
     HttpResponseNotFound,
     JsonResponse,
 )
-
+from django.http.response import FileResponse
 from rest_framework.decorators import action
 from rest_framework.viewsets import ModelViewSet
 
-from api.serializers import SongSerializer
-from build_doc.templates import SingleColumnTemplate, TwoColumnsTemplate
-from build_doc import styles
-
 from api.models import Song
+from api.serializers import SongSerializer
+from build_doc import styles
+from build_doc.templates import SingleColumnTemplate, TwoColumnsTemplate
 from core.models import Hymnary, HymnarySong, Tag
-from core.serializers import HymnarySerializer, TagSerializer
 from core.pagination import HymnaryListPageNumberPagination
-
-# Create your views here.
-# ------------------------------------------------------------------------------------------------------
-# API VIEWS
+from core.serializers import HymnarySerializer, TagSerializer
 
 
 class HymnaryViewSet(ModelViewSet):
@@ -78,7 +73,7 @@ class HymnaryViewSet(ModelViewSet):
     def export(self, request, pk):
         try:
             hymnary = Hymnary.objects.get(id=pk, owner=request.user)
-        except:
+        except Hymnary.DoesNotExist:
             return HttpResponseNotFound("Hinário não encontrado")
 
         if not hymnary.updated and os.path.exists(hymnary.file.path):
@@ -91,7 +86,8 @@ class HymnaryViewSet(ModelViewSet):
             os.makedirs(owner_folder)
 
         safe_hymnary_title = re.sub(r"[^a-zA-Z0-9]", "_", hymnary.title)
-        file_name = f"{owner_folder}/{safe_hymnary_title}_{datetime.now().strftime('%d_%m_%Y-%H_%M')}.pdf"
+        timestamp = datetime.now().strftime("%d_%m_%Y-%H_%M")
+        file_name = f"{owner_folder}/{safe_hymnary_title}_{timestamp}.pdf"
         file_path = os.path.join(file_name)
 
         if hymnary.template in ("single-column", "each-song-by-page"):
@@ -141,7 +137,7 @@ class HymnaryViewSet(ModelViewSet):
     def add(self, request, pk, song):
         try:
             hymnary = Hymnary.objects.get(id=pk, owner=request.user)
-        except:
+        except Hymnary.DoesNotExist:
             return HttpResponseNotFound("Hinário não encontrado")
 
         if not song:
@@ -154,7 +150,7 @@ class HymnaryViewSet(ModelViewSet):
             hymnarysong = HymnarySong.objects.create(
                 hymnary=hymnary, song_id=song, order=hymnary.hymnarysongs.count() + 1
             )
-        except:
+        except IntegrityError:
             return HttpResponseForbidden("Está música já foi adicionada a este hinário")
 
         hymnary.updated = True
@@ -166,7 +162,7 @@ class HymnaryViewSet(ModelViewSet):
     def remove(self, request, pk, song):
         try:
             hymnary = Hymnary.objects.get(id=pk, owner=request.user)
-        except:
+        except Hymnary.DoesNotExist:
             return HttpResponseNotFound("Hinário não encontrado")
 
         if not song:
@@ -184,7 +180,7 @@ class HymnaryViewSet(ModelViewSet):
     def reorder(self, request, pk):
         try:
             hymnary = Hymnary.objects.get(id=pk, owner=request.user)
-        except:
+        except Hymnary.DoesNotExist:
             return HttpResponseNotFound("Hinário não encontrado")
 
         songs = request.data.get("songs")
@@ -208,7 +204,7 @@ class HymnaryViewSet(ModelViewSet):
     def add_tag(self, request, pk, tag_id):
         try:
             hymnary = Hymnary.objects.get(id=pk, owner=request.user)
-        except:
+        except Hymnary.DoesNotExist:
             return HttpResponseNotFound("Hinário não encontrado")
 
         if not tag_id:
@@ -223,7 +219,7 @@ class HymnaryViewSet(ModelViewSet):
     def remove_tag(self, request, pk, tag_id):
         try:
             hymnary = Hymnary.objects.get(id=pk, owner=request.user)
-        except:
+        except Hymnary.DoesNotExist:
             return HttpResponseNotFound("Hinário não encontrado")
 
         if not tag_id:

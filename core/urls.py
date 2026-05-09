@@ -1,8 +1,7 @@
-from django.urls import path, include
-
+from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from .views import *
+from .views import HymnaryViewSet, TagViewSet
 
 router = DefaultRouter()
 router.register(r"hymnary", HymnaryViewSet, basename="hymnary")
