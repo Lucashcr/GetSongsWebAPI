@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.0.4](https://github.com/Lucashcr/GetSongsWebAPI/releases/tag/1.0.4) - 2026-05-08
+
+### Adicionado
+
+- Pipeline de CI/CD agora suporta build de imagens de pré-lançamento (ex: `1.0.4-rc1`, `1.0.4-dev1`) quando disparada manualmente via `workflow_dispatch` em branch fora da `main`. Imagens pré-lançamento recebem apenas a tag de versão exata, sem `latest`, aliases de `major`/`minor`, release no GitHub ou deploy.
+
+### Alterado
+
+- Jobs `deploy-railway` e `deploy-azure` agora só executam em `push` na `main` com build estável, verificando explicitamente o evento e a branch além do output `stable`.
+- Step `Compute image tags` aplica guard clause com saída antecipada para o caminho de pré-lançamento, evolvendo ifs aninhados.
+- Scripts shell dos novos steps utilizam `set -euo pipefail` para falha imediata.
+
+### Corrigido
+
+- Hostname do Azure Container Apps em `ALLOWED_HOSTS` agora é construído corretamente combinando `CONTAINER_APP_NAME` e `CONTAINER_APP_ENV_DNS_SUFFIX`, conforme a documentação oficial do Azure (`$CONTAINER_APP_NAME.$CONTAINER_APP_ENV_DNS_SUFFIX`).
+
 ## [1.0.3](https://github.com/Lucashcr/GetSongsWebAPI/releases/tag/1.0.3) - 2026-05-08
 
 ### Adicionado
