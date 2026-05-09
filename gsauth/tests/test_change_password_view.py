@@ -1,5 +1,6 @@
 import uuid
-from django.test import TestCase, override_settings
+
+from django.test import TestCase
 
 
 class TestChangePasswordAPIView(TestCase):

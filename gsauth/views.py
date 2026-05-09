@@ -1,16 +1,15 @@
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
-
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.core.validators import validate_email
 from django.forms import model_to_dict
 from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
+from rest_framework.views import APIView
 
 from gsauth.models import PasswordRecoveryToken
-from mysite.settings import FRONTEND_BASE_URL, EMAIL_HOST_USER
+from mysite.settings import EMAIL_HOST_USER, FRONTEND_BASE_URL
 from services.email import EmailService
 
 
@@ -126,10 +125,11 @@ class ForgotPasswordAPIView(APIView):
 
         token = PasswordRecoveryToken.objects.create(user=user)
 
-        message = f"<h1>Olá, {user.first_name}!</h1>"
-        message += "<p>Para recuperar sua senha, clique no link abaixo:</p>"
-        message += f'<div><a href="{FRONTEND_BASE_URL}/auth/recover-password?t={token.token}">Recuperar senha</a></div>'
-        message += "<p>Se você não solicitou a recuperação de senha, desconsidere este email.</p>"
+        recovery_url = f"{FRONTEND_BASE_URL}/auth/recover-password?t={token.token}"
+        message = render_to_string(
+            "gsauth/forgot_password_email.html",
+            {"first_name": user.first_name, "recovery_url": recovery_url},
+        )
 
         response = send_mail(
             "Recuperação de senha - GetSongs",
@@ -156,7 +156,7 @@ class ResetPasswordAPIView(APIView):
 
         try:
             token = PasswordRecoveryToken.objects.get(token=token)
-        except:
+        except PasswordRecoveryToken.DoesNotExist:
             return JsonResponse({"ok": False})
 
         if not token.is_valid or token.expired:
@@ -170,7 +170,7 @@ class ResetPasswordAPIView(APIView):
 
         try:
             token = PasswordRecoveryToken.objects.get(token=request.data["token"])
-        except:
+        except PasswordRecoveryToken.DoesNotExist:
             return JsonResponse({"ok": False, "messages": ["Dados inválidos"]})
 
         user = token.user

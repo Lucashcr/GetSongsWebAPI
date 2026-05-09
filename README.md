@@ -34,6 +34,15 @@ Portanto, se você precisa de um hinário para uma ocasião especial, o GetSongs
 | drf-spectacular | 0.29.0+ |
 | sentry-sdk[django] | 2.46.0+ |
 
+### Dependências de desenvolvimento
+
+| Dependência | Versão |
+| - | - |
+| Bandit | 1.9.4+ |
+| pytest | 9.0.3+ |
+| pytest-django | 4.12.0+ |
+| Ruff | 0.15.12+ |
+
 _Vide pyproject.toml_
 
 ## Variáveis de ambiente
@@ -141,6 +150,24 @@ docker run -p 8000:8000 --env-file .env getsongs-api
 ```
 
 ## Contribuição
+
+### Qualidade de código
+
+O projeto utiliza [Ruff](https://docs.astral.sh/ruff/) para formatação e linting. Antes de abrir um PR, verifique:
+
+```bash
+# Verificar formatação
+poetry run ruff format --check .
+
+# Verificar linting
+poetry run ruff check .
+
+# Aplicar formatação
+poetry run ruff format .
+
+# Corrigir erros de lint automaticamente (quando possível)
+poetry run ruff check --fix .
+```
 
 1. Faça o fork do projeto (<https://github.com/seu_usuario/seu_projeto/fork>)
 2. Crie uma branch para sua modificação (`git checkout -b feature/sua_feature`)

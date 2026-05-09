@@ -3,11 +3,9 @@ from typing import Any, Iterable
 from meilisearch import Client
 from meilisearch.errors import MeilisearchApiError
 
-from mysite.settings import MEILI_SETTINGS
-
-from api.serializers import SongSerializerFull
 from api.models import Song
-
+from api.serializers import SongSerializerFull
+from mysite.settings import MEILI_SETTINGS
 
 meili_client = Client(**MEILI_SETTINGS)
 meili_index = meili_client.index("songs")

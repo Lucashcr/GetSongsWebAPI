@@ -1,6 +1,6 @@
 [project]
 name = "getsongsweb-api"
-version = "1.0.2"
+version = "1.0.3"
 description = ""
 authors = [
     {name = "Lucas Henrique",email = "lucash.rocha@hotmail.com"}
@@ -29,6 +29,13 @@ dependencies = [
 [tool.poetry]
 package-mode = false
 
+[tool.ruff]
+line-length = 88
+exclude = [".venv", "migrations"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+
 [tool.bandit]
 targets = ["."]
 exclude_dirs = ["tests", ".venv"]
@@ -42,8 +49,8 @@ build-backend = "poetry.core.masonry.api"
 
 [dependency-groups]
 dev = [
-    "black (>=26.3.1,<27.0.0)",
     "bandit (>=1.9.4,<2.0.0)",
     "pytest (>=9.0.3,<10.0.0)",
-    "pytest-django (>=4.12.0,<5.0.0)"
+    "pytest-django (>=4.12.0,<5.0.0)",
+    "ruff (>=0.15.12,<0.16.0)"
 ]

@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.0.3](https://github.com/Lucashcr/GetSongsWebAPI/releases/tag/1.0.3) - 2026-05-08
+
+### Adicionado
+
+- Ruff como ferramenta de formatação e linting, substituindo o Black.
+- Configuração do Ruff no `pyproject.toml` com regras de estilo, pyflakes e isort.
+- Steps `Check code formatting` e `Lint code` na pipeline de CI utilizando Ruff.
+- Seção de dependências de desenvolvimento e subseção de qualidade de código no README.
+- Template HTML (`gsauth/templates/gsauth/forgot_password_email.html`) para o e-mail de recuperação de senha renderizado via Django template engine.
+
+### Alterado
+
+- Imports genéricos (`from x import *`) substituídos por imports explícitos em `api/`, `core/`, `gsauth/` e `build_doc/`.
+- `except` sem tipo substituído por exceções específicas (`Hymnary.DoesNotExist`, `PasswordRecoveryToken.DoesNotExist`, `IntegrityError`).
+
+### Removido
+
+- Black removido das dependências de desenvolvimento e da pipeline de CI.
+
 ## [1.0.2](https://github.com/Lucashcr/GetSongsWebAPI/releases/tag/1.0.2) - 2026-05-08
 
 ### Corrigido

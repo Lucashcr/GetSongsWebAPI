@@ -57,12 +57,27 @@ jobs:
       - name: Check code formatting
         run: |
           set +e
-          report=$(poetry run black --check . 2>&1 | tee /dev/stderr)
+          report=$(poetry run ruff format --check . 2>&1 | tee /dev/stderr)
           exit_code=$?
           set -e
 
           if [ $exit_code -ne 0 ]; then
             echo "## ❌ Error checking code formatting" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "$report" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            exit $exit_code
+          fi
+
+      - name: Lint code
+        run: |
+          set +e
+          report=$(poetry run ruff check . 2>&1 | tee /dev/stderr)
+          exit_code=$?
+          set -e
+
+          if [ $exit_code -ne 0 ]; then
+            echo "## ❌ Error linting code" >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
             echo "$report" >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
@@ -197,7 +212,6 @@ jobs:
     needs: build-image
     container: ghcr.io/railwayapp/cli:latest
     env:
-      SVC_ID: my-service-id
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
     steps:
       - uses: actions/checkout@v6

@@ -1,6 +1,5 @@
 from django.contrib.auth.models import User
-
-from rest_framework.test import APITestCase, APIClient
+from rest_framework.test import APIClient, APITestCase
 
 from api.models import Artist, Category, Song
 from core.models import Hymnary

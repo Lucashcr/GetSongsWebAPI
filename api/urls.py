@@ -1,8 +1,7 @@
-from django.urls import path, include
+from django.urls import include, path
 from rest_framework import routers
 
-from .views import *
-
+from .views import ArtistViewSet, CategoryViewSet, SongSearchAPIView, SongViewSet
 
 router = routers.DefaultRouter()
 router.register(r"category", CategoryViewSet, basename="category")

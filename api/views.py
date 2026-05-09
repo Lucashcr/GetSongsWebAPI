@@ -1,12 +1,11 @@
 from django.http import JsonResponse
-
 from rest_framework import viewsets
 from rest_framework.views import APIView
 
 from api.index import search
 
 from .models import Artist, Category, Song
-from .serializers import CategorySerializer, ArtistSerializer, SongSerializer
+from .serializers import ArtistSerializer, CategorySerializer, SongSerializer
 
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):

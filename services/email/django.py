@@ -1,8 +1,7 @@
-from typing_extensions import Unpack
-from services.email.strategy import EmailServiceBaseClass
-
 from django.core.mail import send_mail
+from typing_extensions import Unpack
 
+from services.email.strategy import EmailServiceBaseClass
 from services.email.types import EmailServiceInitOptions
 
 

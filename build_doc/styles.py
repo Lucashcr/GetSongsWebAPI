@@ -1,8 +1,7 @@
-from reportlab.platypus.paragraph import ParagraphStyle
 from reportlab.lib.units import mm
-
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.platypus.paragraph import ParagraphStyle
 
 pdfmetrics.registerFont(
     TTFont("Ubuntu-Medium", "./staticfiles/fonts/Ubuntu-Medium.ttf")
@@ -56,13 +55,3 @@ JUSTIFIED = ParagraphStyle(
     firstLineIndent=10 * mm,
     spaceAfter=8,
 )
-
-__all__ = [
-    "CENTERED_HEADING",
-    "HEADING_1",
-    "HEADING_2",
-    "LEFT_ALIGNED",
-    "CENTERED",
-    "RIGHT_ALIGNED",
-    "JUSTIFIED",
-]
