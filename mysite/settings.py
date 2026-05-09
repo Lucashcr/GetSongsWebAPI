@@ -37,7 +37,11 @@ ALLOWED_HOSTS = [
     h.strip() for h in os.environ.get("ALLOWED_HOSTS", "").split(",") if h.strip()
 ]
 
-_aca_hostname = os.environ.get("CONTAINER_APP_HOSTNAME", "")
+_aca_name = os.environ.get("CONTAINER_APP_NAME", "")
+_aca_dns_suffix = os.environ.get("CONTAINER_APP_ENV_DNS_SUFFIX", "")
+_aca_hostname = (
+    f"{_aca_name}.{_aca_dns_suffix}" if _aca_name and _aca_dns_suffix else ""
+)
 if _aca_hostname and _aca_hostname not in ALLOWED_HOSTS:
     ALLOWED_HOSTS.append(_aca_hostname)
 
