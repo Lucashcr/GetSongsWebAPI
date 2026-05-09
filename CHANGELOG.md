@@ -8,7 +8,7 @@
 
 ### Alterado
 
-- Jobs `deploy-railway` e `deploy-azure` agora só executam em builds estáveis (`push` na `main`).
+- Jobs `deploy-railway` e `deploy-azure` agora só executam em `push` na `main` com build estável, verificando explicitamente o evento e a branch além do output `stable`.
 - Step `Compute image tags` aplica guard clause com saída antecipada para o caminho de pré-lançamento, evolvendo ifs aninhados.
 - Scripts shell dos novos steps utilizam `set -euo pipefail` para falha imediata.
 

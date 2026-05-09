@@ -1,6 +1,6 @@
 [project]
 name = "getsongsweb-api"
-version = "1.0.4-rc1"
+version = "1.0.4-rc2"
 description = ""
 authors = [
     {name = "Lucas Henrique",email = "lucash.rocha@hotmail.com"}
